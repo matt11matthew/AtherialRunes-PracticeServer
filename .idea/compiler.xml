@@ -26,8 +26,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="AtherialRunesPracticeServer" target="1.5" />
-      <module name="AtherialRunesPS-game" target="1.5" />
+      <module name="AtherialRunesPracticeServer" target="1.8" />
+      <module name="AtherialRunesPS-game" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
