@@ -3,6 +3,9 @@ package net.atherialrunes.practiceserver.api.handler.handlers.vendor;
 import net.atherialrunes.practiceserver.api.menu.Menu;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 
+/**
+ * Created by Matthew E on 9/22/2016.
+ */
 public abstract class Vendor {
 
     private String npcName;

@@ -2,6 +2,9 @@ package net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.foo
 
 import net.atherialrunes.practiceserver.api.menu.Menu;
 
+/**
+ * Created by Matthew E on 9/22/2016.
+ */
 public class FoodVendorMenu extends Menu {
 
     public FoodVendorMenu(String npcName, int slots) {

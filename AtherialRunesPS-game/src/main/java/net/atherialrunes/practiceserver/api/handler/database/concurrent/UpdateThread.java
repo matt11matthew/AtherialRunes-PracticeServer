@@ -6,7 +6,9 @@ import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class UpdateThread extends Thread {
 
     public static Queue<SingleUpdateQuery<UpdateResult>> CONCURRENT_QUERIES = new ConcurrentLinkedQueue<>();

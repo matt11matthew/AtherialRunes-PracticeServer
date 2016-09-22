@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class GameAPI {
 
     public static Map<String, GamePlayer> GAMEPLAYERS = new ConcurrentHashMap<>();

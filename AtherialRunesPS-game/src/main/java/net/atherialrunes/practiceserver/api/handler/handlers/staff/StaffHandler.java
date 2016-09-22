@@ -4,6 +4,9 @@ import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 
+/**
+ * Created by Matthew E on 9/22/2016.
+ */
 public class StaffHandler extends ListenerHandler {
 
     @Override

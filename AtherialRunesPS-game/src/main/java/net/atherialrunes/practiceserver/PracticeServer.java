@@ -21,6 +21,9 @@ import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.item
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.misc.Healer;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class PracticeServer extends JavaPlugin {
 
     static PracticeServer instance;

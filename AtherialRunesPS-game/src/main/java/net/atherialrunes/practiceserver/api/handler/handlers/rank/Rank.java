@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public enum Rank {
 
     DEFAULT(0, "&7%name%: &f%msg%", "Default", "&7"),

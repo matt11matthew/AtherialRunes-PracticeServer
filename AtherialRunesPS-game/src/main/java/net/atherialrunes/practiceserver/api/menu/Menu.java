@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Created by Matthew E on 9/22/2016.
+ */
 public abstract class Menu {
 
     public Inventory inventory;

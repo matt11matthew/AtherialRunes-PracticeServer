@@ -1,5 +1,7 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.mob;
-
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public enum GearType {
 
     HELMET(0, "helmet"),

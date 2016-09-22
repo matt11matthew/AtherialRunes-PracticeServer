@@ -10,6 +10,9 @@ import org.bukkit.entity.Player;
 
 import java.util.Random;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class CommandRoll extends AtherialCommand {
     public CommandRoll(String command, String usage, String description) {
         super(command, usage, description);

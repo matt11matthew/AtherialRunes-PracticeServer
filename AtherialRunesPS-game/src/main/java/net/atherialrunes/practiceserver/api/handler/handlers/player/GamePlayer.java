@@ -13,6 +13,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 @Data
 public class GamePlayer {
 

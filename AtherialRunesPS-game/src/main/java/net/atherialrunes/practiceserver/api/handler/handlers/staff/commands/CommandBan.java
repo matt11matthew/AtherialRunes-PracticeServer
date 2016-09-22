@@ -20,13 +20,11 @@ public class CommandBan extends AtherialCommand {
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (Rank.isGM(p.getName())) {
-                try {
-                   
-                }
 
 
             }
         }
+        return true;
 
     }
 }

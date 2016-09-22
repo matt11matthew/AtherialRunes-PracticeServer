@@ -1,7 +1,9 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.mob;
 
 import org.bukkit.entity.EntityType;
-
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public enum MobType {
 
     SKELETON(0, EntityType.SKELETON, "Skeleton"),

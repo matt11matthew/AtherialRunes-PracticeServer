@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 @Data
 public class Party {
 

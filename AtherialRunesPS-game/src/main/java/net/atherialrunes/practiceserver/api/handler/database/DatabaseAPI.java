@@ -20,7 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class DatabaseAPI implements Handler {
 
     static DatabaseAPI instance = null;

@@ -14,6 +14,9 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.HashMap;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class ScoreboardHandler extends ListenerHandler {
 
     private static HashMap<GamePlayer, Scoreboard> boards = new HashMap<>();

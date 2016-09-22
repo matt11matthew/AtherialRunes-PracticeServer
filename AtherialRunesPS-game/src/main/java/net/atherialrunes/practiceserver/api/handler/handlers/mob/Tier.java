@@ -5,7 +5,9 @@ import org.bukkit.Material;
 
 import java.util.Arrays;
 import java.util.List;
-
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public enum Tier {
 
     T1(1, "&f", "armor:leather,weapon:wood", ArmorDye.NONE),

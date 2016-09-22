@@ -12,6 +12,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class CommandShowMs extends AtherialCommand {
     public CommandShowMs(String command) {
         super(command);

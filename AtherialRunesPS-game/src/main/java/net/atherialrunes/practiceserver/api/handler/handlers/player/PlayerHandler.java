@@ -9,6 +9,9 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class PlayerHandler extends ListenerHandler {
 
     @Override

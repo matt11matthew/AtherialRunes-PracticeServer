@@ -9,7 +9,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Created by Matthew E on 9/22/2016.
+ */
 public class AtherialItem {
 
     private ItemStack itemStack = null;

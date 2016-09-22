@@ -10,6 +10,9 @@ import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class PartyHandler extends ListenerHandler {
 
     @Override

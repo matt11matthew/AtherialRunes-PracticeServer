@@ -6,6 +6,9 @@ import org.bukkit.command.*;
 import java.lang.reflect.Field;
 import java.util.List;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public abstract class AtherialCommand implements CommandExecutor, TabExecutor {
 
     protected final String command;

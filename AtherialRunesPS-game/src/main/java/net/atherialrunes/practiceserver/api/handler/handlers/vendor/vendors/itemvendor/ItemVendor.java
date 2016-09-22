@@ -4,6 +4,9 @@ import net.atherialrunes.practiceserver.api.handler.handlers.vendor.Vendor;
 import net.atherialrunes.practiceserver.api.menu.Menu;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 
+/**
+ * Created by Matthew E on 9/22/2016.
+ */
 public class ItemVendor extends Vendor {
 
     private int slots = 9;

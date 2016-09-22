@@ -3,7 +3,9 @@ package net.atherialrunes.practiceserver.api.handler.database.concurrent;
 import org.bson.conversions.Bson;
 
 import java.util.function.Consumer;
-
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class SingleUpdateQuery<T> {
 
     private final Bson searchQuery, newDocument;

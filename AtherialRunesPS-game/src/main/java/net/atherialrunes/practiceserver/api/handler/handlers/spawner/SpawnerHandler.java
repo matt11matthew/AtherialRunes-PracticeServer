@@ -23,7 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class SpawnerHandler extends ListenerHandler {
 
     public static ConcurrentHashMap<Location, Spawner> spawners = new ConcurrentHashMap<>();

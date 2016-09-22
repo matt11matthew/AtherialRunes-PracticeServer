@@ -7,7 +7,9 @@ import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class CommandPQuit extends AtherialCommand {
     public CommandPQuit(String command) {
         super(command);

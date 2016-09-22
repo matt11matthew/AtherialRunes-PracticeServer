@@ -6,6 +6,10 @@ import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobType;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
 import org.bukkit.Location;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
+
 @Data
 public class Spawner {
 

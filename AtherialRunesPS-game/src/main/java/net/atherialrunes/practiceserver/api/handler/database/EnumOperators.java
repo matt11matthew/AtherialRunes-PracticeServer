@@ -1,5 +1,7 @@
 package net.atherialrunes.practiceserver.api.handler.database;
-
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public enum EnumOperators {
 
     //Increase whats current in database.

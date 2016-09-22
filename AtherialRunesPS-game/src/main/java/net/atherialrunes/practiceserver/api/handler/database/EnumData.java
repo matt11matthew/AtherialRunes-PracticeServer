@@ -1,5 +1,8 @@
 package net.atherialrunes.practiceserver.api.handler.database;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public enum  EnumData {
 
     UUID("info.uuid"),

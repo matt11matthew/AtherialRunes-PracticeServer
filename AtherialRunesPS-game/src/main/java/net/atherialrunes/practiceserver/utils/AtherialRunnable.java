@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class AtherialRunnable implements org.bukkit.scheduler.BukkitScheduler {
 
     static AtherialRunnable instance = null;

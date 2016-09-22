@@ -2,6 +2,9 @@ package net.atherialrunes.practiceserver.api.handler;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Created by Matthew E on 9/21/2016.
+ */
 public class HandlerManager {
 
     public static ConcurrentHashMap<String, Handler> handlers = new ConcurrentHashMap<>();
