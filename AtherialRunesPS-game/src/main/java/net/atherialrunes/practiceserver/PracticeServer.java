@@ -1,7 +1,7 @@
 package net.atherialrunes.practiceserver;
 
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
-import net.atherialrunes.practiceserver.api.handler.damage.DamageHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.damage.DamageHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.PartyHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.ScoreboardHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRoll;
@@ -13,7 +13,8 @@ import net.atherialrunes.practiceserver.api.handler.handlers.rank.commands.Comma
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.SpawnerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandHideMs;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandShowMs;
-import net.atherialrunes.practiceserver.api.handler.health.HealthHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.health.HealthHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.vendor.VendorHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PracticeServer extends JavaPlugin {
@@ -38,7 +39,12 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new PartyHandler());
         HandlerManager.registerHandler(new ScoreboardHandler());
         HandlerManager.registerHandler(new DamageHandler());
+        HandlerManager.registerHandler(new VendorHandler());
         HandlerManager.loadHandlers();
+    }
+
+    private void registerVendors() {
+
     }
 
     private void registerCommands() {

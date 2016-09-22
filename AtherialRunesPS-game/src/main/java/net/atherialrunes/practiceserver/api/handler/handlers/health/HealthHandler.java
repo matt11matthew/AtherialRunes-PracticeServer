@@ -1,4 +1,4 @@
-package net.atherialrunes.practiceserver.api.handler.health;
+package net.atherialrunes.practiceserver.api.handler.handlers.health;
 
 import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;

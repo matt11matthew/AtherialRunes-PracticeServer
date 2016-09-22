@@ -1,4 +1,4 @@
-package net.atherialrunes.practiceserver.api.handler.damage;
+package net.atherialrunes.practiceserver.api.handler.handlers.damage;
 
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 
