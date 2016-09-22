@@ -1,6 +1,8 @@
 package net.atherialrunes.practiceserver;
 
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
+import net.atherialrunes.practiceserver.api.handler.handlers.party.PartyHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.party.ScoreboardHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRoll;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandSync;
 import net.atherialrunes.practiceserver.api.handler.HandlerManager;
@@ -32,6 +34,8 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new PlayerHandler());
         HandlerManager.registerHandler(new SpawnerHandler());
         HandlerManager.registerHandler(new HealthHandler());
+        HandlerManager.registerHandler(new PartyHandler());
+        HandlerManager.registerHandler(new ScoreboardHandler());
         HandlerManager.loadHandlers();
     }
 
