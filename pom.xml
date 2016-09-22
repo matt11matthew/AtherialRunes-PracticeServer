@@ -33,4 +33,13 @@
         </repository>
     </repositories>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.14.2</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
 </project>
