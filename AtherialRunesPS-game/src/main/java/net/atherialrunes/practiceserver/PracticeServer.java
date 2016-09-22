@@ -10,6 +10,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.rank.commands.Comma
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.SpawnerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandHideMs;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandShowMs;
+import net.atherialrunes.practiceserver.api.handler.health.HealthHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PracticeServer extends JavaPlugin {
@@ -30,6 +31,7 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new DatabaseAPI());
         HandlerManager.registerHandler(new PlayerHandler());
         HandlerManager.registerHandler(new SpawnerHandler());
+        HandlerManager.registerHandler(new HealthHandler());
         HandlerManager.loadHandlers();
     }
 
