@@ -80,5 +80,5 @@ public class GamePlayer {
         getPlayer().sendMessage(Utils.colorCodes(msg));
     }
 
-    s
+
 }
