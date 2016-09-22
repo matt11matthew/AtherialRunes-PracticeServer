@@ -1,7 +1,7 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.vendor;
 
 import net.atherialrunes.practiceserver.api.menu.Menu;
-import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 
 public abstract class Vendor {
 

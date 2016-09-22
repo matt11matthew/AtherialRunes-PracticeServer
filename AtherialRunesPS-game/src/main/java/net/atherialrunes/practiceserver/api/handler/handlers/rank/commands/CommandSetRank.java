@@ -3,7 +3,7 @@ package net.atherialrunes.practiceserver.api.handler.handlers.rank.commands;
 import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.api.command.AtherialCommand;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
-import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

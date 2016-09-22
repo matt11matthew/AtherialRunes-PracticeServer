@@ -1,6 +1,6 @@
 package net.atherialrunes.practiceserver;
 
-import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

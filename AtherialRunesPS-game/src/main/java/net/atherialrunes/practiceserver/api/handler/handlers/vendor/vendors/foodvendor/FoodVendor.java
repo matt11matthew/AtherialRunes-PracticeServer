@@ -2,7 +2,7 @@ package net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.foo
 
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.Vendor;
 import net.atherialrunes.practiceserver.api.menu.Menu;
-import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 
 public class FoodVendor extends Vendor {
 

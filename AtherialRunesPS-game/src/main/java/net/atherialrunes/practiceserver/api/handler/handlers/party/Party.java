@@ -1,7 +1,7 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.party;
 
 import lombok.Data;
-import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 
 import java.util.ArrayList;

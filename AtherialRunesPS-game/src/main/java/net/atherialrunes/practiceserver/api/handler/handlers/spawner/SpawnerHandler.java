@@ -4,7 +4,7 @@ import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
-import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

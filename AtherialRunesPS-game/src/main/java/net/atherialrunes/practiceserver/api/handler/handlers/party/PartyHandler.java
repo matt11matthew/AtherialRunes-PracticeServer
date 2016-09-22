@@ -6,7 +6,7 @@ import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.commands.CommandP;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.commands.CommandPQuit;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.commands.CommandParty;
-import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 

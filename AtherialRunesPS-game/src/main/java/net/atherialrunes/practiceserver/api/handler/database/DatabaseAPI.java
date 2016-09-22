@@ -104,8 +104,19 @@ public class DatabaseAPI implements Handler {
                                 .append("foodLevel", 10)
                                 .append("exp", 0)
                                 .append("level", 0)
-                                .append("location", "")
-                );
+                                .append("location", ""))
+                        .append("ban",
+                                new Document("banned", 0L)
+                                        .append("banReason", "")
+                                        .append("unbanReason", "")
+                                        .append("whoUnbanned", "")
+                                        .append("whoBanned", ""))
+                        .append("mute",
+                                new Document("muted", 0L)
+                                        .append("muteReason", "")
+                                        .append("unmuteReason", "")
+                                         .append("whoUnmuted", "")
+                                        .append("whoMuted", ""));
         playerData.insertOne(newPlayerDocument);
         requestPlayer(uuid, ign);
     }

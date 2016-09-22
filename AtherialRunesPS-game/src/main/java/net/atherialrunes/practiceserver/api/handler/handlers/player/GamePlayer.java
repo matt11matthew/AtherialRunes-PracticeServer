@@ -1,4 +1,4 @@
-package net.atherialrunes.practiceserver.api.player;
+package net.atherialrunes.practiceserver.api.handler.handlers.player;
 
 import lombok.Data;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;

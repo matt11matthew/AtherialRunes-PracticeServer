@@ -2,7 +2,7 @@ package net.atherialrunes.practiceserver.api.handler.handlers.player.commands;
 
 import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.api.command.AtherialCommand;
-import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
