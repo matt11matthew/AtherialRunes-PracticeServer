@@ -61,7 +61,7 @@ public class ScoreboardHandler extends ListenerHandler {
     }
 
     public void updateScoreboard(GamePlayer gp) {
-        if (!gp.hasParty()) {
+        if (gp.getParty() == null) {
             setOverheadHP(gp, gp.getHP());
         }
     }

@@ -21,8 +21,7 @@ public class GamePlayer {
     private Rank rank;
     private Player player = null;
     private double gems;
-    private boolean hasParty;
-    private Party party;
+    private Party party = null;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -35,7 +34,6 @@ public class GamePlayer {
         this.firstLogin = (long) DatabaseAPI.getInstance().getData(EnumData.FIRST_LOGIN, uniqueId);
         this.rank = Rank.valueOf(DatabaseAPI.getInstance().getData(EnumData.RANK, uniqueId) + "");
         this.gems = (double) DatabaseAPI.getInstance().getData(EnumData.GEMS, uniqueId);
-        this.hasParty = false;
         setParty(null);
     }
 
