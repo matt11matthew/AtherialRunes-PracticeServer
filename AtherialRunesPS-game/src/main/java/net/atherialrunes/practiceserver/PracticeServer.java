@@ -14,6 +14,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.spawner.SpawnerHand
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandHideMs;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandShowMs;
 import net.atherialrunes.practiceserver.api.handler.handlers.health.HealthHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.staff.StaffHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.VendorHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.foodvendor.FoodVendor;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.itemvendor.ItemVendor;
@@ -44,6 +45,7 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new ScoreboardHandler());
         HandlerManager.registerHandler(new DamageHandler());
         HandlerManager.registerHandler(new VendorHandler());
+        HandlerManager.registerHandler(new StaffHandler());
         HandlerManager.loadHandlers();
     }
 
