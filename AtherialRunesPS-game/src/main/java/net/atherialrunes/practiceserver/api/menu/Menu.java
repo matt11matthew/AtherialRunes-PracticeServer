@@ -47,7 +47,7 @@ public abstract class Menu {
     }
 
     public String getTitle() {
-        return title;
+        return Utils.colorCodes(title);
     }
 
     public void setTitle(String title) {

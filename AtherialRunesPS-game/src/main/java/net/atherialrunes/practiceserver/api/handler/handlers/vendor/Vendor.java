@@ -16,7 +16,7 @@ public abstract class Vendor {
 
     public abstract Menu getMenu();
 
-    public abstract void click(GamePlayer gamePlayer, int slot);
+    public abstract void onMenuClick(GamePlayer gamePlayer, int slot);
 
     public abstract void onNPCRightClick(GamePlayer gamePlayer);
 

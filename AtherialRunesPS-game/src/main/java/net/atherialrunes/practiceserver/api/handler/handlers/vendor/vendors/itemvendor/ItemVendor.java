@@ -22,7 +22,7 @@ public class ItemVendor extends Vendor {
     }
 
     @Override
-    public void click(GamePlayer gamePlayer, int slot) {
+    public void onMenuClick(GamePlayer gamePlayer, int slot) {
 
     }
 
