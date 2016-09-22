@@ -64,7 +64,7 @@ public class SpawnerHandler extends ListenerHandler {
         if (Rank.isGM(player.getName())) {
             if (e.getBlock().getType() == Material.MOB_SPAWNER) {
                 gp.msg("&aPlease type the spawner info");
-                gp.msg("&fMob:skeleton,Tier:1,Elite:false,Range:5,Cooldown:60,Amount:1,");
+                gp.msg("&fMobType:skeleton,Tier:1,Elite:false,Range:5,Cooldown:60,Amount:1,");
                 e.setCancelled(true);
                 placing.put(gp, e.getBlock().getLocation());
             }
