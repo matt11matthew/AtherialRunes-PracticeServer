@@ -5,19 +5,14 @@ import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.player.GamePlayer;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 public class HealthHandler extends ListenerHandler {
 
     @Override
     public void onLoad() {
-        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-
-            displayHealth(GameAPI.getGamePlayer(p));
-        }
         super.onLoad();
+        levelBarTask();
     }
-
 
     @Override
     public void onUnload() {
@@ -25,14 +20,15 @@ public class HealthHandler extends ListenerHandler {
     }
 
 
-    public static void displayHealth(GamePlayer p) {
+    public void levelBarTask() {
         AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
             @Override
             public void run() {
-                int Health = p.getHP();
-                p.getPlayer().setLevel(Health);
-
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    GamePlayer gp = GameAPI.getGamePlayer(player);
+                    player.setLevel(gp.getHP());
+                });
             }
-        }, 0, 10);
+        }, 5L, 5L);
     }
 }
