@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerHandler extends ListenerHandler {
 
@@ -27,11 +28,18 @@ public class PlayerHandler extends ListenerHandler {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+        e.setJoinMessage(null);
         String MOTD = asCentered(ChatColor.WHITE + "" + ChatColor.BOLD + "Atherial Runes Practice Server Patch 1.0");
         String DMOTD = asCentered(ChatColor.GRAY + "" + ChatColor.ITALIC + "Donate at http://atherialrunes.buycraft.net/ for perks!");
         GameAPI.getGamePlayer(e.getPlayer()).msg(MOTD);
         GameAPI.getGamePlayer(e.getPlayer()).msg(DMOTD);
         GameAPI.handleLogin(e.getPlayer());
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        e.setQuitMessage(null);
+        GameAPI.handleLogout(e.getPlayer());
     }
 
     //Move this wherever quickly put this here :/

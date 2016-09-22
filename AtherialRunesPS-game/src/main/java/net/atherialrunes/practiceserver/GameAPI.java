@@ -13,7 +13,7 @@ public class GameAPI {
     public static Map<String, GamePlayer> GAMEPLAYERS = new ConcurrentHashMap<>();
 
     public static GamePlayer getGamePlayer(Player player) {
-        return GAMEPLAYERS.get(player.getName());
+        return GAMEPLAYERS.get(player.getUniqueId().toString());
     }
 
     public static void handleLogin(Player player) {
@@ -22,6 +22,11 @@ public class GameAPI {
 
     public static void handleLogin(UUID uuid, String name) {
         GAMEPLAYERS.put(uuid.toString(), new GamePlayer(name, uuid));
+    }
+
+    public static void handleLogout(Player player) {
+        getGamePlayer(player).upload();
+        GAMEPLAYERS.remove(player.getUniqueId().toString());
     }
 
     public static GamePlayer getGamePlayer(String name) {
