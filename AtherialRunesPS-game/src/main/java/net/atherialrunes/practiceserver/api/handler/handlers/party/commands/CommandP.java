@@ -31,7 +31,15 @@ public class CommandP extends AtherialCommand {
                     party.msg(gp.getRank().getPrefix() + ": " + msg);
                     return true;
                 } else {
-                    
+                    if (!gp.getChatChannel().equals("party")) {
+                        gp.setChatChannel("party");
+                        gp.msg("&dNow speaking in party chat");
+                        return true;
+                    } else {
+                        gp.setChatChannel("local");
+                        gp.msg("&7No longer speaking in party chat");
+                        return true;
+                    }
                 }
             }
         }

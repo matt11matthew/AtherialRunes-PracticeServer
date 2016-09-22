@@ -22,6 +22,7 @@ public class GamePlayer {
     private Player player = null;
     private double gems;
     private Party party = null;
+    private String chatChannel = "local";
 
     public GamePlayer(Player player) {
         this.player = player;
