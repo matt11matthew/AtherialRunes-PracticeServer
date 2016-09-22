@@ -40,7 +40,6 @@ public class PracticeServer extends JavaPlugin {
         cm.registerCommand(new CommandSetRank("setrank"));
         cm.registerCommand(new CommandShowMs("showms"));
         cm.registerCommand(new CommandHideMs("hidems"));
-
     }
 
     public void onDisable() {

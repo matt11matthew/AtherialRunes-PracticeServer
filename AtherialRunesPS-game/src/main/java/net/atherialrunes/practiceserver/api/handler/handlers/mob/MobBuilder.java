@@ -14,9 +14,17 @@ public class MobBuilder {
             default:
                 break;
         }
-        switch (spawner.getTier()) {
-            case 1:
-
+        switch (spawner.getMobTier()) {
+            case T1:
+                break;
+            case T2:
+                break;
+            case T3:
+                break;
+            case T4:
+                break;
+            case T5:
+                break;
         }
     }
 }
