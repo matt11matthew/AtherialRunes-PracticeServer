@@ -5,6 +5,7 @@ import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
 import net.atherialrunes.practiceserver.api.handler.database.EnumData;
 import net.atherialrunes.practiceserver.api.handler.database.EnumOperators;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
+import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -18,6 +19,7 @@ public class GamePlayer {
     private long firstLogin;
     private Rank rank;
     private Player player = null;
+    private double gems;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -29,6 +31,7 @@ public class GamePlayer {
         this.uniqueId = player.getUniqueId();
         this.firstLogin = (long) DatabaseAPI.getInstance().getData(EnumData.FIRST_LOGIN, uniqueId);
         this.rank = Rank.valueOf(DatabaseAPI.getInstance().getData(EnumData.RANK, uniqueId) + "");
+        this.gems = (double) DatabaseAPI.getInstance().getData(EnumData.GEMS, uniqueId);
     }
 
     public Player getPlayer() {
@@ -40,5 +43,10 @@ public class GamePlayer {
 
     public void upload() {
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.RANK, getRank(), true);
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.GEMS, getGems(), true);
+    }
+
+    public void msg(String msg) {
+        getPlayer().sendMessage(Utils.colorCodes(msg));
     }
 }

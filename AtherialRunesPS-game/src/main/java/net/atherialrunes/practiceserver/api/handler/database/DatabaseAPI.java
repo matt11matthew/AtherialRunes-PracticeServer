@@ -99,6 +99,7 @@ public class DatabaseAPI implements Handler {
                                 .append("ign", ign)
                                 .append("firstLogin", System.currentTimeMillis() / 1000L)
                                 .append("Rank", Rank.DEFAULT.toString())
+                                .append("Gems", 0)
                 );
         playerData.insertOne(newPlayerDocument);
         requestPlayer(uuid, ign);

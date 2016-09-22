@@ -1,6 +1,7 @@
 package net.atherialrunes.practiceserver;
 
 import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -21,5 +22,9 @@ public class GameAPI {
 
     public static void handleLogin(UUID uuid, String name) {
         GAMEPLAYERS.put(uuid.toString(), new GamePlayer(name, uuid));
+    }
+
+    public static GamePlayer getGamePlayer(String name) {
+        return getGamePlayer(Bukkit.getPlayerExact(name));
     }
 }

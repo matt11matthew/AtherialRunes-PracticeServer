@@ -1,25 +1,25 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.spawner;
 
 import lombok.Data;
-import lombok.Getter;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobBuilder;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobType;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
 import org.bukkit.Location;
 
 @Data
 public class Spawner {
 
-    @Getter
     private Location location;
-
-    @Getter
     private String mobData;
-
     private int cooldown;
     private int range;
     private int amount;
     private MobType mobType;
     private boolean elite;
     private int tier;
+    private boolean active;
+    private int currentCooldown;
+    private Tier mobTier;
 
     public static Spawner getFromSpawnData(Location location, String spawn_data) {
         Spawner spawner = new Spawner();
@@ -30,12 +30,18 @@ public class Spawner {
         spawner.setTier(Integer.parseInt(spawn_data.split("Tier:")[1].split(",")[0]));
         spawner.setElite(Boolean.parseBoolean(spawn_data.split("Elite:")[1].split(",")[0]));
         spawner.setLocation(location);
+        spawner.setCurrentCooldown(spawner.getCooldown());
+        spawner.setMobTier(Tier.fromTier(spawner.getTier()));
         return spawner;
     }
 
     @Override
     public String toString() {
         return "MobType:" + getMobType().getName() + ",Amount:" + getCooldown() + ",Range:" + getRange() + ",Tier:" + getTier() + ",Elite:" + isElite()  + ",Cooldown:" + getCooldown() + ",";
+    }
+
+    public void spawn() {
+        MobBuilder.spawn(this);
     }
 }
 

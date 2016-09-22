@@ -1,9 +1,15 @@
 package net.atherialrunes.practiceserver;
 
+import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRoll;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandSync;
 import net.atherialrunes.practiceserver.api.handler.HandlerManager;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.PlayerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.rank.commands.CommandSetRank;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.SpawnerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandHideMs;
+import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandShowMs;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PracticeServer extends JavaPlugin {
@@ -17,6 +23,7 @@ public class PracticeServer extends JavaPlugin {
     public void onEnable() {
         instance = this;
         registerHandlers();
+        registerCommands();
     }
 
     private void registerHandlers() {
@@ -24,6 +31,16 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new PlayerHandler());
         HandlerManager.registerHandler(new SpawnerHandler());
         HandlerManager.loadHandlers();
+    }
+
+    private void registerCommands() {
+        AtherialCommandManager cm = new AtherialCommandManager();
+        cm.registerCommand(new CommandRoll("roll", "/roll", "Roll command."));
+        cm.registerCommand(new CommandSync("sync"));
+        cm.registerCommand(new CommandSetRank("setrank"));
+        cm.registerCommand(new CommandShowMs("showms"));
+        cm.registerCommand(new CommandHideMs("hidems"));
+
     }
 
     public void onDisable() {

@@ -5,7 +5,8 @@ public enum  EnumData {
     UUID("info.uuid"),
     IGN("info.ign"),
     FIRST_LOGIN("info.firstLogin"),
-    RANK("info.rank");
+    RANK("info.rank"),
+    GEMS("info.gems");
 
     private String key;
 

@@ -3,6 +3,7 @@ package net.atherialrunes.practiceserver.api.handler.handlers.spawner;
 import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.player.GamePlayer;
+import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -26,6 +27,7 @@ public class SpawnerHandler extends ListenerHandler {
     public void onLoad() {
         super.onLoad();
         loadAllSpawners();
+        spawnMobTask();
     }
 
     @Override
@@ -76,5 +78,36 @@ public class SpawnerHandler extends ListenerHandler {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+
+    public void spawnMobTask() {
+        AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
+            @Override
+            public void run() {
+                spawners.values().forEach(spawner -> {
+                    int task = 0;
+                    if (!spawner.isActive()) {
+                        task = AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (spawner.getCurrentCooldown() > 0) {
+                                    spawner.setCurrentCooldown((spawner.getCurrentCooldown() - 1));
+                                    if (spawner.getCurrentCooldown() == 0) {
+                                        spawner.setActive(true);
+                                    }
+                                }
+                            }
+                        }, 20L, 20L);
+                    }
+                    if (spawner.isActive()) {
+                        spawner.setCurrentCooldown(spawner.getCooldown());
+                        AtherialRunnable.getInstance().cancelTask(task);
+                        spawner.setActive(false);
+                        spawner.spawn();
+                        return;
+                    }
+                });
+            }
+        }, 1L, 1L);
     }
 }
