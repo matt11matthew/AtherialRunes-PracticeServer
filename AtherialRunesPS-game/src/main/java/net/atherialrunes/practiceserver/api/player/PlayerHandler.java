@@ -27,7 +27,6 @@ public class PlayerHandler extends ListenerHandler {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        //Lazy, but its a practice server. lol.
         String MOTD = asCentered(ChatColor.WHITE + "" + ChatColor.BOLD + "Atherial Runes Practice Server Patch 1.0");
         String DMOTD = asCentered(ChatColor.GRAY + "" + ChatColor.ITALIC + "Donate at http://atherialrunes.buycraft.net/ for perks!");
         GameAPI.getGamePlayer(e.getPlayer()).msg(MOTD);
