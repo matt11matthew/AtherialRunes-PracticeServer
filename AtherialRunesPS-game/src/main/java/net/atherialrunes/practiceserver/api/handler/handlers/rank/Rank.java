@@ -58,6 +58,11 @@ public enum Rank {
         return ((gp.getRank() == GAMEMASTER) || (gp.getRank() == DEVELOPER));
     }
 
+    public static boolean isPMOD(String name) {
+        GamePlayer gp = GameAPI.getGamePlayer(name);
+        return ((isGM(name)) || (gp.getRank() == PMOD));
+    }
+
     public static boolean isRank(String rank) {
         return Arrays.asList(values()).contains(rank);
     }
