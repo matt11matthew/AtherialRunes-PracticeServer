@@ -23,6 +23,7 @@ public class ScoreboardHandler extends ListenerHandler {
     public void onLoad() {
         super.onLoad();
         main = Bukkit.getScoreboardManager().getNewScoreboard();
+        headHPTask();
     }
 
     @Override
