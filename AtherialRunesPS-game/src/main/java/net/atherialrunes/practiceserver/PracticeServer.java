@@ -1,14 +1,11 @@
 package net.atherialrunes.practiceserver;
 
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
-import net.atherialrunes.practiceserver.api.handler.damage.DamageHandler;
-import net.atherialrunes.practiceserver.api.handler.handlers.party.PartyHandler;
-import net.atherialrunes.practiceserver.api.handler.handlers.party.ScoreboardHandler;
-import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRoll;
-import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandSync;
 import net.atherialrunes.practiceserver.api.handler.HandlerManager;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.PlayerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRoll;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandSync;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.commands.CommandSetRank;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.SpawnerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandHideMs;
@@ -28,6 +25,7 @@ public class PracticeServer extends JavaPlugin {
         instance = this;
         registerHandlers();
         registerCommands();
+
     }
 
     private void registerHandlers() {
@@ -35,9 +33,6 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new PlayerHandler());
         HandlerManager.registerHandler(new SpawnerHandler());
         HandlerManager.registerHandler(new HealthHandler());
-        HandlerManager.registerHandler(new PartyHandler());
-        HandlerManager.registerHandler(new ScoreboardHandler());
-        HandlerManager.registerHandler(new DamageHandler());
         HandlerManager.loadHandlers();
     }
 
