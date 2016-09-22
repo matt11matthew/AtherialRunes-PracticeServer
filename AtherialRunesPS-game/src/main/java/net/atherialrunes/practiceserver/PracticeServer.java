@@ -15,6 +15,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.Co
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandShowMs;
 import net.atherialrunes.practiceserver.api.handler.handlers.health.HealthHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.VendorHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.itemvendor.ItemVendor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PracticeServer extends JavaPlugin {
@@ -29,6 +30,7 @@ public class PracticeServer extends JavaPlugin {
         instance = this;
         registerHandlers();
         registerCommands();
+        registerVendors();
     }
 
     private void registerHandlers() {
@@ -44,7 +46,7 @@ public class PracticeServer extends JavaPlugin {
     }
 
     private void registerVendors() {
-
+        VendorHandler.registerVendor(new ItemVendor("Item Vendor", 9));
     }
 
     private void registerCommands() {

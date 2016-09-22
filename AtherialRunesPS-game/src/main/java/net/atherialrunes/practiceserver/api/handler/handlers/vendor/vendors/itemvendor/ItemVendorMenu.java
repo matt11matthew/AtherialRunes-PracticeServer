@@ -4,7 +4,7 @@ import net.atherialrunes.practiceserver.api.menu.Menu;
 
 public class ItemVendorMenu extends Menu {
 
-    public ItemVendorMenu() {
-        super("Item Vendor", 9);
+    public ItemVendorMenu(String npcName, int slots) {
+        super(npcName, slots);
     }
 }

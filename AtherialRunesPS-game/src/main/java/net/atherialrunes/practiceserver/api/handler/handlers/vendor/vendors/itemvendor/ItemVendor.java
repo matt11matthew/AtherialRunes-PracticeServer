@@ -6,18 +6,21 @@ import net.atherialrunes.practiceserver.api.player.GamePlayer;
 
 public class ItemVendor extends Vendor {
 
-    public ItemVendor(String npcName) {
+    private int slots = 9;
+
+    public ItemVendor(String npcName, int slots) {
         super(npcName);
+        this.slots = slots;
     }
 
     @Override
     public Menu getMenu() {
-        return new ItemVendorMenu();
+        return new ItemVendorMenu(getNPCName(), slots);
     }
 
     @Override
     public void click(GamePlayer gamePlayer, int slot) {
-        
+
     }
 
     @Override
