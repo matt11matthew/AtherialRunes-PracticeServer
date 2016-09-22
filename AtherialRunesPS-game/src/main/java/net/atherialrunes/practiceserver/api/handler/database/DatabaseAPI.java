@@ -98,8 +98,13 @@ public class DatabaseAPI implements Handler {
                         new Document("uuid", uuid.toString())
                                 .append("ign", ign)
                                 .append("firstLogin", System.currentTimeMillis() / 1000L)
-                                .append("Rank", Rank.DEFAULT.toString())
-                                .append("Gems", 0)
+                                .append("rank", Rank.DEFAULT.toString())
+                                .append("gems", 0)
+                                .append("health", 100)
+                                .append("foodLevel", 10)
+                                .append("exp", 0)
+                                .append("level", 0)
+                                .append("location", "")
                 );
         playerData.insertOne(newPlayerDocument);
         requestPlayer(uuid, ign);

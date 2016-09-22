@@ -55,7 +55,7 @@ public class ScoreboardHandler extends ListenerHandler {
             if (party.getLeader().getName().equals(gp.getName())) {
                 name = "&l" + gp.getName();
             }
-            int hp = gp.getHP();
+            int hp = gp.getHp();
             partyBoard.getScore(name).setScore(hp);
             gp.getPlayer().setScoreboard(board);
         });
@@ -63,7 +63,7 @@ public class ScoreboardHandler extends ListenerHandler {
 
     public void updateScoreboard(GamePlayer gp) {
         if (gp.getParty() == null) {
-            setOverheadHP(gp, gp.getHP());
+            setOverheadHP(gp, gp.getHp());
         }
     }
 

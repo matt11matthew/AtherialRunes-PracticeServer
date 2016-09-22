@@ -26,7 +26,7 @@ public class HealthHandler extends ListenerHandler {
             public void run() {
                 Bukkit.getOnlinePlayers().forEach(player -> {
                     GamePlayer gp = GameAPI.getGamePlayer(player);
-                    player.setLevel(gp.getHP());
+                    player.setLevel(gp.getHp());
                 });
             }
         }, 5L, 5L);

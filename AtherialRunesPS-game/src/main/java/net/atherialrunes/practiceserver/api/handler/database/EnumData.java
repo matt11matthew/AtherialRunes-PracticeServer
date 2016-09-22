@@ -6,7 +6,13 @@ public enum  EnumData {
     IGN("info.ign"),
     FIRST_LOGIN("info.firstLogin"),
     RANK("info.rank"),
-    GEMS("info.gems");
+    GEMS("info.gems"),
+    HEALTH("info.health"),
+    FOOD_LEVEL("info.foodLevel"),
+    EXP("info.exp"),
+    LEVEL("info.level"),
+    LOCATION("info.location"),
+    ;
 
     private String key;
 
