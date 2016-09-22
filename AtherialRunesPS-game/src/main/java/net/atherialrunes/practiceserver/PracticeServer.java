@@ -3,6 +3,7 @@ package net.atherialrunes.practiceserver;
 import net.atherialrunes.practiceserver.api.handler.HandlerManager;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.PlayerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.spawner.SpawnerHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PracticeServer extends JavaPlugin {
@@ -21,6 +22,7 @@ public class PracticeServer extends JavaPlugin {
     private void registerHandlers() {
         HandlerManager.registerHandler(new DatabaseAPI());
         HandlerManager.registerHandler(new PlayerHandler());
+        HandlerManager.registerHandler(new SpawnerHandler());
         HandlerManager.loadHandlers();
     }
 

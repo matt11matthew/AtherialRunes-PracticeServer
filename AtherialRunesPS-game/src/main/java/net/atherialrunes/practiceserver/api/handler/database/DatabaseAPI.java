@@ -11,6 +11,7 @@ import net.atherialrunes.practiceserver.Constants;
 import net.atherialrunes.practiceserver.api.handler.Handler;
 import net.atherialrunes.practiceserver.api.handler.database.concurrent.SingleUpdateQuery;
 import net.atherialrunes.practiceserver.api.handler.database.concurrent.UpdateThread;
+import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class DatabaseAPI implements Handler {
                         new Document("uuid", uuid.toString())
                                 .append("ign", ign)
                                 .append("firstLogin", System.currentTimeMillis() / 1000L)
+                                .append("Rank", Rank.DEFAULT.toString())
                 );
         playerData.insertOne(newPlayerDocument);
         requestPlayer(uuid, ign);

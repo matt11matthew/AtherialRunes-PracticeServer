@@ -4,6 +4,7 @@ import net.atherialrunes.practiceserver.api.player.GamePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GameAPI {
@@ -15,6 +16,10 @@ public class GameAPI {
     }
 
     public static void handleLogin(Player player) {
-        GAMEPLAYERS.put(player.getUniqueId().toString(), new GamePlayer(player));
+        handleLogin(player.getUniqueId(), player.getName());
+    }
+
+    public static void handleLogin(UUID uuid, String name) {
+        GAMEPLAYERS.put(uuid.toString(), new GamePlayer(name, uuid));
     }
 }
