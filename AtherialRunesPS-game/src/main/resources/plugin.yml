@@ -1,0 +1,5 @@
+name: AtherialPracticeSever
+author: matt11matthew
+authors: [matt11matthew, Jackychen1999, Incinerator64]
+version: 1.0.0
+main: net.atherialrunes.practiceserver.PracticeServer

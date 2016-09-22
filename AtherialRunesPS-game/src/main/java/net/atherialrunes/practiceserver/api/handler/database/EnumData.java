@@ -2,7 +2,9 @@ package net.atherialrunes.practiceserver.api.handler.database;
 
 public enum  EnumData {
 
-    UUID("info.uuid");
+    UUID("info.uuid"),
+    IGN("info.ign"),
+    FIRST_LOGIN("info.firstLogin");
 
     private String key;
 
