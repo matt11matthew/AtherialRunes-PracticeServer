@@ -1,5 +1,6 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.item;
 
+import net.atherialrunes.practiceserver.utils.StatUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -36,17 +37,19 @@ public class AtherialItem {
         return itemStack.getAmount();
     }
 
-    public void setAmount(int amount) {
+    public AtherialItem setAmount(int amount) {
         itemStack.setAmount(amount);
+        return this;
     }
 
-    public void setLore(List<String> lore) {
+    public AtherialItem setLore(List<String> lore) {
         ItemMeta im = itemStack.getItemMeta();
         im.setLore(lore);
         itemStack.setItemMeta(im);
+        return this;
     }
 
-    public void addLore(String lore) {
+    public AtherialItem addLore(String lore) {
         ItemMeta im = itemStack.getItemMeta();
         List<String> itemLore = null;
         if (!im.hasLore()) {
@@ -57,15 +60,17 @@ public class AtherialItem {
         itemLore.add(Utils.colorCodes(lore));
         im.setLore(itemLore);
         itemStack.setItemMeta(im);
+        return this;
     }
 
-    public void addItemFlag(ItemFlag itemFlag) {
+    public AtherialItem addItemFlag(ItemFlag itemFlag) {
         ItemMeta im = itemStack.getItemMeta();
         im.addItemFlags(itemFlag);
         itemStack.setItemMeta(im);
+        return this;
     }
 
-    public void setLoreline(int line, String lore) {
+    public AtherialItem setLoreline(int line, String lore) {
         ItemMeta im = itemStack.getItemMeta();
         List<String> itemLore = null;
         if (!im.hasLore()) {
@@ -76,23 +81,51 @@ public class AtherialItem {
         itemLore.set(line, Utils.colorCodes(lore));
         im.setLore(itemLore);
         itemStack.setItemMeta(im);
+        return this;
     }
 
-    public void setName(String name) {
+    public AtherialItem setName(String name) {
         ItemMeta im = itemStack.getItemMeta();
         im.setDisplayName(Utils.colorCodes(name));
         itemStack.setItemMeta(im);
+        return this;
     }
 
     public ItemStack build() {
         return itemStack;
     }
 
-    public void setDurability(int i) {
-        itemStack.setDurability((short) i);
+    public AtherialItem setPrice(int price) {
+        addLore("&aPrice: &f" + price + "g");
+        return this;
     }
 
-    public void addGlow() {
+    public AtherialItem setDurability(int i) {
+        itemStack.setDurability((short) i);
+        return this;
+    }
+
+    public AtherialItem addGlow() {
         itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
+        return this;
+    }
+
+    public int getPrice() {
+        return StatUtils.getPrice(build());
+    }
+
+    public AtherialItem removePrice() {
+        ItemMeta im = itemStack.getItemMeta();
+        List<String> lore = im.getLore();
+        lore.remove(lore.size() - 1);
+        im.setLore(lore);
+        itemStack.setItemMeta(im);
+        return this;
+    }
+
+    public static AtherialItem fromItemStack(ItemStack item) {
+        AtherialItem atherialItem = new AtherialItem(item.getType());
+        atherialItem.itemStack = item;
+        return atherialItem;
     }
 }

@@ -36,19 +36,35 @@ public class ItemGenerator {
         return item.build(gearType);
     }
 
-    public static ItemStack generateOrbsOfAlteration(int amount) {
+    public static AtherialItem generateOrbsOfAlteration(int amount) {
         AtherialItem orb = new AtherialItem(Material.MAGMA_CREAM);
         orb.setName("&dOrb of Alteration");
+        orb.addLore("&7Randomizes stats of selected equipment.");
         orb.setAmount(amount);
-        return orb.build();
+        return orb;
     }
 
-    public static ItemStack generateEnchant(int amount, Tier tier, String type) {
+    public static AtherialItem generateEnchant(int amount, Tier tier, String type) {
         String color = tier.getColor();
         String name = "&f&lScroll: " + color + " Enchant " + tier.getPrefix(type) + " " + type;
         AtherialItem enchant = new AtherialItem(Material.EMPTY_MAP);
         enchant.setName(name);
         enchant.setAmount(amount);
-        return enchant.build();
+        switch (type) {
+            case "Armor":
+                enchant.addLore("&c+5% HP");
+                enchant.addLore("&c+5% HP REGEN");
+                enchant.addLore("&7   - OR -");
+                enchant.addLore("&c+1% ENERGY REGEN");
+                enchant.addLore("&7&oArmor will VANISH if enchant above +3 FAILS.");
+                break;
+            case "Weapon":
+                enchant.addLore("&c+5% DMG");
+                enchant.addLore("&7&oWeapon will VANISH if enchant above +3 FAILS.");
+                break;
+            default:
+                break;
+        }
+        return enchant;
     }
 }

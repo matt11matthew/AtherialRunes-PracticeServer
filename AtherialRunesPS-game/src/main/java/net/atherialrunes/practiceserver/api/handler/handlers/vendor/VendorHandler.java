@@ -2,6 +2,8 @@ package net.atherialrunes.practiceserver.api.handler.handlers.vendor;
 
 import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,7 +60,9 @@ public class VendorHandler extends ListenerHandler {
         vendors.values().forEach(vendor -> {
             if (e.getClickedInventory().getTitle().equals(vendor.getMenu().getTitle())) {
                 e.setCancelled(true);
-                vendor.onMenuClick(GameAPI.getGamePlayer(player), e.getSlot());
+                if ((e.getCurrentItem().getType() != null) && (e.getCurrentItem().getType() != Material.AIR)) {
+                    vendor.onMenuClick(GameAPI.getGamePlayer(player), e.getSlot(), AtherialItem.fromItemStack(e.getCurrentItem()));
+                }
                 return;
             }
         });

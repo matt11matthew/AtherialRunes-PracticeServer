@@ -1,4 +1,10 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.mob;
+
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Matthew E on 9/21/2016.
  */
@@ -33,5 +39,15 @@ public enum GearType {
 
     public boolean isArmor() {
         return ((this == HELMET) || (this == CHESTPLATE) || (this == LEGGINGS) || (this == BOOTS));
+    }
+
+    public static GearType getGearType(ItemStack item) {
+        List<GearType> types = Arrays.asList(values());
+        for (GearType type : types) {
+            if (item.getType().toString().toLowerCase().split("_")[1].equals(type.getName())) {
+                return type;
+            }
+        }
+        return null;
     }
 }

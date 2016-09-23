@@ -1,5 +1,6 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.foodvendor;
 
+import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.Vendor;
 import net.atherialrunes.practiceserver.api.menu.Menu;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
@@ -22,7 +23,7 @@ public class FoodVendor extends Vendor {
     }
 
     @Override
-    public void onMenuClick(GamePlayer gamePlayer, int slot) {
+    public void onMenuClick(GamePlayer gamePlayer, int slot, AtherialItem item) {
 
     }
 

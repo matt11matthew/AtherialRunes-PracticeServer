@@ -1,8 +1,9 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.itemvendor;
 
+import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.Vendor;
 import net.atherialrunes.practiceserver.api.menu.Menu;
-import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 
 /**
  * Created by Matthew E on 9/22/2016.
@@ -22,8 +23,8 @@ public class ItemVendor extends Vendor {
     }
 
     @Override
-    public void onMenuClick(GamePlayer gamePlayer, int slot) {
-
+    public void onMenuClick(GamePlayer gamePlayer, int slot, AtherialItem item) {
+       buy(gamePlayer, item);
     }
 
     @Override
