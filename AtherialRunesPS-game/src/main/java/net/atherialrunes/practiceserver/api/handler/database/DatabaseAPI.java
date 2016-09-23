@@ -106,7 +106,16 @@ public class DatabaseAPI implements Handler {
                                 .append("foodLevel", 10)
                                 .append("exp", 0)
                                 .append("level", 0)
-                                .append("location", ""))
+                                .append("location", "")
+                                .append("bank_inventory_1", "")
+                                .append("bank_inventory_2", "")
+                                .append("bank_inventory_3", "")
+                                .append("bank_inventory_4", "")
+                                .append("bank_page_amount", 1)
+                                .append("bank_page_1_slots", 54)
+                                .append("bank_page_2_slots", 0)
+                                .append("bank_page_3_slots", 0)
+                                .append("bank_page_4_slots", 0))
                         .append("ban",
                                 new Document("banned", 0L)
                                         .append("banReason", "")
@@ -117,7 +126,7 @@ public class DatabaseAPI implements Handler {
                                 new Document("muted", 0L)
                                         .append("muteReason", "")
                                         .append("unmuteReason", "")
-                                         .append("whoUnmuted", "")
+                                        .append("whoUnmuted", "")
                                         .append("whoMuted", ""));
         playerData.insertOne(newPlayerDocument);
         requestPlayer(uuid, ign);

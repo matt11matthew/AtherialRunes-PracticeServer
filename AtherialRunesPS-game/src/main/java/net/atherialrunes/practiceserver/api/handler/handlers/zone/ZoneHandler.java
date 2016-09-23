@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+/**
+ * Created by Matthew E on 9/23/2016.
+ */
 public class ZoneHandler extends ListenerHandler {
 
     @Override

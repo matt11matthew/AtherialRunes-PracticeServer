@@ -1,6 +1,7 @@
 package net.atherialrunes.practiceserver;
 
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
+import net.atherialrunes.practiceserver.api.handler.handlers.bank.BankHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.damage.DamageHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.ItemHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.PartyHandler;
@@ -53,6 +54,7 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new StaffHandler());
         HandlerManager.registerHandler(new ItemHandler());
         HandlerManager.registerHandler(new ZoneHandler());
+        HandlerManager.registerHandler(new BankHandler());
         HandlerManager.loadHandlers();
     }
 

@@ -7,6 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Created by Matthew E on 9/23/2016.
+ */
 public class RegionUtils {
 
     public static WorldGuardPlugin getWg() {

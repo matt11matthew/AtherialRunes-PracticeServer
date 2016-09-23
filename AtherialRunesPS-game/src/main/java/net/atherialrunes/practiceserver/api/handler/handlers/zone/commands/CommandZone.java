@@ -7,6 +7,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * Created by Matthew E on 9/23/2016.
+ */
 public class CommandZone extends AtherialCommand {
     public CommandZone(String command) {
         super(command);

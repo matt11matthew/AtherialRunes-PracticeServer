@@ -2,6 +2,9 @@ package net.atherialrunes.practiceserver.api.handler.handlers.zone;
 
 import net.atherialrunes.practiceserver.utils.Utils;
 
+/**
+ * Created by Matthew E on 9/23/2016.
+ */
 public enum Zone {
 
     SAFE("&a&l                *** SAFE ZONE (DMG-OFF) ***"),
