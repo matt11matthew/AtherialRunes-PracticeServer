@@ -10,22 +10,26 @@ import java.util.List;
  */
 public enum Tier {
 
-    T1(1, "&f", "armor:leather,weapon:wood", ArmorDye.NONE),
-    T2(2, "&a", "armor:chainmail,weapon:stone", ArmorDye.NONE),
-    T3(3, "&b", "armor:iron,weapon:iron", ArmorDye.NONE),
-    T4(4, "&d", "armor:diamond,weapon:diamond", ArmorDye.NONE),
-    T5(5, "&e", "armor:gold,weapon:gold", ArmorDye.NONE);
+    T1(1, "&f", "armor:leather,weapon:wood", ArmorDye.NONE, "Leather", "Wooden"),
+    T2(2, "&a", "armor:chainmail,weapon:stone", ArmorDye.NONE, "Chainmail", "Stone"),
+    T3(3, "&b", "armor:iron,weapon:iron", ArmorDye.NONE, "Iron", "Iron"),
+    T4(4, "&d", "armor:diamond,weapon:diamond", ArmorDye.NONE, "Diamond", "Diamond"),
+    T5(5, "&e", "armor:gold,weapon:gold", ArmorDye.NONE, "Golden", "Golden");
 
     private int tier;
     private String color;
     private String types;
     private ArmorDye armorDye;
+    private String prefix1;
+    private String prefix2;
 
-    Tier(int tier, String color, String types, ArmorDye armorDye) {
+    Tier(int tier, String color, String types, ArmorDye armorDye, String prefix1, String prefix2) {
         this.tier = tier;
         this.color = color;
         this.types = types;
         this.armorDye = armorDye;
+        this.prefix1 = prefix1;
+        this.prefix2 = prefix2;
     }
 
     public String getTypes() {
@@ -63,5 +67,24 @@ public enum Tier {
 
     public ArmorDye getArmorDye() {
         return armorDye;
+    }
+
+    public String getPrefix1() {
+        return prefix1;
+    }
+
+    public String getPrefix2() {
+        return prefix2;
+    }
+
+    public String getPrefix(String type) {
+        switch (type) {
+            case "Weapon":
+                return getPrefix2();
+            case "Armor":
+                return getPrefix1();
+
+        }
+        return null;
     }
 }

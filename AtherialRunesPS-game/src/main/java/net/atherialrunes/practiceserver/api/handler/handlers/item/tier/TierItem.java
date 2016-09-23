@@ -115,6 +115,10 @@ public abstract class TierItem {
                 damageMin = (damageMax - 5);
             }
             item.addLore("&cDMG: " + damageMin + " - " + damageMax);
+            if (RandomUtils.random(1, 10) == 2) {
+                item.addLore("&cCRITICAL HIT: " + decideValue(getCriticalHitRange()) + "%");
+                name = "Critical " + name;
+            }
             if (RandomUtils.random(1, 8) == 2) {
                 int elementType = RandomUtils.random(1, 6);
                 boolean ice = false;
