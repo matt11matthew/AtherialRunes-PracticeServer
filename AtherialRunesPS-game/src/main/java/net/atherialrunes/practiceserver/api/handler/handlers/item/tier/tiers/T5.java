@@ -4,39 +4,56 @@ import net.atherialrunes.practiceserver.api.handler.handlers.item.tier.TierItem;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
 import org.bukkit.Material;
 
+/**
+ * Created by Matthew E on 9/22/2016.
+ */
 public class T5 extends TierItem {
 
     public T5() {
         setAxeDurability((short) 0);
-        setAxeMinDamageRange("21-61");
-        setAxeMaxDamageRange("39-86");
-        setAxeType(Material.WOOD_AXE);
+        setAxeMinDamageRange("698-802");
+        setAxeMaxDamageRange("1024-2975");
+        setAxeType(Material.GOLD_AXE);
 
-        setCriticalHitRange("1-5");
-        setElementDamageRange("6-16");
+        setCriticalHitRange("12-19");
+        setElementDamageRange("56-125");
+        setReflectRange("5-11");
+        setBlockRange("9-18");
+        setDodgeRange("9-18");
+        setVitStatRange("180-300");
+        setStrStatRange("180-300");
+        setEnergyRange("3-6");
+        setHpsRange("1125-3250");
 
         setSwordDurability((short) 0);
-        setSwordMaxDamageRange("18-55");
-        setSwordMinDamageRange("38-69");
-        setSwordType(Material.WOOD_SWORD);
+        setSwordMaxDamageRange("988-2750");
+        setSwordMinDamageRange("624-756");
+        setSwordType(Material.GOLD_SWORD);
 
         setBootDurability((short) 0);
-        setBootsHpRange("50-200");
-        setBootType(Material.LEATHER_BOOTS);
+        setBootsHpRange("3990-11255");
+        setBootType(Material.GOLD_BOOTS);
 
         setHelmetDurability((short) 0);
-        setHelmetHpRange("65-210");
-        setHelmetType(Material.LEATHER_HELMET);
+        setHelmetHpRange("4200-13650");
+        setHelmetType(Material.GOLD_HELMET);
 
         setChestplateDurability((short) 0);
-        setChestplateHpRange("150-400");
-        setChestplateType(Material.LEATHER_CHESTPLATE);
+        setChestplateHpRange("11850-32750");
+        setChestplateType(Material.GOLD_CHESTPLATE);
 
         setLeggingDurability((short) 0);
-        setLeggingsHpRange("125-375");
-        setLeggingType(Material.LEATHER_LEGGINGS);
+        setLeggingsHpRange("10250-31100");
+        setLeggingType(Material.GOLD_LEGGINGS);
 
-        setTier(Tier.T1);
-        setTierNumber(1);
+        setSwordName("Legendary Sword");
+        setAxeName("Legendary Axe");
+        setBootName("Legendary Platemail Boots");
+        setChestplateName("Legendary Platemail");
+        setLeggingName("Legendary Platemail Leggings");
+        setHelmetName("Legendary Platemail Helmet");
+
+        setTier(Tier.T5);
+        setTierNumber(5);
     }
 }
