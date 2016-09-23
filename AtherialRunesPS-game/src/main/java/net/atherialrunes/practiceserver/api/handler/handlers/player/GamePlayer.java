@@ -10,6 +10,7 @@ import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -83,5 +84,7 @@ public class GamePlayer {
         getPlayer().sendMessage(Utils.colorCodes(msg));
     }
 
-
+    public ItemStack getWeapon() {
+        return getPlayer().getEquipment().getItemInMainHand();
+    }
 }

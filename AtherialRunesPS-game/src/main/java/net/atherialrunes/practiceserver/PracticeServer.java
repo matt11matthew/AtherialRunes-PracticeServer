@@ -20,6 +20,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.vendor.VendorHandle
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.foodvendor.FoodVendor;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.itemvendor.ItemVendor;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.misc.Healer;
+import net.atherialrunes.practiceserver.api.handler.handlers.zone.ZoneHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -51,6 +52,7 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new VendorHandler());
         HandlerManager.registerHandler(new StaffHandler());
         HandlerManager.registerHandler(new ItemHandler());
+        HandlerManager.registerHandler(new ZoneHandler());
         HandlerManager.loadHandlers();
     }
 
