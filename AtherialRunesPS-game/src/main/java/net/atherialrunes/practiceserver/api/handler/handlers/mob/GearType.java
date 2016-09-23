@@ -1,5 +1,6 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.mob;
 
+import net.atherialrunes.practiceserver.utils.RandomUtils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -49,5 +50,17 @@ public enum GearType {
             }
         }
         return null;
+    }
+
+    public static GearType getRandomWeapon() {
+        int i = RandomUtils.random(1, 2);
+        switch (i) {
+            case 1:
+                return AXE;
+            case 2:
+                return SWORD;
+            default:
+                return SWORD;
+        }
     }
 }

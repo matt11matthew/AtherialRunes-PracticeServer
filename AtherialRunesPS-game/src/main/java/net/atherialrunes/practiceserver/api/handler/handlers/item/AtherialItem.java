@@ -1,7 +1,10 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.item;
 
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.GearType;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
 import net.atherialrunes.practiceserver.utils.StatUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -123,9 +126,17 @@ public class AtherialItem {
         return this;
     }
 
+    public int getHP() {
+        return Integer.parseInt(ChatColor.stripColor(itemStack.getItemMeta().getLore().get(1).split("HP: +")[1]).trim());
+    }
+
     public static AtherialItem fromItemStack(ItemStack item) {
         AtherialItem atherialItem = new AtherialItem(item.getType());
         atherialItem.itemStack = item;
         return atherialItem;
+    }
+
+    public static AtherialItem generate(GearType gearType, Tier tier) {
+        return AtherialItem.fromItemStack(ItemGenerator.generateGear(tier.getTier(), gearType));
     }
 }
