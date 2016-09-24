@@ -1,5 +1,7 @@
 package net.atherialrunes.practiceserver;
 
+import net.atherialrunes.practiceserver.api.handler.handlers.player.PlayerHandler;
+
 /**
  * Created by Matthew E on 9/24/2016 at 11:55 AM.
  */
@@ -17,4 +19,7 @@ public class GameConstants {
     public static final int CPS = 3;
 
     public static final double ELITE_DROP_MULTIPLIER = 1.50;
+
+    public static final int MAX_PLAYERS = 500;
+    public static final String MOTD = PlayerHandler.asCentered("&a&m--&a> &cAtherialRunes Practice Server&a<&m--");
 }

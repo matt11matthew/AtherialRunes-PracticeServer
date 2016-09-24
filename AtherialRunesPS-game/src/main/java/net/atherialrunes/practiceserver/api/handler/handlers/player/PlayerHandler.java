@@ -1,6 +1,7 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.player;
 
 import net.atherialrunes.practiceserver.GameAPI;
+import net.atherialrunes.practiceserver.GameConstants;
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
@@ -19,6 +20,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 
 import java.util.Arrays;
 
@@ -63,6 +65,12 @@ public class PlayerHandler extends ListenerHandler {
     public void onQuit(PlayerQuitEvent e) {
         e.setQuitMessage(null);
         GameAPI.handleLogout(e.getPlayer());
+    }
+
+    @EventHandler
+    public void onServerListPingEvent(ServerListPingEvent e) {
+        e.setMaxPlayers(GameConstants.MAX_PLAYERS);
+        e.setMotd(GameConstants.MOTD);
     }
 
     //Move this wherever quickly put this here :/
