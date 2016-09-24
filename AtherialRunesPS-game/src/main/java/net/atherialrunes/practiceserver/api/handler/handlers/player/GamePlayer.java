@@ -49,6 +49,8 @@ public class GamePlayer {
     private int neutralTime;
     private int chaoticTime;
     private int combatTime;
+    private boolean save = true;
+    private PlayerStatistics playerStatistics;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -77,6 +79,7 @@ public class GamePlayer {
         this.location = getLocationNotParsed();
         getPlayer().teleport(getLocation());
         setParty(null);
+        this.playerStatistics = new PlayerStatistics(this);
     }
 
     private Location getLocationNotParsed() {
@@ -109,6 +112,7 @@ public class GamePlayer {
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.NEUTRAL_TIME, getNeutralTime(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.CHAOTIC_TIME, getChaoticTime(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.COMBAT_TIME, getCombatTime(), true);
+        playerStatistics.upload();
     }
 
     private String getLocationParsed() {
@@ -215,5 +219,19 @@ public class GamePlayer {
 
     public boolean isToggleChaos() {
         return (boolean) DatabaseAPI.getInstance().getData(EnumData.TOGGLE_CHAOTIC_PREVENTION, uniqueId);
+    }
+
+    public void wipe() {
+        setSave(false);
+        DatabaseAPI.getInstance().playerData.deleteOne(DatabaseAPI.getInstance().PLAYERS.get(uniqueId));
+        getPlayer().kickPlayer(Utils.colorCodes("&cYou have been wiped!"));
+    }
+
+    public Object getStatistic(String data) {
+        return DatabaseAPI.getInstance().getData(data, uniqueId);
+    }
+
+    public void setStatistic(String name, Object value) {
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, "statistics." + name, value, true);
     }
 }

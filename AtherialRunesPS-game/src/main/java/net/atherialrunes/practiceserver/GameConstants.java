@@ -14,5 +14,7 @@ public class GameConstants {
     public static final int T4_DROP_RATES = 9;
     public static final int T5_DROP_RATES = 5;
 
+    public static final int CPS = 3;
+
     public static final double ELITE_DROP_MULTIPLIER = 1.50;
 }

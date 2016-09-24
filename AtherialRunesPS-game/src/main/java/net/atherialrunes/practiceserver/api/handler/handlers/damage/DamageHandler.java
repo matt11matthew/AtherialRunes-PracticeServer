@@ -5,6 +5,7 @@ import net.atherialrunes.practiceserver.GameConstants;
 import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobBuilder;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.armor.MobArmor;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import net.atherialrunes.practiceserver.api.handler.handlers.pvp.Alignment;
 import net.atherialrunes.practiceserver.api.handler.handlers.zone.RegionUtils;
@@ -37,6 +38,9 @@ public class DamageHandler extends ListenerHandler {
     @Override
     public void onLoad() {
         super.onLoad();
+
+        damageTask();
+        task();
     }
 
     @Override
@@ -217,6 +221,37 @@ public class DamageHandler extends ListenerHandler {
 
     public Player getPlayer(Entity entity) {
         return (isPlayer(entity)) ? ((Player) entity) : null;
+    }
+
+    public void damageTask() {
+       AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
+           @Override
+           public void run() {
+               MobBuilder.mobArmors.keySet().forEach(mob -> {
+                   MobArmor mobArmor = MobBuilder.mobArmors.get(mob);
+                   Bukkit.getOnlinePlayers().forEach(player -> {
+                       if (mob.getLocation().distance(player.getLocation()) <= 2) {
+                           GamePlayer gp = GameAPI.getGamePlayer(player);
+                           int dmg = MobBuilder.getDamageBasedOnMobArmor(mobArmor);
+                           tag(gp.getPlayer());
+                           if (dmg >= gp.getHp()) {
+                               gp.getPlayer().damage(gp.getPlayer().getHealth());
+                               if (gp.isToggleDebug()) {
+                                   gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[0&lHP&a]");
+                               }
+                               String msg = gp.getRank().getChatPrefix(gp.getPlayer()) + "&f was killed a(n) &r" + mobArmor.getName();
+                               Bukkit.getServer().broadcastMessage(Utils.colorCodes(msg));
+                           } else {
+                               gp.getPlayer().setHealth((gp.getPlayer().getHealth() - dmg));
+                               if (gp.isToggleDebug()) {
+                                   gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[" + gp.getHp() + "&lHP&a]");
+                               }
+                           }
+                       }
+                   });
+               });
+           }
+       }, GameConstants.CPS, GameConstants.CPS);
     }
 
     @EventHandler

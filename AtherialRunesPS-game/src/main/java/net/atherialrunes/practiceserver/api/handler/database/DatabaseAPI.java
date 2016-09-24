@@ -81,9 +81,30 @@ public class DatabaseAPI implements Handler {
         return rootDoc.get(key[1], clazz);
     }
 
+    public Object getData(String data, UUID uuid) {
+        Document doc;
+
+        if (PLAYERS.containsKey(uuid)) {
+            doc = PLAYERS.get(uuid);
+        } else {
+            long currentTime = 0;
+            doc = playerData.find(Filters.eq("info.uuid", uuid.toString())).first();
+        }
+
+        String[] key = data.split("\\.");
+        Document rootDoc = (Document) doc.get(key[0]);
+        if (rootDoc == null) return null;
+
+        Object dataObj = rootDoc.get(key[1]);
+
+        if (dataObj == null) return null;
+        Class<?> clazz = dataObj.getClass();
+
+        return rootDoc.get(key[1], clazz);
+    }
+
     public boolean requestPlayer(UUID uuid, String ign) {
         Document doc = playerData.find(Filters.eq("info.uuid", uuid.toString())).first();
-
         if (doc == null) {
             addNewPlayer(uuid, ign);
             System.out.println("DOCUMENT IS NULL, ADDING NEW PLAYER");
@@ -125,6 +146,19 @@ public class DatabaseAPI implements Handler {
                                 new Document("debug", true)
                                         .append("pvp", false)
                                         .append("chaoticPrevention", true))
+                        .append("statistics",
+                                new Document("t1mobkills", 0)
+                                        .append("t2mobkills", 0)
+                                        .append("t3mobkills", 0)
+                                        .append("t4mobkills", 0)
+                                        .append("t5mobkills", 0)
+                                        .append("lawfulkills", 0)
+                                        .append("neutralkills", 0)
+                                        .append("chaotickills", 0)
+                                        .append("orbsfailed", 0)
+                                        .append("orbsworked", 0)
+                                        .append("gemsgained", 0)
+                                        .append("gemsspent", 0))
                         .append("ban",
                                 new Document("banned", 0L)
                                         .append("banReason", "")
@@ -192,10 +226,65 @@ public class DatabaseAPI implements Handler {
         }
     }
 
+    public void update(UUID uuid, EnumOperators EO, String variable, Object object, boolean async, Consumer<UpdateResult> doAfterOptional) {
+        if (PLAYERS.containsKey(uuid)) { // update local data
+            Document localDoc = PLAYERS.get(uuid);
+            String[] key = variable.split("\\.");
+            Document rootDoc = (Document) localDoc.get(key[0]);
+            Object data = rootDoc.get(key[1]);
+            switch (EO) {
+                case $SET:
+                    rootDoc.put(key[1], object);
+                    break;
+                case $INC:
+                    if (data instanceof Integer)
+                        rootDoc.put(key[1], ((Integer) object) + ((Integer) data));
+                    else if (data instanceof Double)
+                        rootDoc.put(key[1], ((Double) object) + ((Double) data));
+                    else if (data instanceof Float)
+                        rootDoc.put(key[1], ((Float) object) + ((Float) data));
+                    else if (data instanceof Long)
+                        rootDoc.put(key[1], ((Long) object) + ((Long) data));
+                    break;
+                case $MUL:
+                    if (data instanceof Integer)
+                        rootDoc.put(key[1], ((Integer) object) * ((Integer) data));
+                    else if (data instanceof Double)
+                        rootDoc.put(key[1], ((Double) object) * ((Double) data));
+                    else if (data instanceof Float)
+                        rootDoc.put(key[1], ((Float) object) * ((Float) data));
+                    else if (data instanceof Long)
+                        rootDoc.put(key[1], ((Long) object) * ((Long) data));
+                    break;
+                case $PUSH:
+                    ((ArrayList) data).add(object);
+                    break;
+                case $PULL:
+                    ((ArrayList) data).remove(object);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (async)
+            UpdateThread.CONCURRENT_QUERIES.add(new SingleUpdateQuery<>(Filters.eq("info.uuid", uuid.toString()), new Document(EO.getUO(), new Document(variable, object)), doAfterOptional));
+        else {
+            UpdateResult result = playerData.updateOne(Filters.eq("info.uuid", uuid.toString()), new Document(EO.getUO(), new Document(variable, object)), UpdateThread.uo);
+            if (doAfterOptional != null) {
+                doAfterOptional.accept(result);
+            }
+        }
+    }
+
     /**
      * {@link #update(UUID, EnumOperators, EnumData, Object, boolean, Consumer)}
      */
     public void update(UUID uuid, EnumOperators EO, EnumData variable, Object object, boolean async) {
+        update(uuid, EO, variable, object, async, null);
+    }
+
+    public void update(UUID uuid, EnumOperators EO, String variable, Object object, boolean async) {
         update(uuid, EO, variable, object, async, null);
     }
 }

@@ -28,7 +28,9 @@ public class GameAPI {
     }
 
     public static void handleLogout(Player player) {
-        getGamePlayer(player).upload();
+        if (getGamePlayer(player).isSave()) {
+            getGamePlayer(player).upload();
+        }
         GAMEPLAYERS.remove(player.getUniqueId().toString());
     }
 
