@@ -1,5 +1,6 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.item;
 
+import net.atherialrunes.practiceserver.api.handler.handlers.enchant.EnchantHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.GearType;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
 import net.atherialrunes.practiceserver.utils.StatUtils;
@@ -73,7 +74,7 @@ public class AtherialItem {
         return this;
     }
 
-    public AtherialItem setLoreline(int line, String lore) {
+    public AtherialItem setLoreLine(int line, String lore) {
         ItemMeta im = itemStack.getItemMeta();
         List<String> itemLore = null;
         if (!im.hasLore()) {
@@ -138,5 +139,40 @@ public class AtherialItem {
 
     public static AtherialItem generate(GearType gearType, Tier tier) {
         return AtherialItem.fromItemStack(ItemGenerator.generateGear(tier.getTier(), gearType));
+    }
+
+    public int getDamage() {
+        return StatUtils.getDamage(itemStack);
+    }
+
+    public void enchant(String type) {
+        setName("&c[" + EnchantHandler.getPlus(itemStack.getItemMeta().getDisplayName()) + "] " + EnchantHandler.getPlus(itemStack.getItemMeta().getDisplayName()));
+        switch (type) {
+            case "Armor":
+                int hp = getHP();
+                hp *= 1.05;
+                setLoreLine(1, "&cHP: +" + hp);
+                if (StatUtils.hasStat(itemStack, "ENERGY REGEN")) {
+                    int energy = (int) StatUtils.getStatFromLore(itemStack, "ENERGY REGEN: ", "%");
+                    energy += 1;
+                    setLoreLine(2, "&cENERGY REGEN: " + energy + "%");
+                    break;
+                } else if (StatUtils.hasStat(itemStack, "HP REGEN")) {
+                    int hps = (int) StatUtils.getStatFromLore(itemStack, "HP REGEN: ", "HP/s");
+                    hps *= 1.05;
+                    setLoreLine(2, "&cHP REGEN: " + hps + " HP/s");
+                    break;
+                }
+                break;
+            case "Weapon":
+                int minDamage = StatUtils.getMinDamage(itemStack);
+                int maxDamage = StatUtils.getMaxDamage(itemStack);
+                minDamage *= 1.05;
+                maxDamage *= 1.05;
+                setLoreLine(0, "&cDMG: " + minDamage + " - " + maxDamage);
+                break;
+            default:
+                break;
+        }
     }
 }

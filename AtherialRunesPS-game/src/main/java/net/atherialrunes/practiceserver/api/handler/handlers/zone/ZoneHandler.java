@@ -1,7 +1,10 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.zone;
 
+import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.pvp.Alignment;
 import net.atherialrunes.practiceserver.api.handler.handlers.zone.commands.CommandZone;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -38,7 +41,7 @@ public class ZoneHandler extends ListenerHandler {
             if (from_zone != to_zone) {
                 player.sendMessage(to_zone.getMessage());
                 player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.25F, 0.3F);
-                if (!canEnterZone(player, to_zone)) {
+                if (!canEnterZone(GameAPI.getGamePlayer(player), to_zone)) {
                     e.setCancelled(true);
                     player.teleport(from);
                 }
@@ -46,7 +49,34 @@ public class ZoneHandler extends ListenerHandler {
         }
     }
 
-    public boolean canEnterZone(Player p, Zone to_zone) {
+    public boolean canEnterZone(GamePlayer gp, Zone to_zone) {
+        Alignment alignment = gp.getAlignment();
+        switch (to_zone) {
+            case CHAOTIC:
+                return true;
+            case WILDERNESS:
+                if (alignment == Alignment.CHAOTIC) {
+                    gp.msg("&cYou &ncannot&c enter &lNON-PVP&c zones with a chaotic alignment.");
+                    return false;
+                } else if ((alignment == Alignment.NEUTRAL) && (gp.isInCombat())) {
+                    gp.msg("&cYou &ncannot&c leave a chaotic zone while in combat.");
+                    gp.msg("&7Out of combat in: &l" + gp.getCombatTime() + "s");
+                    return false;
+                } else {
+                    return true;
+                }
+            case SAFE:
+                if (alignment == Alignment.CHAOTIC) {
+                    gp.msg("&cYou &ncannot&c enter &lNON-PVP&c zones with a chaotic alignment.");
+                    return false;
+                } else if ((alignment == Alignment.NEUTRAL) && (gp.isInCombat())) {
+                    gp.msg("&cYou &ncannot&c leave a chaotic zone while in combat.");
+                    gp.msg("&7Out of combat in: &l" + gp.getCombatTime() + "s");
+                    return false;
+                } else {
+                    return true;
+                }
+        }
         return true;
     }
 }

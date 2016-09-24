@@ -77,6 +77,9 @@ public abstract class AtherialCommand implements CommandExecutor, TabExecutor {
         this(command, usage, description, null, aliases);
     }
 
+    public AtherialCommand(String command, List<String> aliases) {
+        this(command, null, null, null, aliases);
+    }
     /**
      * Command, usage, description, permissionsMessage and Aliases.
      *

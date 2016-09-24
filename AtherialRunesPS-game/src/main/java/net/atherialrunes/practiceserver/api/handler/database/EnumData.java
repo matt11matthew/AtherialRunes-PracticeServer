@@ -28,6 +28,15 @@ public enum  EnumData {
 
     BANK_PAGE_AMOUNT("info.bank_page_amount"),
 
+    ALIGNMENT("info.alignment"),
+
+    NEUTRAL_TIME("info.neutralTime"),
+    CHAOTIC_TIME("info.chaoticTime"),
+    COMBAT_TIME("info.combatTime"),
+
+    TOGGLE_DEBUG("toggles.debug"),
+    TOGGLE_PVP("toggles.pvp"),
+    TOGGLE_CHAOTIC_PREVENTION("toggles.chaoticPrevention"),
     ;
 
     private String key;

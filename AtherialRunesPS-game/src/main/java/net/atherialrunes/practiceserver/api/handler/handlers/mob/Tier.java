@@ -1,7 +1,9 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.mob;
 
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.armor.ArmorDye;
+import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -86,5 +88,15 @@ public enum Tier {
 
         }
         return null;
+    }
+
+    public static int getTier(ItemStack itemStack) {
+        List<Tier> tiers = Arrays.asList(values());
+        for (Tier tier : tiers) {
+            if (itemStack.getItemMeta().getDisplayName().startsWith(Utils.colorCodes(tier.getColor()))) {
+                return tier.getTier();
+            }
+        }
+        return 0;
     }
 }

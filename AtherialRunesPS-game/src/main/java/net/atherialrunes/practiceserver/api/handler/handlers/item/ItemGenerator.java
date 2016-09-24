@@ -36,6 +36,33 @@ public class ItemGenerator {
         return item.build(gearType);
     }
 
+    public static ItemStack rerollStats(ItemStack itemStack) {
+        TierItem item = null;
+        int tier = Tier.getTier(itemStack);
+        switch (tier) {
+            case 0:
+                return itemStack;
+            case 1:
+                item = new T1();
+                break;
+            case 2:
+                item = new T2();
+                break;
+            case 3:
+                item = new T3();
+                break;
+            case 4:
+                item = new T4();
+                break;
+            case 5:
+                item = new T5();
+                break;
+            default:
+                break;
+        }
+        return item.rerollStats(itemStack);
+    }
+
     public static AtherialItem generateOrbsOfAlteration(int amount) {
         AtherialItem orb = new AtherialItem(Material.MAGMA_CREAM);
         orb.setName("&dOrb of Alteration");

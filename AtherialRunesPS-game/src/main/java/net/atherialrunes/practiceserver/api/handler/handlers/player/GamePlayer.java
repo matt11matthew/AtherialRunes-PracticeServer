@@ -5,14 +5,19 @@ import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
 import net.atherialrunes.practiceserver.api.handler.database.EnumData;
 import net.atherialrunes.practiceserver.api.handler.database.EnumOperators;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.Party;
+import net.atherialrunes.practiceserver.api.handler.handlers.pvp.Alignment;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
 import net.atherialrunes.practiceserver.utils.InventoryUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.UUID;
 
@@ -40,6 +45,10 @@ public class GamePlayer {
     private int page_2_slots;
     private int page_3_slots;
     private int page_4_slots;
+    private Alignment alignment;
+    private int neutralTime;
+    private int chaoticTime;
+    private int combatTime;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -61,6 +70,10 @@ public class GamePlayer {
         this.page_2_slots = (int) DatabaseAPI.getInstance().getData(EnumData.PAGE_2_SLOTS, uniqueId);
         this.page_3_slots = (int) DatabaseAPI.getInstance().getData(EnumData.PAGE_3_SLOTS, uniqueId);
         this.page_4_slots = (int) DatabaseAPI.getInstance().getData(EnumData.PAGE_4_SLOTS, uniqueId);
+        this.alignment = Alignment.valueOf(DatabaseAPI.getInstance().getData(EnumData.ALIGNMENT, uniqueId) + "");
+        this.chaoticTime = (int) DatabaseAPI.getInstance().getData(EnumData.CHAOTIC_TIME, uniqueId);
+        this.neutralTime = (int) DatabaseAPI.getInstance().getData(EnumData.NEUTRAL_TIME, uniqueId);
+        this.combatTime = (int) DatabaseAPI.getInstance().getData(EnumData.COMBAT_TIME, uniqueId);
         this.location = getLocationNotParsed();
         getPlayer().teleport(getLocation());
         setParty(null);
@@ -92,6 +105,10 @@ public class GamePlayer {
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.PAGE_2_SLOTS, getPage_2_slots(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.PAGE_3_SLOTS, getPage_3_slots(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.PAGE_4_SLOTS, getPage_4_slots(), true);
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.ALIGNMENT, getAlignment().toString(), true);
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.NEUTRAL_TIME, getNeutralTime(), true);
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.CHAOTIC_TIME, getChaoticTime(), true);
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.COMBAT_TIME, getCombatTime(), true);
     }
 
     private String getLocationParsed() {
@@ -161,5 +178,42 @@ public class GamePlayer {
             default:
                 break;
         }
+    }
+
+    public boolean isInCombat() {
+        return (combatTime > 0);
+    }
+
+    public void sendAction(String msg) {
+        Utils.sendActionBar(getPlayer(), Utils.colorCodes(msg));
+    }
+
+    public void fw() {
+        Player player = getPlayer();
+        Firework f = (Firework) player.getWorld().spawn(player.getLocation(), Firework.class);
+
+        FireworkMeta fm = f.getFireworkMeta();
+        fm.addEffect(FireworkEffect.builder()
+                .flicker(false)
+                .trail(true)
+                .with(FireworkEffect.Type.BURST)
+                .withColor(Color.ORANGE)
+                .withFade(Color.WHITE)
+                .build());
+        fm.setPower(1);
+        f.setFireworkMeta(fm);
+
+    }
+
+    public boolean isTogglePvP() {
+        return (boolean) DatabaseAPI.getInstance().getData(EnumData.TOGGLE_PVP, uniqueId);
+    }
+
+    public boolean isToggleDebug() {
+        return (boolean) DatabaseAPI.getInstance().getData(EnumData.TOGGLE_DEBUG, uniqueId);
+    }
+
+    public boolean isToggleChaos() {
+        return (boolean) DatabaseAPI.getInstance().getData(EnumData.TOGGLE_CHAOTIC_PREVENTION, uniqueId);
     }
 }

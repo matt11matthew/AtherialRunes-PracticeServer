@@ -3,7 +3,10 @@ package net.atherialrunes.practiceserver;
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
 import net.atherialrunes.practiceserver.api.handler.handlers.bank.BankHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.damage.DamageHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.enchant.EnchantHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.enchant.OrbHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.ItemHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.PartyHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.ScoreboardHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRoll;
@@ -11,6 +14,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.Com
 import net.atherialrunes.practiceserver.api.handler.HandlerManager;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.PlayerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.pvp.PvPHandlers;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.commands.CommandSetRank;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.SpawnerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.commands.CommandHideMs;
@@ -22,6 +26,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.food
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.itemvendor.ItemVendor;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.misc.Healer;
 import net.atherialrunes.practiceserver.api.handler.handlers.zone.ZoneHandler;
+import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -40,6 +45,7 @@ public class PracticeServer extends JavaPlugin {
         registerHandlers();
         registerCommands();
         registerVendors();
+        Utils.load();
     }
 
     private void registerHandlers() {
@@ -55,6 +61,10 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new ItemHandler());
         HandlerManager.registerHandler(new ZoneHandler());
         HandlerManager.registerHandler(new BankHandler());
+        HandlerManager.registerHandler(new PvPHandlers());
+        HandlerManager.registerHandler(new MobHandler());
+        HandlerManager.registerHandler(new OrbHandler());
+        HandlerManager.registerHandler(new EnchantHandler());
         HandlerManager.loadHandlers();
     }
 

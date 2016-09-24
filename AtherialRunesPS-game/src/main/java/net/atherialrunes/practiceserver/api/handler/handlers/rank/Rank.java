@@ -11,13 +11,13 @@ import java.util.Arrays;
  */
 public enum Rank {
 
-    DEFAULT(0, "&7%name%: &f%msg%", "Default", "&7"),
-    SUB(1, "&a&lS &7%name%: &f%msg%", "Sub", "&a&lS &7"),
-    SUBPLUS(2, "&6&lS+ &7%name%: &f%msg%", "SubPlus", "&6&lS+ &7"),
-    SUBLIFE(3, "&3&lS+ &7%name%: &f%msg%", "SubLife", "&3&lS+ &7"),
-    PMOD(4, "&f&lPMOD &7%name%: &f%msg%", "PMOD", "&f&lPMOD &7"),
-    GAMEMASTER(5, "&b&lGM &7%name%: &f%msg%", "GameMaster", "&b&lGM &7"),
-    DEVELOPER(6, "&3&lDEV &7%name%: &f%msg%", "Developer", "&3&lDEV &7");
+    DEFAULT(0, "&7%name%: &f%msg%", "Default", "%namecolor%"),
+    SUB(1, "&a&lS &7%name%: &f%msg%", "Sub", "&a&lS %namecolor%"),
+    SUBPLUS(2, "&6&lS+ &7%name%: &f%msg%", "SubPlus", "&6&lS+ %namecolor%"),
+    SUBLIFE(3, "&3&lS+ &7%name%: &f%msg%", "SubLife", "&3&lS+ %namecolor%"),
+    PMOD(4, "&f&lPMOD &7%name%: &f%msg%", "PMOD", "&f&lPMOD %namecolor%"),
+    GAMEMASTER(5, "&b&lGM &7%name%: &f%msg%", "GameMaster", "&b&lGM %namecolor%"),
+    DEVELOPER(6, "&3&lDEV &7%name%: &f%msg%", "Developer", "&3&lDEV %namecolor%");
 
     private int id;
     private String placeHolder;
@@ -53,7 +53,9 @@ public enum Rank {
 
     public static String getChatPrefix(Player player) {
         GamePlayer gp = GameAPI.getGamePlayer(player);
-        return gp.getRank().getPrefix();
+        String prefix = gp.getRank().getPrefix();
+        prefix = prefix.replaceAll("%namecolor%", gp.getAlignment().getChatPrefix());
+        return prefix;
     }
 
     public static boolean isGM(String name) {

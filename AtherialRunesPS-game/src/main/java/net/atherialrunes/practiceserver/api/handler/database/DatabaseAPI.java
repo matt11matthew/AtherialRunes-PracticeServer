@@ -11,6 +11,7 @@ import net.atherialrunes.practiceserver.Constants;
 import net.atherialrunes.practiceserver.api.handler.Handler;
 import net.atherialrunes.practiceserver.api.handler.database.concurrent.SingleUpdateQuery;
 import net.atherialrunes.practiceserver.api.handler.database.concurrent.UpdateThread;
+import net.atherialrunes.practiceserver.api.handler.handlers.pvp.Alignment;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
 import org.bson.Document;
 
@@ -115,7 +116,15 @@ public class DatabaseAPI implements Handler {
                                 .append("bank_page_1_slots", 54)
                                 .append("bank_page_2_slots", 0)
                                 .append("bank_page_3_slots", 0)
-                                .append("bank_page_4_slots", 0))
+                                .append("bank_page_4_slots", 0)
+                                .append("alignment", Alignment.LAWFUL.toString())
+                                .append("neutralTime", 0)
+                                .append("chaoticTime", 0)
+                                .append("combatTime", 0))
+                        .append("toggles",
+                                new Document("debug", true)
+                                        .append("pvp", false)
+                                        .append("chaoticPrevention", true))
                         .append("ban",
                                 new Document("banned", 0L)
                                         .append("banReason", "")

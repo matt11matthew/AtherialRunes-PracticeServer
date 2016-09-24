@@ -100,4 +100,8 @@ public class StatUtils {
     public static int getPrice(ItemStack is) {
         return (StatUtils.hasStat(is, "Price")) ? (int) getStatFromLore(is, "Price", "g") : 0;
     }
+
+    public static int getDamage(ItemStack item) {
+        return RandomUtils.random(getMinDamage(item), getMaxDamage(item));
+    }
 }

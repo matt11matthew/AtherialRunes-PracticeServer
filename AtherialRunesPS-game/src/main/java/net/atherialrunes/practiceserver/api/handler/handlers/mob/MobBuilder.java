@@ -29,12 +29,16 @@ public class MobBuilder {
         AtherialItem boots = AtherialItem.generate(GearType.BOOTS, tier);
         AtherialItem weapon = AtherialItem.generate(GearType.getRandomWeapon(), tier);
         MobArmor mobArmor = new MobArmor(mob, helmet, chestplate, leggings, boots, weapon);
+        mobArmor.setTier(tier);
+        mobArmor.setElite(isElite);
+        String name = getName(tier, mobType, isElite);
+        mobArmor.setName(name);
         mob.getEquipment().setHelmet(helmet.build());
         mob.getEquipment().setChestplate(chestplate.build());
         mob.getEquipment().setLeggings(leggings.build());
         mob.getEquipment().setBoots(boots.build());
         mob.getEquipment().setItemInMainHand(weapon.build());
-        mob.setCustomName(getName(tier, mobType, isElite));
+        mob.setCustomName(name);
         mob.setCustomNameVisible(true);
         mob.setMaxHealth(getHealthBasedOnMobArmor(mobArmor));
         mob.setHealth(mob.getMaxHealth());
@@ -47,7 +51,20 @@ public class MobBuilder {
         health += mobArmor.getChestplate().getHP();
         health += mobArmor.getLeggings().getHP();
         health += mobArmor.getBoots().getHP();
-        return (health * 2);
+        health *= 2;
+        if (mobArmor.isElite()) {
+            health *= 2;
+        }
+        return health;
+    }
+
+    public static int getDamageBasedOnMobArmor(MobArmor mobArmor) {
+        int damage = 0;
+        damage += mobArmor.getWeapon().getDamage();
+        if (mobArmor.isElite()) {
+            damage *= 2;
+        }
+        return damage;
     }
 
     public static String getName(Tier tier, MobType mobType, boolean isElite) {
