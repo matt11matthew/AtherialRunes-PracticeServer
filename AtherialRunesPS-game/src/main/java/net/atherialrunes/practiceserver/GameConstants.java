@@ -1,6 +1,8 @@
 package net.atherialrunes.practiceserver;
 
 import net.atherialrunes.practiceserver.utils.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -19,11 +21,19 @@ public class GameConstants {
     public static final int T4_DROP_RATES = 9;
     public static final int T5_DROP_RATES = 5;
 
+    public static final String T1_GEM_DROP = "2-5";
+    public static final String T2_GEM_DROP = "15-20";
+    public static final String T3_GEM_DROP = "25-35";
+    public static final String T4_GEM_DROP = "40-74";
+    public static final String T5_GEM_DROP = "60-120";
+
     public static final int CPS = 5;
 
     public static final double ELITE_DROP_MULTIPLIER = 1.50;
 
-    public static final int MAX_ENTITIES_IN_CHUNK = 16;
+    public static final int MAX_ENTITIES_IN_CHUNK = 7;
+
+    public static World WORLD = Bukkit.getWorld("ARPS");
 
     public static final int MAX_PLAYERS = 500;
     public static final String MOTD = Utils.colorCodes(YamlConfiguration.loadConfiguration(new File(PracticeServer.getInstance().getDataFolder() + "", "motd.yml")).getString("motd")).replaceAll("%nl%", "\n");

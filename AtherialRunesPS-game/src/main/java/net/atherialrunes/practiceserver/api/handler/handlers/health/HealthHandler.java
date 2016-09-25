@@ -96,7 +96,7 @@ public class HealthHandler extends ListenerHandler {
 
     public void hpCheck(Player p) {
         double vit = getVIT(p);
-        double a = 50.0D;
+        double a = 200.0D;
         double hp = getHP(p);
         a += hp;
         if (vit > 0.0D) {

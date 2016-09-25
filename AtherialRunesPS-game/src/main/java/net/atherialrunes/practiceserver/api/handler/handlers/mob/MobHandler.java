@@ -2,10 +2,11 @@ package net.atherialrunes.practiceserver.api.handler.handlers.mob;
 
 import net.atherialrunes.practiceserver.GameConstants;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.armor.MobArmor;
 import net.atherialrunes.practiceserver.utils.RandomUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -21,11 +22,12 @@ public class MobHandler extends ListenerHandler {
     @Override
     public void onLoad() {
         super.onLoad();
+        MobBuilder.task();
     }
 
     @Override
     public void onUnload() {
-        Bukkit.getWorlds().get(0).getEntities().forEach(Entity::remove);
+        GameConstants.WORLD.getEntities().forEach(Entity::remove);
     }
 
     @EventHandler
@@ -65,23 +67,33 @@ public class MobHandler extends ListenerHandler {
             int chance = (int) (Math.random() * 100);
             if (chance < dropChance) {
                 int type = RandomUtils.random(1, 5);
+                int gem_amount = 0;
                 switch (type) {
                     case 1:
                         drop(mobArmor.getHelmet().build(), location);
+                        gem_amount = decideValue(GameConstants.T1_GEM_DROP);
                         break;
                     case 2:
                         drop(mobArmor.getChestplate().build(), location);
+                        gem_amount = decideValue(GameConstants.T2_GEM_DROP);
                         break;
                     case 3:
                         drop(mobArmor.getLeggings().build(), location);
+                        gem_amount = decideValue(GameConstants.T3_GEM_DROP);
                         break;
                     case 4:
                         drop(mobArmor.getBoots().build(), location);
+                        gem_amount = decideValue(GameConstants.T4_GEM_DROP);
                         break;
                     case 5:
                         drop(mobArmor.getWeapon().build(), location);
+                        gem_amount = decideValue(GameConstants.T5_GEM_DROP);
                         break;
                 }
+                AtherialItem gem = new AtherialItem(Material.EMERALD);
+                gem.setName("&aGem");
+                gem.setAmount(gem_amount);
+                drop(gem.build(), location);
                 MobBuilder.mobArmors.remove(mob);
                 return;
             }
@@ -90,5 +102,9 @@ public class MobHandler extends ListenerHandler {
 
     public void drop(ItemStack item, Location location) {
         location.getWorld().dropItemNaturally(location, item);
+    }
+
+    private int decideValue(String value) {
+        return RandomUtils.random(Integer.parseInt(value.split("-")[0]), Integer.parseInt(value.split("-")[1]));
     }
 }

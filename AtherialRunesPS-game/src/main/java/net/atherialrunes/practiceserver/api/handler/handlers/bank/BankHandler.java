@@ -8,6 +8,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import net.atherialrunes.practiceserver.utils.IntegerUtils;
+import net.atherialrunes.practiceserver.utils.StatUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,13 +16,11 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -49,18 +48,24 @@ public class BankHandler extends ListenerHandler {
     public void onUnload() {
 
     }
-
-    public void saveBank(GamePlayer gamePlayer, Inventory inventory) {
-        if (inventory.getTitle().startsWith("Bank Chest")) {
-            gamePlayer.uploadBank(inventory);
-        }
-    }
-
-    @EventHandler
+/*
+   public void saveBank(GamePlayer gamePlayer, Inventory inventory) {
+       if (inventory.getTitle().startsWith("Bank Chest")) {
+           String inv = InventoryUtils.convertInventoryToString(gamePlayer.getName(), inventory, false);
+           gamePlayer.msg(inv);
+           DatabaseAPI.getInstance().update(gamePlayer.getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_1, inv, true);
+       }
+   }
+*/
+   /* @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         Player player = (Player) e.getPlayer();
-        saveBank(GameAPI.getGamePlayer(player), e.getInventory());
-    }
+        Inventory inventory = e.getInventory();
+        if (inventory.getTitle().startsWith("Bank Chest")) {
+            saveBank(GameAPI.getGamePlayer(player), inventory);
+            return;
+        }
+    }*/
 
     public ItemStack getGem(GamePlayer gamePlayer) {
         AtherialItem gem = new AtherialItem(Material.EMERALD);
@@ -69,14 +74,60 @@ public class BankHandler extends ListenerHandler {
         return gem.build();
     }
 
-    public void openBank(GamePlayer gamePlayer) {
-        Inventory bank = gamePlayer.getBankInventory(1);
-        if (bank == null) {
-            bank = Bukkit.createInventory(null, 54, "Bank Chest (" + 1 + "/" + gamePlayer.getBankPageAmount() + ")");
+   /* public void openBank(Player player) {
+        Inventory bank = null;
+        try {
+            String bankinv = DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_1, player.getUniqueId()) + "";
+            bank = InventoryUtils.convertStringToInventory(player, bankinv, "Bank Chest (1/1)", 54);
+            player.sendMessage(bankinv);
+            player.openInventory(bank);
+        } catch (Exception e) {
+            e.printStackTrace();
+            bank = Bukkit.createInventory(null, 54, "Bank Chest (1/1)");
         }
-        bank.setItem(53, getGem(gamePlayer));
-        gamePlayer.getPlayer().openInventory(bank);
+       // bank.setItem(53, getGem(GameAPI.getGamePlayer(player)));
+       // player.openInventory(bank);
+        return;
+    }*/
+
+    public static int GEM_SLOT = 26;
+
+
+    @EventHandler
+    public void onInventoryOpenEvent(InventoryOpenEvent e) {
+        if (e.getInventory().getType() == InventoryType.ENDER_CHEST) {
+            Player p = (Player) e.getPlayer();
+            Inventory inv = p.getEnderChest();
+            inv.setItem(GEM_SLOT, getGem(GameAPI.getGamePlayer(p)));
+        }
     }
+/*
+    @EventHandler
+    public void onBankClick(InventoryClickEvent e) {
+        if (e.getSlotType() == InventoryType.SlotType.OUTSIDE) return;
+        if (e.getInventory().getType() == InventoryType.ENDER_CHEST) {
+            if (e.getInventory().contains(Material.EMERALD)) {
+                for (int i = 0; i < e.getInventory().getSize(); i++) {
+                    if (e.getInventory().getItem(i) != null) {
+                        if ((e.getInventory().getItem(i) != null) && (i != GEM_SLOT) && (e.getInventory().getItem(i).getType() == Material.EMERALD)) {
+                            int amt = e.getInventory().getItem(i).getAmount();
+                            Player p = (Player) e.getWhoClicked();
+                            e.getInventory().removeItem(e.getInventory().getItem(i));
+                            GamePlayer gp = GameAPI.getGamePlayer(p);
+                            gp.setGems((gp.getGems() + amt));
+                            p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
+                            e.getInventory().setItem(GEM_SLOT, getGem(gp));
+                            p.sendMessage(Utils.colorCodes("&a&l+&a" + amt + "&lG&a, &lNew Balance: &a" + gp.getGems() + " Gem(s)"));
+                            p.updateInventory();
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+*/
+
 
     public void task() {
         AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
@@ -91,7 +142,7 @@ public class BankHandler extends ListenerHandler {
                             if (time == 0) {
                                 CommandBank.bankOpening.remove(gp);
                                 gp.msg("&cOpened bank...");
-                                openBank(gp);
+                                player.openInventory(player.getEnderChest());
                                 return;
                             }
                             CommandBank.bankOpening.remove(gp);
@@ -104,6 +155,9 @@ public class BankHandler extends ListenerHandler {
         }, 20L, 20L);
     }
 
+    private void openBank(Player player) {
+    }
+
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
@@ -113,7 +167,7 @@ public class BankHandler extends ListenerHandler {
             Location to = e.getTo();
             if ((from.getX() != to.getX()) || (from.getY() != to.getY()) || (from.getZ() != to.getZ())) {
                 CommandBank.bankOpening.remove(gp);
-                gp.msg("&cBank opening &l-Cancelled");
+                gp.msg("&cBank opening Cancelled");
                 return;
             }
         }
@@ -126,7 +180,7 @@ public class BankHandler extends ListenerHandler {
             GamePlayer gp = GameAPI.getGamePlayer(player);
             if (CommandBank.bankOpening.containsKey(gp)) {
                 CommandBank.bankOpening.remove(gp);
-                gp.msg("&cBank opening &l-Cancelled");
+                gp.msg("&cBank opening Cancelled");
                 return;
             }
 
@@ -141,7 +195,7 @@ public class BankHandler extends ListenerHandler {
             return;
         }
         if (e.getClickedInventory().getTitle().contains("Bank Chest")) {
-            if (e.getSlot() == 53) {
+            if (e.getSlot() == GEM_SLOT) {
                 e.setCancelled(true);
                 if (e.isRightClick()) {
                     withdraw(gamePlayer);
@@ -154,18 +208,35 @@ public class BankHandler extends ListenerHandler {
     @EventHandler
     public void onBankClick(InventoryClickEvent e) {
         if (e.getSlotType() == InventoryType.SlotType.OUTSIDE) return;
-        if (e.getInventory().getTitle().contains("Bank Chest")) {
+        if ((e.getClickedInventory().getType() == InventoryType.ENDER_CHEST) && (e.getClickedInventory().equals(e.getWhoClicked().getEnderChest()))) {
+            if (e.getInventory().contains(Material.PAPER)) {
+                for (int i = 0; i < e.getInventory().getSize(); i++) {
+                    if (e.getInventory().getItem(i) != null) {
+                        if ((e.getInventory().getItem(i) != null) && (i != GEM_SLOT) && (e.getInventory().getItem(i).getType() == Material.PAPER)) {
+                            int amt = getBankNoteValue(e.getInventory().getItem(i));
+                            Player p = (Player) e.getWhoClicked();
+                            GamePlayer gp = GameAPI.getGamePlayer(p);
+                            e.getInventory().removeItem(e.getInventory().getItem(i));
+                            gp.setGems((gp.getGems()) + amt);
+                            p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
+                            e.getInventory().setItem(GEM_SLOT, getGem(gp));
+                            p.sendMessage(Utils.colorCodes("&a&l+&a" + amt + "&lG&a, &lNew Balance: &a" + gp.getGems() + " Gem(s)"));
+                            p.updateInventory();
+                        }
+                    }
+                }
+            }
             if (e.getInventory().contains(Material.EMERALD)) {
                 for (int i = 0; i < e.getInventory().getSize(); i++) {
                     if (e.getInventory().getItem(i) != null) {
-                        if ((e.getInventory().getItem(i) != null) && (i != 53) && (e.getInventory().getItem(i).getType() == Material.EMERALD)) {
+                        if ((e.getInventory().getItem(i) != null) && (i != GEM_SLOT) && (e.getInventory().getItem(i).getType() == Material.EMERALD)) {
                             int amt = e.getInventory().getItem(i).getAmount();
                             Player p = (Player) e.getWhoClicked();
                             GamePlayer gp = GameAPI.getGamePlayer(p);
                             e.getInventory().removeItem(e.getInventory().getItem(i));
                             gp.setGems((gp.getGems()) + amt);
                             p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
-                            e.getInventory().setItem(53, getGem(gp));
+                            e.getInventory().setItem(GEM_SLOT, getGem(gp));
                             p.sendMessage(Utils.colorCodes("&a&l+&a" + amt + "&lG&a, &lNew Balance: &a" + gp.getGems() + " Gem(s)"));
                             p.updateInventory();
                         }
@@ -176,17 +247,17 @@ public class BankHandler extends ListenerHandler {
         }
     }
 
-    @EventHandler
-    public void onInteract(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if ((e.getClickedBlock() != null) && (e.getClickedBlock().getType() == Material.ENDER_CHEST)) {
-                e.setCancelled(true);
-                openBank(GameAPI.getGamePlayer(player));
-                return;
-            }
-        }
-    }
+//    @EventHandler
+//    public void onInteract(PlayerInteractEvent e) {
+//        Player player = e.getPlayer();
+//        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+//            if ((e.getClickedBlock() != null) && (e.getClickedBlock().getType() == Material.ENDER_CHEST)) {
+//                e.setCancelled(true);
+//                openBank(player);
+//                return;
+//            }
+//        }
+//    }
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
@@ -232,6 +303,10 @@ public class BankHandler extends ListenerHandler {
         note.setName("&aBank Note");
         note.addLore("&f&lValue: " + amt + "G");
         return note.build();
+    }
+
+    private int getBankNoteValue(ItemStack item) {
+        return (isBankNote(item)) ? (int) StatUtils.getStatFromLore(item, "Value: ", "G") : 0;
     }
 
     private boolean isBankNote(ItemStack item) {

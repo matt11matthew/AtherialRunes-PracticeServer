@@ -9,6 +9,8 @@ public enum MobType {
     SKELETON(0, EntityType.SKELETON, "Skeleton"),
     ZOMBIE(1, EntityType.ZOMBIE, "Zombie"),
     NAGA(2, EntityType.ZOMBIE, "Naga"),
+    PIGMAN(3, EntityType.PIG_ZOMBIE, "PigMan"),
+    WITCH(4, EntityType.WITCH, "Witch"),
     ;
 
     private int id;

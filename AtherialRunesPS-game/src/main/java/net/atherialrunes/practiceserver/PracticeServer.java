@@ -5,8 +5,10 @@ import net.atherialrunes.practiceserver.api.handler.HandlerManager;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
 import net.atherialrunes.practiceserver.api.handler.handlers.bank.BankHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.damage.DamageHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.donor.DonorHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.enchant.EnchantHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.enchant.OrbHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.energy.EnergyHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.health.HealthHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.ItemHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobHandler;
@@ -24,6 +26,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.staff.StaffHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.VendorHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.foodvendor.FoodVendor;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.itemvendor.ItemVendor;
+import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.misc.Banker;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.misc.Healer;
 import net.atherialrunes.practiceserver.api.handler.handlers.world.WorldHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.zone.ZoneHandler;
@@ -55,10 +58,10 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new PlayerHandler());
         HandlerManager.registerHandler(new SpawnerHandler());
         HandlerManager.registerHandler(new HealthHandler());
-      //  HandlerManager.registerHandler(new PartyHandler());
+        //  HandlerManager.registerHandler(new PartyHandler());
         HandlerManager.registerHandler(new ScoreboardHandler());
         HandlerManager.registerHandler(new DamageHandler());
-       HandlerManager.registerHandler(new VendorHandler());
+        HandlerManager.registerHandler(new VendorHandler());
         HandlerManager.registerHandler(new StaffHandler());
         HandlerManager.registerHandler(new ItemHandler());
         HandlerManager.registerHandler(new ZoneHandler());
@@ -70,6 +73,8 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new DatabaseAPI());
         HandlerManager.registerHandler(new RankHandler());
         HandlerManager.registerHandler(new WorldHandler());
+        HandlerManager.registerHandler(new DonorHandler());
+        HandlerManager.registerHandler(new EnergyHandler());
         HandlerManager.loadHandlers();
     }
 
@@ -77,6 +82,7 @@ public class PracticeServer extends JavaPlugin {
         VendorHandler.registerVendor(new ItemVendor("Item Vendor", 18));
         VendorHandler.registerVendor(new Healer("Healer"));
         VendorHandler.registerVendor(new FoodVendor("Food Vendor", 18));
+        VendorHandler.registerVendor(new Banker("Banker"));
     }
 
     private void registerCommands() {

@@ -4,6 +4,7 @@ import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.GameConstants;
 import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.energy.EnergyHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobBuilder;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.armor.MobArmor;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
@@ -280,12 +281,12 @@ public class DamageHandler extends ListenerHandler {
             if (attacker.getCombatTime() == 0) {
                 attacker.sendAction("&c&lEntering Combat");
             }
+            EnergyHandler.removeEnergyFromPlayerAndUpdate(attacker.getUniqueId(), EnergyHandler.getWeaponSwingEnergyCost(attacker.getWeapon()));
             attacker.setCombatTime(10);
             boolean dead = false;
             tag(attacker.getPlayer());
             tag(gpMob.getPlayer());
             if (dmg >= mob.getHealth()) {
-                mob.playEffect(EntityEffect.DEATH);
                 mob.damage(mob.getHealth());
                 if (gpMob.isTogglePvP()) {
                     gpMob.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[0&lHP&a]");
@@ -318,12 +319,12 @@ public class DamageHandler extends ListenerHandler {
             if (dmg == -1) {
                 return;
             }
+            EnergyHandler.removeEnergyFromPlayerAndUpdate(attacker.getUniqueId(), EnergyHandler.getWeaponSwingEnergyCost(attacker.getWeapon()));
             tag(attacker.getPlayer());
             mob.setVelocity(attacker.getPlayer().getLocation().getDirection().multiply(0.4));
             mob.playEffect(EntityEffect.HURT);
             attacker.getPlayer().playSound(mob.getLocation(), Sound.ENTITY_GENERIC_HURT, 1.0F, 1.0F);
             if (dmg >= mob.getHealth()) {
-                mob.playEffect(EntityEffect.DEATH);
                 mob.damage(mob.getHealth());
                 if (attacker.isToggleDebug()) {
                     attacker.msg("&c            " + (int) dmg + "&c&l DMG -> &r" + MobBuilder.mobArmors.get(mob).getName() + " [0]");

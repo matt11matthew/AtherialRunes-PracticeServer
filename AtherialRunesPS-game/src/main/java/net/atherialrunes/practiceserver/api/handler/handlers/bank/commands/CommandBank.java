@@ -55,6 +55,6 @@ public class CommandBank extends AtherialCommand {
     }
 
     private void openTask(GamePlayer gp) {
-        bankOpening.put(gp, 5);
+        bankOpening.put(gp, 6);
     }
 }

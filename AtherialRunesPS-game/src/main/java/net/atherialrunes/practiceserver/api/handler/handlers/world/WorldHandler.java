@@ -4,10 +4,7 @@ import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobBuilder;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockBurnEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
@@ -55,10 +52,15 @@ public class WorldHandler extends ListenerHandler {
         e.setCancelled(true);
     }
 
-    @EventHandler
+    //@EventHandler
     public void onSpawn(CreatureSpawnEvent e) {
         if (!MobBuilder.mobArmors.containsKey(e.getEntity())) {
             e.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onCrop(BlockFadeEvent e) {
+        e.setCancelled(true);
     }
 }

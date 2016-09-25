@@ -73,7 +73,7 @@ public class ItemGenerator {
 
     public static AtherialItem generateEnchant(int amount, Tier tier, String type) {
         String color = tier.getColor();
-        String name = "&f&lScroll: " + color + " Enchant " + tier.getPrefix(type) + " " + type;
+        String name = "&f&lScroll:" + color + " Enchant " + tier.getPrefix(type) + " " + type;
         AtherialItem enchant = new AtherialItem(Material.EMPTY_MAP);
         enchant.setName(name);
         enchant.setAmount(amount);

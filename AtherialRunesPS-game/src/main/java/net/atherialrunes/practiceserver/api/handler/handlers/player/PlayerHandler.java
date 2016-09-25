@@ -2,6 +2,7 @@ package net.atherialrunes.practiceserver.api.handler.handlers.player;
 
 import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.GameConstants;
+import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
@@ -19,6 +20,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -28,12 +31,18 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Matthew E on 9/21/2016.
  */
 public class PlayerHandler extends ListenerHandler {
+
+
+    public static long releaseIn = 0L;
 
     @Override
     public void onLoad() {
@@ -46,6 +55,30 @@ public class PlayerHandler extends ListenerHandler {
         cm.registerCommand(new CommandTogglePvP("togglepvp", Arrays.asList("toggleplayervsplayer")));
         cm.registerCommand(new CommandToggleChaos("togglechaos", Arrays.asList("togglechaotic", "togglechao")));
         cm.registerCommand(new CommandRules("rules"));
+        FileConfiguration c = YamlConfiguration.loadConfiguration(new File(PracticeServer.getInstance().getDataFolder() + "", "time.yml"));
+        File file = new File(PracticeServer.getInstance().getDataFolder() + "", "time.yml");
+        long time = c.getLong("release");
+        if (time == 0L) {
+            releaseIn = Utils.convertToMillis(2);
+            c.set("release", releaseIn);
+            try {
+                c.save(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static long getTimeUntilOut() {
+        long sec = TimeUnit.MILLISECONDS.toSeconds(releaseIn);
+        if (sec - TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) > 0) {
+            sec = sec - TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        }
+        return sec;
+    }
+
+    public static String parseTime() {
+        return Utils.parseMilis(releaseIn);
     }
 
     @Override
@@ -79,7 +112,11 @@ public class PlayerHandler extends ListenerHandler {
             gp.getPlayer().spigot().sendMessage(comp1);
             gp.msg("&b&l--------------------------------");
             Bukkit.getServer().broadcastMessage(Utils.colorCodes("&aWelcome " + gp.getName() + " &3To Atherial Runes Practice Server"));
+            gp.getPlayer().setMaxHealth(200.0D);
+            gp.getPlayer().setHealth(200.0D);
         }
+        gp.getPlayer().setHealthScale(20);
+        gp.getPlayer().setHealthScaled(true);
     }
 
     public void giveStarterKit(GamePlayer gp) {
@@ -98,13 +135,13 @@ public class PlayerHandler extends ListenerHandler {
         if (sword) {
             AtherialItem wep = new AtherialItem(Material.WOOD_SWORD);
             wep.setName("&fTraining Sword");
-            wep.addLore("&cDMG: " + RandomUtils.random(5, 10) + " - " + RandomUtils.random(11, 20));
+            wep.addLore("&cDMG: " + RandomUtils.random(18, 20) + " - " + RandomUtils.random(22, 40));
             gp.getPlayer().getInventory().setItem(0, wep.build());
             return;
         }
         AtherialItem axe = new AtherialItem(Material.WOOD_AXE);
         axe.setName("&fTraining Hatchet");
-        axe.addLore("&cDMG: " + RandomUtils.random(5, 12) + " - " + RandomUtils.random(13, 22));
+        axe.addLore("&cDMG: " + RandomUtils.random(18, 20) + " - " + RandomUtils.random(22, 35));
         gp.getPlayer().getInventory().setItem(0, axe.build());
         return;
     }
@@ -118,7 +155,10 @@ public class PlayerHandler extends ListenerHandler {
     @EventHandler
     public void onServerListPingEvent(ServerListPingEvent e) {
         e.setMaxPlayers(GameConstants.MAX_PLAYERS);
-        e.setMotd(Utils.colorCodes(GameConstants.MOTD));
+        String motd = Utils.colorCodes(YamlConfiguration.loadConfiguration(new File(PracticeServer.getInstance().getDataFolder() + "", "motd.yml")).getString("motd"));
+        motd = motd.replaceAll("%nl%", "\n");
+        motd = motd.replaceAll("%release%", parseTime());
+        e.setMotd(Utils.colorCodes(motd));
     }
 
     //Move this wherever quickly put this here :/

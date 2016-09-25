@@ -3,6 +3,7 @@ package net.atherialrunes.practiceserver.api.handler.handlers.mob.armor;
 import lombok.Data;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
+import net.atherialrunes.practiceserver.api.handler.handlers.spawner.Spawner;
 import org.bukkit.entity.LivingEntity;
 
 @Data
@@ -17,6 +18,7 @@ public class MobArmor {
     private Tier tier;
     private boolean elite;
     private String name;
+    private Spawner spawner;
 
     public MobArmor(LivingEntity livingEntity, AtherialItem helmet, AtherialItem chestplate, AtherialItem leggings, AtherialItem boots, AtherialItem weapon) {
         this.livingEntity = livingEntity;

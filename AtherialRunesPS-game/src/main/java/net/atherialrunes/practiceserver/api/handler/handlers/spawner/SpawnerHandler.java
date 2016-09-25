@@ -170,6 +170,7 @@ public class SpawnerHandler extends ListenerHandler {
             for (int z = -16 * chunkRadius; z <= 16 * chunkRadius; z += 16) {
                 for (Entity e : b.getRelative(x, 0, z).getChunk().getEntities()) {
                     if (!(e instanceof Player)) {
+                        if (e.hasMetadata("NPC")) continue;
                         entities.add(e);
                     }
                 }

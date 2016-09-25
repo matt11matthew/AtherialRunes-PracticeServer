@@ -8,6 +8,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.party.Party;
 import net.atherialrunes.practiceserver.api.handler.handlers.pvp.Alignment;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
 import net.atherialrunes.practiceserver.utils.InventoryUtils;
+import net.atherialrunes.practiceserver.utils.StatUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -52,6 +53,8 @@ public class GamePlayer {
     private boolean save = true;
     private PlayerStatistics playerStatistics;
     private boolean newPlayer = false;
+    private boolean debug;
+    private boolean togglepvp;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -78,6 +81,8 @@ public class GamePlayer {
         this.neutralTime = (int) DatabaseAPI.getInstance().getData(EnumData.NEUTRAL_TIME, uniqueId);
         this.combatTime = (int) DatabaseAPI.getInstance().getData(EnumData.COMBAT_TIME, uniqueId);
         this.newPlayer = (boolean) DatabaseAPI.getInstance().getData(EnumData.NEW_PLAYER, uniqueId);
+        this.debug = (boolean) DatabaseAPI.getInstance().getData(EnumData.TOGGLE_DEBUG, uniqueId);
+        this.togglepvp = (boolean) DatabaseAPI.getInstance().getData(EnumData.TOGGLE_PVP, uniqueId);
         //this.location = getLocationNotParsed();
        // getPlayer().teleport(getLocation());
         setParty(null);
@@ -115,6 +120,8 @@ public class GamePlayer {
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.CHAOTIC_TIME, getChaoticTime(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.COMBAT_TIME, getCombatTime(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.NEW_PLAYER, false, true);
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.TOGGLE_PVP, isTogglePvP(), true);
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.TOGGLE_DEBUG, isToggleDebug(), true);
         //playerStatistics.upload();
     }
 
@@ -131,26 +138,12 @@ public class GamePlayer {
     }
 
     public Inventory getBankInventory(int page) {
-        Inventory bank = null;
+        Inventory bank = Bukkit.createInventory(null, 54, "Bank Chest (1/1)");
         try {
-            switch (page) {
-                case 1:
-                    bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_1, uniqueId) + "", "Bank Chest (1/" + getBankPageAmount() + ")", getBankSlots(1));
-                    break;
-                case 2:
-                    bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_2, uniqueId) + "", "Bank Chest (2/" + getBankPageAmount() + ")", getBankSlots(2));
-                    break;
-                case 3:
-                    bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_3, uniqueId) + "", "Bank Chest (3/" + getBankPageAmount() + ")", getBankSlots(3));
-                    break;
-                case 4:
-                    bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_4, uniqueId) + "", "Bank Chest (4/" + getBankPageAmount() + ")", getBankSlots(4));
-                    break;
-                default:
-                    break;
-            }
+            String bankinv = DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_1, uniqueId) + "";
+            bank = InventoryUtils.convertStringToInventory(getPlayer(), bankinv, "Bank Chest (1/1)", 54);
         } catch (Exception e) {
-            bank = Bukkit.createInventory(null, 54, "Bank Chest (" + page + "/" + getBankPageAmount() + ")");
+            return  Bukkit.createInventory(null, 54, "Bank Chest (1/1)");
         }
         return bank;
     }
@@ -172,7 +165,7 @@ public class GamePlayer {
     }
 
     public void uploadBank(Inventory inventory) {
-        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_1, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_1, InventoryUtils.convertInventoryToString(player.getName(), inventory, false), true);
 //        int page = Integer.parseInt(inventory.getTitle().split("\\(")[1].split("/")[0].trim());
 //        switch (page) {
 //            case 1:
@@ -218,11 +211,11 @@ public class GamePlayer {
     }
 
     public boolean isTogglePvP() {
-        return (boolean) DatabaseAPI.getInstance().getData(EnumData.TOGGLE_PVP, uniqueId);
+        return togglepvp;
     }
 
     public boolean isToggleDebug() {
-        return (boolean) DatabaseAPI.getInstance().getData(EnumData.TOGGLE_DEBUG, uniqueId);
+        return debug;
     }
 
     public boolean isToggleChaos() {
@@ -241,5 +234,9 @@ public class GamePlayer {
 
     public void setStatistic(String name, Object value) {
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, "statistics." + name, value, true);
+    }
+
+    public float getEnergyRegen() {
+        return StatUtils.getEnergy(getPlayer());
     }
 }

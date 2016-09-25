@@ -97,6 +97,7 @@ public class AtherialItem {
         ItemMeta im = itemStack.getItemMeta();
         im.spigot().setUnbreakable(true);
         itemStack.setItemMeta(im);
+        addItemFlag(ItemFlag.HIDE_UNBREAKABLE);
         return itemStack;
     }
 

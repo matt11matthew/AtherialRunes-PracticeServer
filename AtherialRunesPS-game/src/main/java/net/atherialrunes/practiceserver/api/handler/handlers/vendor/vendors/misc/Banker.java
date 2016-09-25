@@ -1,16 +1,16 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.misc;
 
 import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import net.atherialrunes.practiceserver.api.handler.handlers.vendor.Vendor;
 import net.atherialrunes.practiceserver.api.menu.Menu;
-import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 
 /**
  * Created by Matthew E on 9/22/2016.
  */
-public class Healer extends Vendor {
+public class Banker extends Vendor {
 
-    public Healer(String npcName) {
+    public Banker(String npcName) {
         super(npcName);
     }
 
@@ -26,8 +26,7 @@ public class Healer extends Vendor {
 
     @Override
     public void onNPCRightClick(GamePlayer gamePlayer) {
-        gamePlayer.getPlayer().setHealth(gamePlayer.getPlayer().getMaxHealth());
-        gamePlayer.msg("&aYou have been healed");
+        gamePlayer.getPlayer().openInventory(gamePlayer.getPlayer().getEnderChest());
         return;
     }
 }

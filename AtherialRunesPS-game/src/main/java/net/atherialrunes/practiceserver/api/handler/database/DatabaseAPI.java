@@ -49,7 +49,7 @@ public class DatabaseAPI implements Handler {
     public void onLoad() {
         mongoClientURI = new MongoClientURI(Constants.MONGO_DATABASE_URI);
         mongoClient = new MongoClient(mongoClientURI);
-        database = mongoClient.getDatabase("ps");
+        database = mongoClient.getDatabase("ps1");
         playerData = database.getCollection("player_data");
         new UpdateThread().start();
     }

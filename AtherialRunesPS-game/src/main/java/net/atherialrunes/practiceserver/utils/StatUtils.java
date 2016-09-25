@@ -2,6 +2,7 @@ package net.atherialrunes.practiceserver.utils;
 
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.GearType;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -98,10 +99,35 @@ public class StatUtils {
     }
 
     public static int getPrice(ItemStack is) {
-        return (int) getStatFromLore(is, "Price", "g");
+        return (int) getStatFromLore(is, "Price:", "g");
     }
 
     public static int getDamage(ItemStack item) {
         return RandomUtils.random(getMinDamage(item), getMaxDamage(item));
+    }
+
+    public static float getEnergy(Player p) {
+        double vit = 0.0D;
+        if ((p.getEquipment().getHelmet() != null) && (p.getEquipment().getHelmet().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getHelmet(), "ENERGY REGEN")) {
+                vit += (StatUtils.getStatFromLore(p.getEquipment().getHelmet(), "ENERGY REGEN: +", "%"));
+            }
+        }
+        if ((p.getEquipment().getChestplate() != null) && (p.getEquipment().getChestplate().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getChestplate(), "ENERGY REGEN")) {
+                vit += (StatUtils.getStatFromLore(p.getEquipment().getChestplate(), "ENERGY REGEN: +", "%"));
+            }
+        }
+        if ((p.getEquipment().getLeggings() != null) && (p.getEquipment().getLeggings().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getLeggings(), "ENERGY REGEN")) {
+                vit += (StatUtils.getStatFromLore(p.getEquipment().getLeggings(), "ENERGY REGEN: +", "%"));
+            }
+        }
+        if ((p.getEquipment().getBoots() != null) && (p.getEquipment().getBoots().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getBoots(), "ENERGY REGEN")) {
+                vit += (StatUtils.getStatFromLore(p.getEquipment().getBoots(), "ENERGY REGEN: +", "%"));
+            }
+        }
+        return (float) vit;
     }
 }
