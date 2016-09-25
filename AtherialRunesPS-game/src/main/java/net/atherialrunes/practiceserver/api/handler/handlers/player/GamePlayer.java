@@ -32,7 +32,7 @@ public class GamePlayer {
     private long firstLogin;
     private Rank rank;
     private Player player = null;
-    private double gems;
+    private int gems;
     private Party party = null;
     private String chatChannel = "local";
     private int hp;
@@ -51,6 +51,7 @@ public class GamePlayer {
     private int combatTime;
     private boolean save = true;
     private PlayerStatistics playerStatistics;
+    private boolean newPlayer = false;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -58,14 +59,14 @@ public class GamePlayer {
     }
 
     public GamePlayer(String name, UUID uuid) {
-        this.name = player.getName();
-        this.uniqueId = player.getUniqueId();
+        this.name = name;
+        this.uniqueId = uuid;
         this.firstLogin = (long) DatabaseAPI.getInstance().getData(EnumData.FIRST_LOGIN, uniqueId);
         this.rank = Rank.valueOf(DatabaseAPI.getInstance().getData(EnumData.RANK, uniqueId) + "");
-        this.gems = (double) DatabaseAPI.getInstance().getData(EnumData.GEMS, uniqueId);
+        this.gems = (int) DatabaseAPI.getInstance().getData(EnumData.GEMS, uniqueId);
         this.hp = (int) DatabaseAPI.getInstance().getData(EnumData.HEALTH, uniqueId);
         this.foodLevel = (int) DatabaseAPI.getInstance().getData(EnumData.FOOD_LEVEL, uniqueId);
-        this.exp = (float) DatabaseAPI.getInstance().getData(EnumData.EXP, uniqueId);
+        this.exp = 0.0F;//(double) DatabaseAPI.getInstance().getData(EnumData.EXP, uniqueId);
         this.level = (int) DatabaseAPI.getInstance().getData(EnumData.LEVEL, uniqueId);
         this.bankPageAmount = (int) DatabaseAPI.getInstance().getData(EnumData.BANK_PAGE_AMOUNT, uniqueId);
         this.page_1_slots = (int) DatabaseAPI.getInstance().getData(EnumData.PAGE_1_SLOTS, uniqueId);
@@ -76,10 +77,11 @@ public class GamePlayer {
         this.chaoticTime = (int) DatabaseAPI.getInstance().getData(EnumData.CHAOTIC_TIME, uniqueId);
         this.neutralTime = (int) DatabaseAPI.getInstance().getData(EnumData.NEUTRAL_TIME, uniqueId);
         this.combatTime = (int) DatabaseAPI.getInstance().getData(EnumData.COMBAT_TIME, uniqueId);
-        this.location = getLocationNotParsed();
-        getPlayer().teleport(getLocation());
+        this.newPlayer = (boolean) DatabaseAPI.getInstance().getData(EnumData.NEW_PLAYER, uniqueId);
+        //this.location = getLocationNotParsed();
+       // getPlayer().teleport(getLocation());
         setParty(null);
-        this.playerStatistics = new PlayerStatistics(this);
+       // this.playerStatistics = new PlayerStatistics(this);
     }
 
     private Location getLocationNotParsed() {
@@ -95,7 +97,7 @@ public class GamePlayer {
     }
 
     public void upload() {
-        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.RANK, getRank(), true);
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.RANK, getRank().toString(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.GEMS, getGems(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.HEALTH, getHp(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.FOOD_LEVEL, getFoodLevel(), true);
@@ -112,11 +114,12 @@ public class GamePlayer {
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.NEUTRAL_TIME, getNeutralTime(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.CHAOTIC_TIME, getChaoticTime(), true);
         DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.COMBAT_TIME, getCombatTime(), true);
-        playerStatistics.upload();
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.NEW_PLAYER, false, true);
+        //playerStatistics.upload();
     }
 
     private String getLocationParsed() {
-        return getLocation().toString();
+        return "";
     }
 
     public void msg(String msg) {
@@ -129,21 +132,25 @@ public class GamePlayer {
 
     public Inventory getBankInventory(int page) {
         Inventory bank = null;
-        switch (page) {
-            case 1:
-                bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_1, uniqueId) + "", "Bank Chest (1/" + getBankPageAmount() + ")", getBankSlots(1));
-                break;
-            case 2:
-                bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_2, uniqueId) + "", "Bank Chest (2/" + getBankPageAmount() + ")", getBankSlots(2));
-                break;
-            case 3:
-                bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_3, uniqueId) + "", "Bank Chest (3/" + getBankPageAmount() + ")", getBankSlots(3));
-                break;
-            case 4:
-                bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_4, uniqueId) + "", "Bank Chest (4/" + getBankPageAmount() + ")", getBankSlots(4));
-                break;
-            default:
-                break;
+        try {
+            switch (page) {
+                case 1:
+                    bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_1, uniqueId) + "", "Bank Chest (1/" + getBankPageAmount() + ")", getBankSlots(1));
+                    break;
+                case 2:
+                    bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_2, uniqueId) + "", "Bank Chest (2/" + getBankPageAmount() + ")", getBankSlots(2));
+                    break;
+                case 3:
+                    bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_3, uniqueId) + "", "Bank Chest (3/" + getBankPageAmount() + ")", getBankSlots(3));
+                    break;
+                case 4:
+                    bank = InventoryUtils.convertStringToInventory(getPlayer(), DatabaseAPI.getInstance().getData(EnumData.BANK_INVENTORY_4, uniqueId) + "", "Bank Chest (4/" + getBankPageAmount() + ")", getBankSlots(4));
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            bank = Bukkit.createInventory(null, 54, "Bank Chest (" + page + "/" + getBankPageAmount() + ")");
         }
         return bank;
     }
@@ -165,23 +172,24 @@ public class GamePlayer {
     }
 
     public void uploadBank(Inventory inventory) {
-        int page = Integer.parseInt(inventory.getTitle().split("\\(")[1].split("/")[0].trim());
-        switch (page) {
-            case 1:
-                DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_1, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
-                break;
-            case 2:
-                DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_2, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
-                break;
-            case 3:
-                DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_3, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
-                break;
-            case 4:
-                DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_4, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
-                break;
-            default:
-                break;
-        }
+        DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_1, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
+//        int page = Integer.parseInt(inventory.getTitle().split("\\(")[1].split("/")[0].trim());
+//        switch (page) {
+//            case 1:
+//                DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_1, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
+//                break;
+//            case 2:
+//                DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_2, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
+//                break;
+//            case 3:
+//                DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_3, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
+//                break;
+//            case 4:
+//                DatabaseAPI.getInstance().update(getUniqueId(), EnumOperators.$SET, EnumData.BANK_INVENTORY_4, InventoryUtils.convertInventoryToString(getName(), inventory, false), true);
+//                break;
+//            default:
+//                break;
+//        }
     }
 
     public boolean isInCombat() {

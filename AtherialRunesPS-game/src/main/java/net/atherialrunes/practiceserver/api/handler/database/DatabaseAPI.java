@@ -49,7 +49,7 @@ public class DatabaseAPI implements Handler {
     public void onLoad() {
         mongoClientURI = new MongoClientURI(Constants.MONGO_DATABASE_URI);
         mongoClient = new MongoClient(mongoClientURI);
-        database = mongoClient.getDatabase("practiceserver");
+        database = mongoClient.getDatabase("ps");
         playerData = database.getCollection("player_data");
         new UpdateThread().start();
     }
@@ -126,7 +126,7 @@ public class DatabaseAPI implements Handler {
                                 .append("gems", 0)
                                 .append("health", 100)
                                 .append("foodLevel", 10)
-                                .append("exp", 0)
+                                .append("exp", 0.0F)
                                 .append("level", 0)
                                 .append("location", "")
                                 .append("bank_inventory_1", "")
@@ -141,7 +141,8 @@ public class DatabaseAPI implements Handler {
                                 .append("alignment", Alignment.LAWFUL.toString())
                                 .append("neutralTime", 0)
                                 .append("chaoticTime", 0)
-                                .append("combatTime", 0))
+                                .append("combatTime", 0)
+                                .append("newplayer", true))
                         .append("toggles",
                                 new Document("debug", true)
                                         .append("pvp", false)

@@ -1,5 +1,7 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.pvp;
 
+import net.atherialrunes.practiceserver.utils.Utils;
+
 /**
  * Created by Matthew E on 9/24/2016 at 11:07 AM.
  */
@@ -23,7 +25,7 @@ public enum Alignment {
     }
 
     public String getTabPrefix() {
-        return tabPrefix;
+        return Utils.colorCodes(tabPrefix);
     }
 
     public String getChatPrefix() {

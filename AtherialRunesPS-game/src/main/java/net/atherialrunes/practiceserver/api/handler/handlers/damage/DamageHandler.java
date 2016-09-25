@@ -20,6 +20,7 @@ import org.bukkit.EntityEffect;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -230,11 +231,14 @@ public class DamageHandler extends ListenerHandler {
                MobBuilder.mobArmors.keySet().forEach(mob -> {
                    MobArmor mobArmor = MobBuilder.mobArmors.get(mob);
                    Bukkit.getOnlinePlayers().forEach(player -> {
-                       if (mob.getLocation().distance(player.getLocation()) <= 2) {
+                       if (mob.getLocation().distance(player.getLocation()) <= 1) {
                            GamePlayer gp = GameAPI.getGamePlayer(player);
+                           player.playEffect(EntityEffect.HURT);
+                           player.setVelocity(mob.getLocation().getDirection().multiply(0.3));
                            int dmg = MobBuilder.getDamageBasedOnMobArmor(mobArmor);
                            tag(gp.getPlayer());
-                           if (dmg >= gp.getHp()) {
+                           gp.getPlayer().playSound(mob.getLocation(), Sound.ENTITY_GENERIC_HURT, 1.0F, 1.0F);
+                           if (dmg >= gp.getPlayer().getHealth()) {
                                gp.getPlayer().damage(gp.getPlayer().getHealth());
                                if (gp.isToggleDebug()) {
                                    gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[0&lHP&a]");
@@ -252,6 +256,11 @@ public class DamageHandler extends ListenerHandler {
                });
            }
        }, GameConstants.CPS, GameConstants.CPS);
+    }
+
+    @EventHandler
+    public void onFire(EntityCombustEvent e) {
+        e.setCancelled(true);
     }
 
     @EventHandler

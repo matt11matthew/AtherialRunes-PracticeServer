@@ -12,7 +12,7 @@ public class StatUtils {
     private static String getDamageString(ItemStack item) {
         GearType gearType = GearType.getGearType(item);
         if ((gearType == GearType.AXE) || (gearType == GearType.SWORD)) {
-            return item.getItemMeta().getLore().get(0);
+            return item.getItemMeta().getLore().get(0).split("DMG:")[1];
         }
         return null;
     }
@@ -98,7 +98,7 @@ public class StatUtils {
     }
 
     public static int getPrice(ItemStack is) {
-        return (StatUtils.hasStat(is, "Price")) ? (int) getStatFromLore(is, "Price", "g") : 0;
+        return (int) getStatFromLore(is, "Price", "g");
     }
 
     public static int getDamage(ItemStack item) {

@@ -41,11 +41,12 @@ public class Spawner {
 
     @Override
     public String toString() {
-        return "MobType:" + getMobType().getName() + ",Amount:" + getCooldown() + ",Range:" + getRange() + ",Tier:" + getTier() + ",Elite:" + isElite()  + ",Cooldown:" + getCooldown() + ",";
+        return "MobType:" + getMobType().toString() + ",Amount:" + getCooldown() + ",Range:" + getRange() + ",Tier:" + getTier() + ",Elite:" + isElite()  + ",Cooldown:" + getCooldown() + ",";
     }
 
     public void spawn() {
         MobBuilder.spawn(this);
+        return;
     }
 }
 

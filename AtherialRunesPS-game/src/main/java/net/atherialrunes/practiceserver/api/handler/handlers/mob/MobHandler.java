@@ -4,7 +4,9 @@ import net.atherialrunes.practiceserver.GameConstants;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.armor.MobArmor;
 import net.atherialrunes.practiceserver.utils.RandomUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +25,7 @@ public class MobHandler extends ListenerHandler {
 
     @Override
     public void onUnload() {
-
+        Bukkit.getWorlds().get(0).getEntities().forEach(Entity::remove);
     }
 
     @EventHandler

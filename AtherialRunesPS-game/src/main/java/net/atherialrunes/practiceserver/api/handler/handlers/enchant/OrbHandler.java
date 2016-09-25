@@ -6,7 +6,6 @@ import net.atherialrunes.practiceserver.api.handler.handlers.item.ItemGenerator;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.GearType;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -45,11 +44,6 @@ public class OrbHandler extends ListenerHandler {
                         e.setCursor(new ItemStack(Material.AIR));
                     }
                     ItemStack newItem = ItemGenerator.rerollStats(e.getCurrentItem());
-                    if (newItem.equals(e.getCurrentItem())) {
-                        player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1.0F, 1.0F);
-                    } else {
-                        gp.fw();
-                    }
                     e.setCurrentItem(newItem);
                     return;
                 }

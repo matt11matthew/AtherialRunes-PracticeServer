@@ -25,7 +25,7 @@ public class ScoreboardHandler extends ListenerHandler {
     @Override
     public void onLoad() {
         super.onLoad();
-        main = Bukkit.getScoreboardManager().getNewScoreboard();
+        main = Bukkit.getScoreboardManager().getMainScoreboard();
         headHPTask();
     }
 
@@ -103,6 +103,6 @@ public class ScoreboardHandler extends ListenerHandler {
             Score ha = getBoard(GameAPI.getGamePlayer(p)).getObjective(DisplaySlot.BELOW_NAME).getScore(pl.getPlayer());
             ha.setScore(hp);
         }
-        main.getObjective(DisplaySlot.BELOW_NAME).getScore(pl.getPlayer());
+        getBoard(pl).getObjective("hpdisplay").getScore(pl.getPlayer()).setScore(hp);
     }
 }

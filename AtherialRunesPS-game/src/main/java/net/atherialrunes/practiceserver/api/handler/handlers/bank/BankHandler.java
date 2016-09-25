@@ -1,19 +1,28 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.bank;
 
 import net.atherialrunes.practiceserver.GameAPI;
+import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.bank.commands.CommandBank;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
+import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import net.atherialrunes.practiceserver.utils.IntegerUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -30,6 +39,10 @@ public class BankHandler extends ListenerHandler {
     @Override
     public void onLoad() {
         super.onLoad();
+        task();
+
+        AtherialCommandManager cm = new AtherialCommandManager();
+        cm.registerCommand(new CommandBank("bank"));
     }
 
     @Override
@@ -45,7 +58,8 @@ public class BankHandler extends ListenerHandler {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        saveBank(GameAPI.getGamePlayer((Player) e.getPlayer()), e.getInventory());
+        Player player = (Player) e.getPlayer();
+        saveBank(GameAPI.getGamePlayer(player), e.getInventory());
     }
 
     public ItemStack getGem(GamePlayer gamePlayer) {
@@ -57,8 +71,66 @@ public class BankHandler extends ListenerHandler {
 
     public void openBank(GamePlayer gamePlayer) {
         Inventory bank = gamePlayer.getBankInventory(1);
+        if (bank == null) {
+            bank = Bukkit.createInventory(null, 54, "Bank Chest (" + 1 + "/" + gamePlayer.getBankPageAmount() + ")");
+        }
         bank.setItem(53, getGem(gamePlayer));
         gamePlayer.getPlayer().openInventory(bank);
+    }
+
+    public void task() {
+        AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
+            @Override
+            public void run() {
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    GamePlayer gp = GameAPI.getGamePlayer(player);
+                    if (CommandBank.bankOpening.containsKey(gp)) {
+                        int time = CommandBank.bankOpening.get(gp);
+                        if (time > 0) {
+                            time = (time - 1);
+                            if (time == 0) {
+                                CommandBank.bankOpening.remove(gp);
+                                gp.msg("&cOpened bank...");
+                                openBank(gp);
+                                return;
+                            }
+                            CommandBank.bankOpening.remove(gp);
+                            CommandBank.bankOpening.put(gp, time);
+                            gp.msg("&cBank opening " + time + "&ls");
+                        }
+                    }
+                });
+            }
+        }, 20L, 20L);
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent e) {
+        Player player = e.getPlayer();
+        GamePlayer gp = GameAPI.getGamePlayer(player);
+        if (CommandBank.bankOpening.containsKey(gp)) {
+            Location from = e.getFrom();
+            Location to = e.getTo();
+            if ((from.getX() != to.getX()) || (from.getY() != to.getY()) || (from.getZ() != to.getZ())) {
+                CommandBank.bankOpening.remove(gp);
+                gp.msg("&cBank opening &l-Cancelled");
+                return;
+            }
+        }
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent e) {
+        if (e.getEntity() instanceof Player) {
+            Player player = (Player) e.getEntity();
+            GamePlayer gp = GameAPI.getGamePlayer(player);
+            if (CommandBank.bankOpening.containsKey(gp)) {
+                CommandBank.bankOpening.remove(gp);
+                gp.msg("&cBank opening &l-Cancelled");
+                return;
+            }
+
+        }
     }
 
     @EventHandler
@@ -105,6 +177,18 @@ public class BankHandler extends ListenerHandler {
     }
 
     @EventHandler
+    public void onInteract(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if ((e.getClickedBlock() != null) && (e.getClickedBlock().getType() == Material.ENDER_CHEST)) {
+                e.setCancelled(true);
+                openBank(GameAPI.getGamePlayer(player));
+                return;
+            }
+        }
+    }
+
+    @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
         GamePlayer gp = GameAPI.getGamePlayer(player);
@@ -130,6 +214,7 @@ public class BankHandler extends ListenerHandler {
                             return;
                         }
                         gp.getPlayer().getInventory().setItem(gp.getPlayer().getInventory().firstEmpty(), getBankNote(amt));
+                        gp.setGems((gp.getGems() - amt));
                         withdraw.remove(gp);
                         return;
                     }

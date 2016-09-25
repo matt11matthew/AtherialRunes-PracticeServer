@@ -3,6 +3,7 @@ package net.atherialrunes.practiceserver.api.handler.handlers.vendor;
 import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
+import net.atherialrunes.practiceserver.api.handler.handlers.vendor.vendors.itemvendor.ItemVendor;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -57,14 +58,27 @@ public class VendorHandler extends ListenerHandler {
         if (e.getSlotType() == InventoryType.SlotType.OUTSIDE) {
             return;
         }
-        vendors.values().forEach(vendor -> {
-            if (e.getClickedInventory().getTitle().equals(vendor.getMenu().getTitle())) {
+        if (e.getClickedInventory().getType() == InventoryType.PLAYER) return;
+        if ((e.getCurrentItem().getType() != null) && (e.getCurrentItem().getType() != Material.AIR)) {
+            if (e.getClickedInventory().getTitle().equals("Rules")) {
                 e.setCancelled(true);
-                if ((e.getCurrentItem().getType() != null) && (e.getCurrentItem().getType() != Material.AIR)) {
-                    vendor.onMenuClick(GameAPI.getGamePlayer(player), e.getSlot(), AtherialItem.fromItemStack(e.getCurrentItem()));
-                }
-                return;
             }
-        });
+             if (e.getClickedInventory().getTitle().equals("Item Vendor")) {
+                 new ItemVendor("Item Vendor", 18).onMenuClick(GameAPI.getGamePlayer(player), e.getSlot(), AtherialItem.fromItemStack(e.getCurrentItem()));
+                 e.setCancelled(true);
+                 return;
+             }
+        }
+//        vendors.values().forEach(vendor -> {
+//            if (e.getClickedInventory().getTitle().equals(vendor.getMenu().getTitle())) {
+//                e.setCancelled(true);
+//                if ((e.getCurrentItem().getType() != null) && (e.getCurrentItem().getType() != Material.AIR)) {
+//                    vendor.onMenuClick(GameAPI.getGamePlayer(player), e.getSlot(), AtherialItem.fromItemStack(e.getCurrentItem()));
+//                }
+//                return;
+//            } else {
+//                return;
+//            }
+//        });
     }
 }

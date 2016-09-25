@@ -43,6 +43,7 @@ public class MobBuilder {
         mob.setMaxHealth(getHealthBasedOnMobArmor(mobArmor));
         mob.setHealth(mob.getMaxHealth());
         mobArmors.put(mob, mobArmor);
+        return;
     }
 
     public static int getHealthBasedOnMobArmor(MobArmor mobArmor) {
@@ -51,7 +52,6 @@ public class MobBuilder {
         health += mobArmor.getChestplate().getHP();
         health += mobArmor.getLeggings().getHP();
         health += mobArmor.getBoots().getHP();
-        health *= 2;
         if (mobArmor.isElite()) {
             health *= 2;
         }

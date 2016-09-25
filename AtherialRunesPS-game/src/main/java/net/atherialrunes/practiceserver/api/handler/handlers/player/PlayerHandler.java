@@ -5,11 +5,17 @@ import net.atherialrunes.practiceserver.GameConstants;
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
+import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
+import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRules;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandToggle;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandToggleChaos;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandToggleDebug;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandTogglePvP;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
+import net.atherialrunes.practiceserver.utils.RandomUtils;
+import net.atherialrunes.practiceserver.utils.Utils;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,6 +45,7 @@ public class PlayerHandler extends ListenerHandler {
         cm.registerCommand(new CommandToggleDebug("debug", Arrays.asList("toggledebug")));
         cm.registerCommand(new CommandTogglePvP("togglepvp", Arrays.asList("toggleplayervsplayer")));
         cm.registerCommand(new CommandToggleChaos("togglechaos", Arrays.asList("togglechaotic", "togglechao")));
+        cm.registerCommand(new CommandRules("rules"));
     }
 
     @Override
@@ -54,11 +61,52 @@ public class PlayerHandler extends ListenerHandler {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         e.setJoinMessage(null);
-        String MOTD = asCentered(ChatColor.WHITE + "" + ChatColor.BOLD + "Atherial Runes Practice Server Patch 1.0");
-        String DMOTD = asCentered(ChatColor.GRAY + "" + ChatColor.ITALIC + "Donate at http://atherialrunes.buycraft.net/ for perks!");
-        GameAPI.getGamePlayer(e.getPlayer()).msg(MOTD);
-        GameAPI.getGamePlayer(e.getPlayer()).msg(DMOTD);
+        String MOTD = (ChatColor.WHITE + "" + ChatColor.BOLD + "Atherial Runes Practice Server Patch 1.0");
+        String DMOTD = (ChatColor.GRAY + "" + ChatColor.ITALIC + "Donate at http://atherialrunes.buycraft.net/ for perks!");
         GameAPI.handleLogin(e.getPlayer());
+        GamePlayer gp = GameAPI.getGamePlayer(e.getPlayer());
+        gp.msg(MOTD);
+        gp.msg(DMOTD);
+        if (gp.isNewPlayer()) {
+            giveStarterKit(gp);
+            gp.fw();
+            TextComponent comp = new TextComponent(Utils.colorCodes("&6&l[CLICK]"));
+            TextComponent comp1 = new TextComponent(Utils.colorCodes("&aRules: "));
+            comp.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/rules"));
+            comp1.addExtra(comp);
+            gp.msg("&b&l--------------------------------");
+            gp.msg("&3Welcome " + gp.getName());
+            gp.getPlayer().spigot().sendMessage(comp1);
+            gp.msg("&b&l--------------------------------");
+            Bukkit.getServer().broadcastMessage(Utils.colorCodes("&aWelcome " + gp.getName() + " &3To Atherial Runes Practice Server"));
+        }
+    }
+
+    public void giveStarterKit(GamePlayer gp) {
+        int i = RandomUtils.random(1, 2);
+        boolean sword = false;
+        switch (i) {
+            case 1:
+                sword = true;
+                break;
+            case 2:
+                sword = false;
+                break;
+            default:
+                break;
+        }
+        if (sword) {
+            AtherialItem wep = new AtherialItem(Material.WOOD_SWORD);
+            wep.setName("&fTraining Sword");
+            wep.addLore("&cDMG: " + RandomUtils.random(5, 10) + " - " + RandomUtils.random(11, 20));
+            gp.getPlayer().getInventory().setItem(0, wep.build());
+            return;
+        }
+        AtherialItem axe = new AtherialItem(Material.WOOD_AXE);
+        axe.setName("&fTraining Hatchet");
+        axe.addLore("&cDMG: " + RandomUtils.random(5, 12) + " - " + RandomUtils.random(13, 22));
+        gp.getPlayer().getInventory().setItem(0, axe.build());
+        return;
     }
 
     @EventHandler
@@ -70,7 +118,7 @@ public class PlayerHandler extends ListenerHandler {
     @EventHandler
     public void onServerListPingEvent(ServerListPingEvent e) {
         e.setMaxPlayers(GameConstants.MAX_PLAYERS);
-        e.setMotd(GameConstants.MOTD);
+        e.setMotd(Utils.colorCodes(GameConstants.MOTD));
     }
 
     //Move this wherever quickly put this here :/

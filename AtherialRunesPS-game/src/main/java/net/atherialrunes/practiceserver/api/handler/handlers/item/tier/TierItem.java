@@ -7,6 +7,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
 import net.atherialrunes.practiceserver.utils.RandomUtils;
 import net.atherialrunes.practiceserver.utils.StatUtils;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -232,6 +233,7 @@ public abstract class TierItem {
         name = getTier().getColor() + name;
         item.setName(name);
         item.setDurability(durability);
+        item.addItemFlag(ItemFlag.HIDE_ATTRIBUTES);
         return item.build();
     }
 
@@ -400,6 +402,7 @@ public abstract class TierItem {
         name = getTier().getColor() + name;
         item.setName(name);
         item.setDurability(durability);
+        item.addItemFlag(ItemFlag.HIDE_ATTRIBUTES);
         return item.build();
     }
 

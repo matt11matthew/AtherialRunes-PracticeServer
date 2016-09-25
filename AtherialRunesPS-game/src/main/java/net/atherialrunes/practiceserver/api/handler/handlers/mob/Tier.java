@@ -1,12 +1,9 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.mob;
 
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.armor.ArmorDye;
-import net.atherialrunes.practiceserver.utils.Utils;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Arrays;
-import java.util.List;
 /**
  * Created by Matthew E on 9/21/2016.
  */
@@ -60,11 +57,7 @@ public enum Tier {
     }
 
     public static Tier fromTier(int tierNumber) {
-        List<Tier> tiers = Arrays.asList(values());
-        for (Tier tier : tiers) {
-            return (tier.getTier() == tierNumber) ? tier : null;
-        }
-        return null;
+        return Tier.valueOf("T" + tierNumber);
     }
 
     public ArmorDye getArmorDye() {
@@ -82,21 +75,21 @@ public enum Tier {
     public String getPrefix(String type) {
         switch (type) {
             case "Weapon":
-                return getPrefix2();
+                return getPrefix2().trim();
             case "Armor":
-                return getPrefix1();
+                return getPrefix1().trim();
 
         }
         return null;
     }
 
     public static int getTier(ItemStack itemStack) {
-        List<Tier> tiers = Arrays.asList(values());
-        for (Tier tier : tiers) {
-            if (itemStack.getItemMeta().getDisplayName().startsWith(Utils.colorCodes(tier.getColor()))) {
-                return tier.getTier();
-            }
-        }
+        String name = itemStack.getItemMeta().getDisplayName();
+        if (name.startsWith(ChatColor.WHITE.toString())) return 1;
+        if (name.startsWith(ChatColor.GREEN.toString())) return 2;
+        if (name.startsWith(ChatColor.AQUA.toString())) return 3;
+        if (name.startsWith(ChatColor.LIGHT_PURPLE.toString())) return 4;
+        if (name.startsWith(ChatColor.YELLOW.toString())) return 5;
         return 0;
     }
 }

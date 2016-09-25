@@ -1,11 +1,9 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.item;
 
-import net.atherialrunes.practiceserver.api.handler.handlers.enchant.EnchantHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.GearType;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
 import net.atherialrunes.practiceserver.utils.StatUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -96,6 +94,9 @@ public class AtherialItem {
     }
 
     public ItemStack build() {
+        ItemMeta im = itemStack.getItemMeta();
+        im.spigot().setUnbreakable(true);
+        itemStack.setItemMeta(im);
         return itemStack;
     }
 
@@ -128,7 +129,7 @@ public class AtherialItem {
     }
 
     public int getHP() {
-        return Integer.parseInt(ChatColor.stripColor(itemStack.getItemMeta().getLore().get(1).split("HP: +")[1]).trim());
+        return (int) StatUtils.getStatFromLore(itemStack, "HP: +", "");
     }
 
     public static AtherialItem fromItemStack(ItemStack item) {
@@ -146,7 +147,7 @@ public class AtherialItem {
     }
 
     public void enchant(String type) {
-        setName("&c[" + EnchantHandler.getPlus(itemStack.getItemMeta().getDisplayName()) + "] " + EnchantHandler.getPlus(itemStack.getItemMeta().getDisplayName()));
+        setName("&c[+" + (StatUtils.getPlus(itemStack) + 1) + "] " + itemStack.getItemMeta().getDisplayName());
         switch (type) {
             case "Armor":
                 int hp = getHP();

@@ -15,6 +15,7 @@ public enum  EnumData {
     EXP("info.exp"),
     LEVEL("info.level"),
     LOCATION("info.location"),
+    NEW_PLAYER("info.newplayer"),
 
     BANK_INVENTORY_1("info.bank_inventory_1"),
     BANK_INVENTORY_2("info.bank_inventory_2"),

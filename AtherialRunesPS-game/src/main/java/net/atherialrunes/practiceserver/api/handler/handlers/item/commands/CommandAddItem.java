@@ -23,12 +23,13 @@ public class CommandAddItem extends AtherialCommand {
             if (Rank.isGM(gamePlayer.getName())) {
                 try {
                     if (args.length == 2) {
-                        int tier = Integer.parseInt(args[1]);
-                        GearType type = GearType.valueOf(args[2].toUpperCase());
+                        int tier = Integer.parseInt(args[0]);
+                        GearType type = GearType.valueOf(args[1].toUpperCase());
                         player.getInventory().addItem(ItemGenerator.generateGear(tier, type));
                         return true;
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     return true;
                 }
             }

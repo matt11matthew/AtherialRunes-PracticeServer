@@ -1,15 +1,18 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.spawner;
 
 import net.atherialrunes.practiceserver.GameAPI;
+import net.atherialrunes.practiceserver.GameConstants;
 import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
-import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
+import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -20,7 +23,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -83,9 +88,11 @@ public class SpawnerHandler extends ListenerHandler {
                 try {
                     spawners.put(placing.get(gp), Spawner.getFromSpawnData(placing.get(gp), e.getMessage().trim()));
                     gp.msg("&aYou've placed at spawner!");
+                    placing.remove(gp);
                     return;
                 } catch (Exception ee) {
                     gp.msg("&cError");
+                    placing.remove(gp);
                     return;
                 }
             }
@@ -156,34 +163,61 @@ public class SpawnerHandler extends ListenerHandler {
         }
     }
 
+    private Set<Entity> getEntitiesInChunks(Location l, int chunkRadius) {
+        Block b = l.getBlock();
+        Set<Entity> entities = new HashSet<Entity>();
+        for (int x = -16 * chunkRadius; x <= 16 * chunkRadius; x += 16) {
+            for (int z = -16 * chunkRadius; z <= 16 * chunkRadius; z += 16) {
+                for (Entity e : b.getRelative(x, 0, z).getChunk().getEntities()) {
+                    if (!(e instanceof Player)) {
+                        entities.add(e);
+                    }
+                }
+            }
+        }
+        return entities;
+    }
+
     public void spawnMobTask() {
-        AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
-            @Override
-            public void run() {
-                spawners.values().forEach(spawner -> {
-                    int task = 0;
-                    if (!spawner.isActive()) {
-                        task = AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
-                            @Override
-                            public void run() {
+        spawners.values().forEach(spawner -> {
+            int task = 0;
+            if (!spawner.isActive()) {
+                task = AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
+                    @Override
+                    public void run() {
+                        spawners.values().forEach(spawner -> {
+                            int task = 0;
+                            if (!spawner.isActive()) {
                                 if (spawner.getCurrentCooldown() > 0) {
                                     spawner.setCurrentCooldown((spawner.getCurrentCooldown() - 1));
                                     if (spawner.getCurrentCooldown() == 0) {
                                         spawner.setActive(true);
                                     }
                                 }
+                            } else if (spawner.isActive()) {
+                                spawner.setCurrentCooldown(spawner.getCooldown());
+                                if (canSpawn(spawner)) {
+                                    spawner.spawn();
+                                    spawner.setActive(false);
+                                    return;
+                                }
                             }
-                        }, 20L, 20L);
+                        });
                     }
-                    if (spawner.isActive()) {
-                        spawner.setCurrentCooldown(spawner.getCooldown());
-                        AtherialRunnable.getInstance().cancelTask(task);
-                        spawner.setActive(false);
-                        spawner.spawn();
-                        return;
-                    }
-                });
+                }, 20L, 20L);
             }
-        }, 1L, 1L);
+        });
+    }
+
+    private boolean canSpawn(Spawner spawner) {
+        Location location = spawner.getLocation();
+        if (getEntitiesInChunks(location, 1).size() < GameConstants.MAX_ENTITIES_IN_CHUNK) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (location.distance(player.getLocation()) <= 16) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
