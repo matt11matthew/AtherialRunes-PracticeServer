@@ -242,14 +242,14 @@ public class DamageHandler extends ListenerHandler {
                            if (dmg >= gp.getPlayer().getHealth()) {
                                gp.getPlayer().damage(gp.getPlayer().getHealth());
                                if (gp.isToggleDebug()) {
-                                   gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A ➜ -0&lDMG&7] &a[0&lHP&a]");
+                                   gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A ➡ -0&lDMG&7] &a[0&lHP&a]");
                                }
                                String msg = gp.getRank().getChatPrefix(gp.getPlayer()) + "&f was killed a(n) &r" + mobArmor.getName();
                                Bukkit.getServer().broadcastMessage(Utils.colorCodes(msg));
                            } else {
                                gp.getPlayer().setHealth((gp.getPlayer().getHealth() - dmg));
                                if (gp.isToggleDebug()) {
-                                   gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A ➜ -0&lDMG&7] &a[" + gp.getHp() + "&lHP&a]");
+                                   gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A ➡ -0&lDMG&7] &a[" + gp.getHp() + "&lHP&a]");
                                }
                            }
                        }
@@ -289,20 +289,20 @@ public class DamageHandler extends ListenerHandler {
             if (dmg >= mob.getHealth()) {
                 mob.damage(mob.getHealth());
                 if (gpMob.isTogglePvP()) {
-                    gpMob.msg("&c            -" + (int) dmg + "&lHP &7[-0%A ➜ -0&lDMG&7] &a[0&lHP&a]");
+                    gpMob.msg("&c            -" + (int) dmg + "&lHP &7[-0%A ➡ -0&lDMG&7] &a[0&lHP&a]");
                 }
                 if (attacker.isTogglePvP()) {
-                    attacker.msg("&c            " + (int) dmg + "&c&l DMG ➜ &c" + gpMob.getName());
+                    attacker.msg("&c            " + (int) dmg + "&c&l DMG ➡ &c" + gpMob.getName());
                 }
                 dead = true;
             } else {
                 mob.setHealth((mob.getHealth() - dmg));
                 mob.damage(0);
                 if (gpMob.isTogglePvP()) {
-                    gpMob.msg("&c            -" + (int) dmg + "&lHP &7[-0%A ➜➜ -0&lDMG&7] &a[" + gpMob.getHp() + "&lHP&a]");
+                    gpMob.msg("&c            -" + (int) dmg + "&lHP &7[-0%A ➡ -0&lDMG&7] &a[" + gpMob.getHp() + "&lHP&a]");
                 }
                 if (attacker.isTogglePvP()) {
-                    attacker.msg("&c            " + (int) dmg + "&c&l DMG ➜ &c" + gpMob.getName());
+                    attacker.msg("&c            " + (int) dmg + "&c&l DMG ➡ &c" + gpMob.getName());
                 }
             }
             testAlignment(attacker, gpMob, dead);
@@ -327,13 +327,13 @@ public class DamageHandler extends ListenerHandler {
             if (dmg >= mob.getHealth()) {
                 mob.damage(mob.getHealth());
                 if (attacker.isToggleDebug()) {
-                    attacker.msg("&c            " + (int) dmg + "&c&l DMG ➜ &r" + MobBuilder.mobArmors.get(mob).getName() + " [0]");
+                    attacker.msg("&c            " + (int) dmg + "&c&l DMG ➡ &r" + MobBuilder.mobArmors.get(mob).getName() + " [0]");
                 }
             } else {
                 mob.setHealth((mob.getHealth() - dmg));
                 mob.damage(0);
                 if (attacker.isTogglePvP()) {
-                    attacker.msg("&c            " + (int) dmg + "&c&l DMG ➜ &r" + MobBuilder.mobArmors.get(mob).getName() + " [" + (int) mob.getHealth() + "]");
+                    attacker.msg("&c            " + (int) dmg + "&c&l DMG ➡ &r" + MobBuilder.mobArmors.get(mob).getName() + " [" + (int) mob.getHealth() + "]");
                 }
             }
         }
