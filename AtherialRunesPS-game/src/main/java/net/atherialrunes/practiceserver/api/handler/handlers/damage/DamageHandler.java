@@ -264,7 +264,7 @@ public class DamageHandler extends ListenerHandler {
                         if (gp.getChaoticTime() > 0) {
                             gp.setChaoticTime((gp.getChaoticTime() - 1));
                             if (gp.getChaoticTime() == 0) {
-                                addLawful(gp);
+                                addNeutral(gp);
                                 return;
                             }
                         }
