@@ -233,6 +233,7 @@ public class SpawnerHandler extends ListenerHandler {
         Location location = spawner.getLocation();
         if (getEntitiesInChunks(location, 1).size() < GameConstants.MAX_ENTITIES_IN_CHUNK) {
             for (Player player : Bukkit.getOnlinePlayers()) {
+                if (!player.getWorld().getName().equals(spawner.getLocation().getWorld().getName())) continue;
                 if (location.distance(player.getLocation()) <= 16) {
                     return true;
                 }

@@ -38,10 +38,6 @@ public class MobHandler extends ListenerHandler {
             if (mob.isDead()) {
                 MobBuilder.mobArmors.remove(mob);
             }
-            if (mob.getLocation().getBlock().getType() == Material.WATER) {
-                MobBuilder.mobArmors.remove(mob);
-                mob.remove();
-            }
             if (RegionUtils.getZone(mob.getLocation()) == Zone.SAFE) {
                 MobBuilder.mobArmors.remove(mob);
                 mob.remove();
@@ -79,6 +75,9 @@ public class MobHandler extends ListenerHandler {
                     break;
                 default:
                     break;
+            }
+            if (mob.getKiller().getName().equals("matt11matthew")) {
+                dropChance = 50;
             }
             if (mobArmor.isElite()) {
                 dropChance = (int) (dropChance * GameConstants.ELITE_DROP_MULTIPLIER);
