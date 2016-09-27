@@ -16,10 +16,7 @@ import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import net.atherialrunes.practiceserver.utils.RandomUtils;
 import net.atherialrunes.practiceserver.utils.StatUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.EntityEffect;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityCombustEvent;
@@ -315,6 +312,7 @@ public class DamageHandler extends ListenerHandler {
                    Bukkit.getOnlinePlayers().forEach(player -> {
                        if (mob.getLocation().distance(player.getLocation()) <= 1) {
                            GamePlayer gp = GameAPI.getGamePlayer(player);
+                           if ((player.getGameMode() == GameMode.CREATIVE) || player.getGameMode() == GameMode.ADVENTURE) return;
                            player.playEffect(EntityEffect.HURT);
                            player.setVelocity(mob.getLocation().getDirection().multiply(0.3));
                            int dmg = MobBuilder.getDamageBasedOnMobArmor(mobArmor);

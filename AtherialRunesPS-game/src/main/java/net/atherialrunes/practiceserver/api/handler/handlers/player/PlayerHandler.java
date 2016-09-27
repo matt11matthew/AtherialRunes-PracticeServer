@@ -15,6 +15,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.tog
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandToggleDebug;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandTogglePvP;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
+import net.atherialrunes.practiceserver.api.handler.handlers.staff.commands.CommandWipe;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import net.atherialrunes.practiceserver.utils.RandomUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
@@ -58,6 +59,7 @@ public class PlayerHandler extends ListenerHandler {
         cm.registerCommand(new CommandToggleDebug("debug", Arrays.asList("toggledebug")));
         cm.registerCommand(new CommandTogglePvP("togglepvp", Arrays.asList("toggleplayervsplayer")));
         cm.registerCommand(new CommandToggleChaos("togglechaos", Arrays.asList("togglechaotic", "togglechao")));
+        cm.registerCommand(new CommandWipe("wipe"));
         cm.registerCommand(new CommandRules("rules"));
         FileConfiguration c = YamlConfiguration.loadConfiguration(new File(PracticeServer.getInstance().getDataFolder() + "", "time.yml"));
         File file = new File(PracticeServer.getInstance().getDataFolder() + "", "time.yml");
@@ -79,6 +81,7 @@ public class PlayerHandler extends ListenerHandler {
         GameAPI.GAMEPLAYERS.values().forEach(gp -> {
             gp.upload();
         });
+        Bukkit.getServer().broadcastMessage(Utils.colorCodes("&bBackup complete!"));
     }
 
     public static long getTimeUntilOut() {
@@ -106,8 +109,8 @@ public class PlayerHandler extends ListenerHandler {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         e.setJoinMessage(null);
-        String MOTD = (ChatColor.WHITE + "" + ChatColor.BOLD + "               Atherial Runes Practice Server Patch 1.0   ");
-        String DMOTD = (ChatColor.GRAY + "" + ChatColor.ITALIC + "         Donate at http://atherialrunes.buycraft.net/ for perks! ");
+        String MOTD = (ChatColor.WHITE + "" + ChatColor.BOLD + "            Atherial Runes Practice Server Patch 1.0   ");
+        String DMOTD = (ChatColor.GRAY + "" + ChatColor.ITALIC + "      Donate at http://atherialrunes.buycraft.net/ for perks! ");
         GameAPI.handleLogin(e.getPlayer());
         GamePlayer gp = GameAPI.getGamePlayer(e.getPlayer());
         gp.msg(MOTD);

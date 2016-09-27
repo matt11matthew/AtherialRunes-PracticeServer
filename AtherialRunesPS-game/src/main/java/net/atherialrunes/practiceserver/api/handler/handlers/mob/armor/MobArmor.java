@@ -19,6 +19,7 @@ public class MobArmor {
     private boolean elite;
     private String name;
     private Spawner spawner;
+    private String killer;
 
     public MobArmor(LivingEntity livingEntity, AtherialItem helmet, AtherialItem chestplate, AtherialItem leggings, AtherialItem boots, AtherialItem weapon) {
         this.livingEntity = livingEntity;

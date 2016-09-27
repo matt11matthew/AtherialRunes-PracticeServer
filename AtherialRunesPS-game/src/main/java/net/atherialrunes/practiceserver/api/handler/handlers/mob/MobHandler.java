@@ -8,6 +8,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.zone.RegionUtils;
 import net.atherialrunes.practiceserver.api.handler.handlers.zone.Zone;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import net.atherialrunes.practiceserver.utils.RandomUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -30,13 +31,17 @@ public class MobHandler extends ListenerHandler {
 
     @Override
     public void onUnload() {
-        GameConstants.WORLD.getEntities().forEach(Entity::remove);
+        Bukkit.getWorld("ARPS").getEntities().forEach(Entity::remove);
     }
 
     public void despawnMobsTask() {
         MobBuilder.mobArmors.keySet().forEach(mob -> {
             if (mob.isDead()) {
                 MobBuilder.mobArmors.remove(mob);
+            }
+            if (mob.getLocation().getBlock().isLiquid()) {
+                MobBuilder.mobArmors.remove(mob);
+                mob.remove();
             }
             if (RegionUtils.getZone(mob.getLocation()) == Zone.SAFE) {
                 MobBuilder.mobArmors.remove(mob);
@@ -76,18 +81,16 @@ public class MobHandler extends ListenerHandler {
                 default:
                     break;
             }
-            if (mob.getKiller().getName().equals("matt11matthew")) {
-                dropChance = 50;
-            }
+//            if (mobArmor.getKiller().equals("matt11matthew")) {
+//                dropChance = 50;
+//            }
             if (mobArmor.isElite()) {
                 dropChance = (int) (dropChance * GameConstants.ELITE_DROP_MULTIPLIER);
             }
             if (dropChance > 100) {
                 dropChance = 100;
             }
-            int chance = (int) (Math.random() * 100);
-            if (chance < dropChance) {
-                int type = RandomUtils.random(1, 5);
+            if (RandomUtils.random(1, 20) == 10) {
                 int gem_amount = 0;
                 switch (mobArmor.getTier()) {
                     case T1:
@@ -107,23 +110,6 @@ public class MobHandler extends ListenerHandler {
                         break;
                     case T6:
                         gem_amount = decideValue(GameConstants.T6_GEM_DROP);
-                        break;
-                }
-                switch (type) {
-                    case 1:
-                        drop(mobArmor.getHelmet().build(), location);
-                        break;
-                    case 2:
-                        drop(mobArmor.getChestplate().build(), location);
-                        break;
-                    case 3:
-                        drop(mobArmor.getLeggings().build(), location);
-                        break;
-                    case 4:
-                        drop(mobArmor.getBoots().build(), location);
-                        break;
-                    case 5:
-                        drop(mobArmor.getWeapon().build(), location);
                         break;
                 }
                 int stacks = 0;
@@ -147,6 +133,27 @@ public class MobHandler extends ListenerHandler {
                     gem.setName("&aGem");
                     gem.setAmount(gem_amount);
                     drop(gem.build(), location);
+                }
+            }
+            int chance = (int) (Math.random() * 100);
+            if (chance < dropChance) {
+                int type = RandomUtils.random(1, 5);
+                switch (type) {
+                    case 1:
+                        drop(mobArmor.getHelmet().build(), location);
+                        break;
+                    case 2:
+                        drop(mobArmor.getChestplate().build(), location);
+                        break;
+                    case 3:
+                        drop(mobArmor.getLeggings().build(), location);
+                        break;
+                    case 4:
+                        drop(mobArmor.getBoots().build(), location);
+                        break;
+                    case 5:
+                        drop(mobArmor.getWeapon().build(), location);
+                        break;
                 }
                 MobBuilder.mobArmors.remove(mob);
                 return;
