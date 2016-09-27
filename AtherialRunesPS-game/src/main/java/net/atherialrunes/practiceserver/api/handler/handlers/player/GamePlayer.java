@@ -36,7 +36,6 @@ public class GamePlayer {
     private int gems;
     private Party party = null;
     private String chatChannel = "local";
-    private int hp;
     private int foodLevel;
     private float exp;
     private int level;
@@ -67,7 +66,6 @@ public class GamePlayer {
         this.firstLogin = (long) DatabaseAPI.getInstance().getData(EnumData.FIRST_LOGIN, uniqueId);
         this.rank = Rank.valueOf(DatabaseAPI.getInstance().getData(EnumData.RANK, uniqueId) + "");
         this.gems = (int) DatabaseAPI.getInstance().getData(EnumData.GEMS, uniqueId);
-        this.hp = (int) DatabaseAPI.getInstance().getData(EnumData.HEALTH, uniqueId);
         this.foodLevel = (int) DatabaseAPI.getInstance().getData(EnumData.FOOD_LEVEL, uniqueId);
         this.exp = 0.0F;//(double) DatabaseAPI.getInstance().getData(EnumData.EXP, uniqueId);
         this.level = (int) DatabaseAPI.getInstance().getData(EnumData.LEVEL, uniqueId);
@@ -242,5 +240,9 @@ public class GamePlayer {
 
     public void kill() {
         getPlayer().setHealth(0);
+    }
+
+    public int getHp() {
+        return (int) getPlayer().getHealth();
     }
 }

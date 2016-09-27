@@ -48,12 +48,18 @@ public class ScoreboardHandler extends ListenerHandler {
     public void showPartyBoard(Party party) {
         party.getMembers().forEach(gp -> {
             Scoreboard board = getBoard(gp);
-            Objective partyBoard = board.registerNewObjective(party.getLeader().getName() + ":party", "dummy");
+            Objective partyBoard = null;
+            if (board.getObjective(party.getLeader().getName() + ":party") == null) {
+              partyBoard = board.registerNewObjective(party.getLeader().getName() + ":party", "dummy");
+            } else {
+                board.getObjective(party.getLeader().getName() + ":party").unregister();
+                partyBoard = board.registerNewObjective(party.getLeader().getName() + ":party", "dummy");
+            }
             partyBoard.setDisplayName(Utils.colorCodes(" &d&lParty "));
             partyBoard.setDisplaySlot(DisplaySlot.SIDEBAR);
             String name = gp.getName();
-            if(name.length() > 14) {
-                name = name.substring(0, 14);
+            if(name.length() > 12) {
+                name = name.substring(0, 12);
             }
             if (party.getLeader().getName().equals(gp.getName())) {
                 name = "&l" + gp.getName();

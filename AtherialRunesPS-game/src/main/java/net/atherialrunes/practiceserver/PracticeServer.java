@@ -13,6 +13,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.health.HealthHandle
 import net.atherialrunes.practiceserver.api.handler.handlers.item.ItemHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.nocheat.NoCheatHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.party.PartyHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.ScoreboardHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.PlayerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRoll;
@@ -59,7 +60,7 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new PlayerHandler());
         HandlerManager.registerHandler(new SpawnerHandler());
         HandlerManager.registerHandler(new HealthHandler());
-        //HandlerManager.registerHandler(new PartyHandler());
+        HandlerManager.registerHandler(new PartyHandler());
         HandlerManager.registerHandler(new ScoreboardHandler());
         HandlerManager.registerHandler(new DamageHandler());
         HandlerManager.registerHandler(new VendorHandler());

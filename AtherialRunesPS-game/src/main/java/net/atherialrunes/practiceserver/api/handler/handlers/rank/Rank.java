@@ -54,7 +54,7 @@ public enum Rank {
         GamePlayer gp = GameAPI.getGamePlayer(player);
         String prefix = gp.getRank().getPrefix();
         prefix = prefix.replaceAll("%namecolor%", gp.getAlignment().getChatPrefix());
-        return Utils.colorCodes(prefix + player.getName());
+        return Utils.colorCodes(prefix + player.getName() + ": &f");
     }
 
     public static boolean isGM(String name) {
