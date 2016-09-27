@@ -32,7 +32,7 @@ public class OrbHandler extends ListenerHandler {
     public void onInventoryClickEvent(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
         if (e.getSlotType() == InventoryType.SlotType.OUTSIDE) {
-            return;
+            return; 
         }
         GamePlayer gp = GameAPI.getGamePlayer(player);
         if ((e.getCurrentItem() != null) && (e.getCurrentItem().getType() != Material.AIR)) {
