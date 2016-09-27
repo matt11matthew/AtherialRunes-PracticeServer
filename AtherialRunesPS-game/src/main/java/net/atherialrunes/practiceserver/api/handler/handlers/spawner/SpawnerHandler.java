@@ -217,9 +217,9 @@ public class SpawnerHandler extends ListenerHandler {
                             }
                         }
                     } else if (spawner.isActive()) {
-                        spawner.setCurrentCooldown(spawner.getCooldown());
-                        spawner.setActive(false);
                         if (canSpawn(spawner)) {
+                            spawner.setCurrentCooldown(spawner.getCooldown());
+                            spawner.setActive(false);
                             spawner.spawn();
                             return;
                         }
