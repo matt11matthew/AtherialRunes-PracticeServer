@@ -4,7 +4,10 @@ import org.bukkit.DyeColor;
 
 public enum ArmorDye {
 
-    NONE(null);
+    NONE(null),
+    ORANGE(DyeColor.ORANGE),
+
+    ;
 
     private DyeColor dyeColor;
 

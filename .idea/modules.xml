@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AtherialRunesPS-game/AtherialRunesPS-game.iml" filepath="$PROJECT_DIR$/AtherialRunesPS-game/AtherialRunesPS-game.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AtherialRunesPracticeServer.iml" filepath="$PROJECT_DIR$/AtherialRunesPracticeServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AtherialRunesPS-game/game.iml" filepath="$PROJECT_DIR$/AtherialRunesPS-game/game.iml" />
+      <module fileurl="file://$PROJECT_DIR$/practiceserver.iml" filepath="$PROJECT_DIR$/practiceserver.iml" />
     </modules>
   </component>
 </project>

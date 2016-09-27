@@ -22,12 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="AtherialRunesPS-game" />
+        <module name="game" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="AtherialRunesPracticeServer" target="1.8" />
-      <module name="AtherialRunesPS-game" target="1.8" />
+      <module name="game" target="1.8" />
+      <module name="practiceserver" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

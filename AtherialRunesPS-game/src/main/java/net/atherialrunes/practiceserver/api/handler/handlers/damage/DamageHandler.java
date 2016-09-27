@@ -5,6 +5,7 @@ import net.atherialrunes.practiceserver.GameConstants;
 import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.energy.EnergyHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.health.HealthHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobBuilder;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.armor.MobArmor;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
@@ -51,6 +52,16 @@ public class DamageHandler extends ListenerHandler {
     }
 
     public static List<Player> tagged = new ArrayList<>();
+    public static List<Player> nodmg = new ArrayList<>();
+
+    public void noDMG(final Player p) {
+        nodmg.add(p);
+        new BukkitRunnable() {
+            public void run() {
+                nodmg.remove(p);
+            }
+        }.runTaskLater(PracticeServer.getInstance(), GameConstants.PLAYER_CPS);
+    }
 
     public void tag(final Player p) {
         tagged.add(p);
@@ -63,6 +74,12 @@ public class DamageHandler extends ListenerHandler {
 
     public double getFinalDMGMob(GamePlayer gamePlayer, LivingEntity mob) {
         if ((RegionUtils.getZone(gamePlayer.getPlayer().getLocation()) == Zone.SAFE) || (RegionUtils.getZone(gamePlayer.getPlayer().getLocation()) == Zone.SAFE)) {
+            return -1;
+        }
+        if (gamePlayer.getPlayer().hasPotionEffect(PotionEffectType.SLOW_DIGGING)) {
+            return -1;
+        }
+        if (nodmg.contains(gamePlayer.getPlayer())) {
             return -1;
         }
         ItemStack wep = gamePlayer.getWeapon();
@@ -89,6 +106,35 @@ public class DamageHandler extends ListenerHandler {
             }
             if (StatUtils.hasStat(wep, "CRITICAL HIT")) {
                 crit += StatUtils.getStatFromLore(wep, "CRITICAL HIT: ", "%");
+            }
+            if (HealthHandler.getDPS(gamePlayer.getPlayer()) > 0) {
+                double dps = HealthHandler.getDPS(gamePlayer.getPlayer()) / 2;
+                double divide = dps / 100.0D;
+                double pre = dmg * divide;
+                int cleaned = (int)(dmg + pre);
+                dmg = cleaned;
+            }
+            if (HealthHandler.getVIT(gamePlayer.getPlayer()) > 0) {
+                if (Utils.isSword(wep)) {
+                    double vit = HealthHandler.getVIT(gamePlayer.getPlayer()) / 2;
+                    if (vit > 0.0D) {
+                        double divide = vit / 7500.0D;
+                        double pre = dmg * divide;
+                        int cleaned = (int) (dmg + pre);
+                        dmg = cleaned;
+                    }
+                }
+            }
+            if (HealthHandler.getSTR(gamePlayer.getPlayer()) > 0) {
+                if (Utils.isSword(wep)) {
+                    double vit = HealthHandler.getSTR(gamePlayer.getPlayer()) / 2;
+                    if (vit > 0.0D) {
+                        double divide = vit / 7500.0D;
+                        double pre = dmg * divide;
+                        int cleaned = (int) (dmg + pre);
+                        dmg = cleaned;
+                    }
+                }
             }
             if (Utils.isAxe(wep)) {
                 crit += 5;
@@ -123,6 +169,12 @@ public class DamageHandler extends ListenerHandler {
         if ((mobAlignment == Alignment.LAWFUL) && (gamePlayer.isToggleChaos())) {
             return -1;
         }
+        if (gamePlayer.getPlayer().hasPotionEffect(PotionEffectType.SLOW_DIGGING)) {
+            return -1;
+        }
+        if (nodmg.contains(gamePlayer.getPlayer())) {
+            return -1;
+        }
         ItemStack wep = gamePlayer.getWeapon();
         double dmg = 0.0D;
         double crit = 0;
@@ -144,6 +196,35 @@ public class DamageHandler extends ListenerHandler {
                 dmg += StatUtils.getStatFromLore(wep, "POISON DMG: +", "");
                 mob.getWorld().playEffect(mob.getEyeLocation(), Effect.POTION_BREAK, 40);
                 mob.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10, 1));
+            }
+            if (HealthHandler.getDPS(gamePlayer.getPlayer()) > 0) {
+                double dps = HealthHandler.getDPS(gamePlayer.getPlayer()) / 2;
+                double divide = dps / 100.0D;
+                double pre = dmg * divide;
+                int cleaned = (int)(dmg + pre);
+                dmg = cleaned;
+            }
+            if (HealthHandler.getVIT(gamePlayer.getPlayer()) > 0) {
+                if (Utils.isSword(wep)) {
+                    double vit = HealthHandler.getVIT(gamePlayer.getPlayer()) / 2;
+                    if (vit > 0.0D) {
+                        double divide = vit / 7500.0D;
+                        double pre = dmg * divide;
+                        int cleaned = (int) (dmg + pre);
+                        dmg = cleaned;
+                    }
+                }
+            }
+            if (HealthHandler.getSTR(gamePlayer.getPlayer()) > 0) {
+                if (Utils.isSword(wep)) {
+                    double vit = HealthHandler.getSTR(gamePlayer.getPlayer()) / 2;
+                    if (vit > 0.0D) {
+                        double divide = vit / 7500.0D;
+                        double pre = dmg * divide;
+                        int cleaned = (int) (dmg + pre);
+                        dmg = cleaned;
+                    }
+                }
             }
             if (StatUtils.hasStat(wep, "CRITICAL HIT")) {
                 crit += StatUtils.getStatFromLore(wep, "CRITICAL HIT: ", "%");
@@ -241,22 +322,18 @@ public class DamageHandler extends ListenerHandler {
                            gp.getPlayer().playSound(mob.getLocation(), Sound.ENTITY_GENERIC_HURT, 1.0F, 1.0F);
                            if (dmg >= gp.getPlayer().getHealth()) {
                                gp.getPlayer().damage(gp.getPlayer().getHealth());
-                               if (gp.isToggleDebug()) {
-                                   gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[0&lHP&a]");
-                               }
+                               gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[" + gp.getHp() + "&lHP&a]");
                                String msg = gp.getRank().getChatPrefix(gp.getPlayer()) + "&f was killed a(n) &r" + mobArmor.getName();
                                Bukkit.getServer().broadcastMessage(Utils.colorCodes(msg));
                            } else {
                                gp.getPlayer().setHealth((gp.getPlayer().getHealth() - dmg));
-                               if (gp.isToggleDebug()) {
-                                   gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[" + gp.getHp() + "&lHP&a]");
-                               }
+                               gp.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[" + gp.getHp() + "&lHP&a]");
                            }
                        }
                    });
                });
            }
-       }, GameConstants.CPS, GameConstants.CPS);
+       }, GameConstants.MOB_CPS, GameConstants.MOB_CPS);
     }
 
     @EventHandler
@@ -281,29 +358,20 @@ public class DamageHandler extends ListenerHandler {
             if (attacker.getCombatTime() == 0) {
                 attacker.sendAction("&c&lEntering Combat");
             }
+            noDMG(attacker.getPlayer());
             EnergyHandler.removeEnergyFromPlayerAndUpdate(attacker.getUniqueId(), EnergyHandler.getWeaponSwingEnergyCost(attacker.getWeapon()));
             attacker.setCombatTime(10);
             boolean dead = false;
             tag(attacker.getPlayer());
             tag(gpMob.getPlayer());
+            gpMob.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[" + (int) gpMob.getPlayer().getHealth() + "&lHP&a]");
+            attacker.msg("&c            " + (int) dmg + "&c&l DMG -> &c" + gpMob.getName());
             if (dmg >= mob.getHealth()) {
                 mob.damage(mob.getHealth());
-                if (gpMob.isTogglePvP()) {
-                    gpMob.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[0&lHP&a]");
-                }
-                if (attacker.isTogglePvP()) {
-                    attacker.msg("&c            " + (int) dmg + "&c&l DMG -> &c" + gpMob.getName());
-                }
                 dead = true;
             } else {
                 mob.setHealth((mob.getHealth() - dmg));
                 mob.damage(0);
-                if (gpMob.isTogglePvP()) {
-                    gpMob.msg("&c            -" + (int) dmg + "&lHP &7[-0%A -> -0&lDMG&7] &a[" + gpMob.getHp() + "&lHP&a]");
-                }
-                if (attacker.isTogglePvP()) {
-                    attacker.msg("&c            " + (int) dmg + "&c&l DMG -> &c" + gpMob.getName());
-                }
             }
             testAlignment(attacker, gpMob, dead);
             if (dead) {
@@ -319,23 +387,21 @@ public class DamageHandler extends ListenerHandler {
             if (dmg == -1) {
                 return;
             }
+            noDMG(attacker.getPlayer());
             EnergyHandler.removeEnergyFromPlayerAndUpdate(attacker.getUniqueId(), EnergyHandler.getWeaponSwingEnergyCost(attacker.getWeapon()));
             tag(attacker.getPlayer());
             mob.setVelocity(attacker.getPlayer().getLocation().getDirection().multiply(0.4));
             mob.playEffect(EntityEffect.HURT);
             attacker.getPlayer().playSound(mob.getLocation(), Sound.ENTITY_GENERIC_HURT, 1.0F, 1.0F);
+            int hp = (int) mob.getHealth();
             if (dmg >= mob.getHealth()) {
                 mob.damage(mob.getHealth());
-                if (attacker.isToggleDebug()) {
-                    attacker.msg("&c            " + (int) dmg + "&c&l DMG -> &r" + MobBuilder.mobArmors.get(mob).getName() + " [0]");
-                }
+                hp = 0;
             } else {
                 mob.setHealth((mob.getHealth() - dmg));
                 mob.damage(0);
-                if (attacker.isTogglePvP()) {
-                    attacker.msg("&c            " + (int) dmg + "&c&l DMG -> &r" + MobBuilder.mobArmors.get(mob).getName() + " [" + (int) mob.getHealth() + "]");
-                }
             }
+            attacker.msg("&c            " + (int) dmg + "&c&l DMG -> &r" + MobBuilder.mobArmors.get(mob).getName() + " [" + hp + "]");
         }
     }
 

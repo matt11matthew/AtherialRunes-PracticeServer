@@ -30,6 +30,9 @@ public class ItemGenerator {
             case 5:
                 item = new T5();
                 break;
+            case 6:
+                item = new T6();
+                break;
             default:
                 break;
         }
@@ -56,6 +59,9 @@ public class ItemGenerator {
                 break;
             case 5:
                 item = new T5();
+                break;
+            case 6:
+                item = new T6();
                 break;
             default:
                 break;

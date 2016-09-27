@@ -46,13 +46,21 @@ public class T1 extends TierItem {
         setLeggingsHpRange("125-375");
         setLeggingType(Material.LEATHER_LEGGINGS);
 
-        setSwordName("Wooden Sword");
+        setSwordName("Shortsword");
         setAxeName("Wooden Hatchet");
         setBootName("Leather Sandals");
         setChestplateName("Leather Vest");
         setLeggingName("Leather Pants");
         setHelmetName("Leather Cap");
 
+        setArmorPenStatRange("1-10");
+        setDpsMaxStatRange("1-3");
+        setDpsMaxStatRange("4-5");
+        setArmorMinStatRange("1-4");
+        setArmorMaxStatRange("7-17");
+        setIntStatRange("1-50");
+        setVsStatRange("1-10");
+        setAccuracyStatRange("1-30");
         setTier(Tier.T1);
         setTierNumber(1);
     }

@@ -3,7 +3,6 @@ package net.atherialrunes.practiceserver.api.handler.handlers.mob;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.armor.MobArmor;
 import net.atherialrunes.practiceserver.api.handler.handlers.spawner.Spawner;
-import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import net.atherialrunes.practiceserver.utils.RandomUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Location;
@@ -20,42 +19,39 @@ public class MobBuilder {
 
     public static void spawn(Spawner spawner) {
         spawn(spawner.getLocation(), spawner.getMobTier(), spawner.getMobType(), spawner.isElite(), spawner.getAmount(), spawner);
+        return;
     }
 
     public static void spawn(Location location, Tier tier, MobType mobType, boolean isElite, int amount, Spawner spawner) {
-        int i = 0;
-        while (i < amount) {
-            LivingEntity mob = (LivingEntity) location.getWorld().spawnEntity(location, mobType.getEntityType());
-            AtherialItem helmet = AtherialItem.generate(GearType.HELMET, tier);
-            AtherialItem chestplate = AtherialItem.generate(GearType.CHESTPLATE, tier);
-            AtherialItem leggings = AtherialItem.generate(GearType.LEGGINGS, tier);
-            AtherialItem boots = AtherialItem.generate(GearType.BOOTS, tier);
-            AtherialItem weapon = AtherialItem.generate(GearType.getRandomWeapon(), tier);
-            MobArmor mobArmor = new MobArmor(mob, helmet, chestplate, leggings, boots, weapon);
-            mobArmor.setTier(tier);
-            mobArmor.setElite(isElite);
-            String name = getName(tier, mobType, isElite);
-            mobArmor.setName(name);
-            mobArmor.setSpawner(spawner);
-            if (isElite) {
-                helmet.addGlow();
-                chestplate.addGlow();
-                leggings.addGlow();
-                boots.addGlow();
-                weapon.addGlow();
-            }
-            mob.getEquipment().setHelmet(helmet.build());
-            mob.getEquipment().setChestplate(chestplate.build());
-            mob.getEquipment().setLeggings(leggings.build());
-            mob.getEquipment().setBoots(boots.build());
-            mob.getEquipment().setItemInMainHand(weapon.build());
-            mob.setCustomName(name);
-            mob.setCustomNameVisible(true);
-            mob.setMaxHealth(getHealthBasedOnMobArmor(mobArmor));
-            mob.setHealth(mob.getMaxHealth());
-            mobArmors.put(mob, mobArmor);
-            i++;
+        LivingEntity mob = (LivingEntity) location.getWorld().spawnEntity(location, mobType.getEntityType());
+        AtherialItem helmet = AtherialItem.generate(GearType.HELMET, tier);
+        AtherialItem chestplate = AtherialItem.generate(GearType.CHESTPLATE, tier);
+        AtherialItem leggings = AtherialItem.generate(GearType.LEGGINGS, tier);
+        AtherialItem boots = AtherialItem.generate(GearType.BOOTS, tier);
+        AtherialItem weapon = AtherialItem.generate(GearType.getRandomWeapon(), tier);
+        MobArmor mobArmor = new MobArmor(mob, helmet, chestplate, leggings, boots, weapon);
+        mobArmor.setTier(tier);
+        mobArmor.setElite(isElite);
+        String name = getName(tier, mobType, isElite);
+        mobArmor.setName(name);
+        mobArmor.setSpawner(spawner);
+        if (isElite) {
+            helmet.addGlow();
+            chestplate.addGlow();
+            leggings.addGlow();
+            boots.addGlow();
+            weapon.addGlow();
         }
+        mob.getEquipment().setHelmet(helmet.build());
+        mob.getEquipment().setChestplate(chestplate.build());
+        mob.getEquipment().setLeggings(leggings.build());
+        mob.getEquipment().setBoots(boots.build());
+        mob.getEquipment().setItemInMainHand(weapon.build());
+        mob.setCustomName(name);
+        mob.setCustomNameVisible(true);
+        mob.setMaxHealth(getHealthBasedOnMobArmor(mobArmor));
+        mob.setHealth(mob.getMaxHealth());
+        mobArmors.put(mob, mobArmor);
         return;
     }
 
@@ -80,19 +76,19 @@ public class MobBuilder {
         return damage;
     }
 
-    public static void task() {
-        AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
-            @Override
-            public void run() {
-                mobArmors.values().forEach(mobArmor -> {
-                    if (mobArmor.getSpawner().getLocation().distance(mobArmor.getLivingEntity().getLocation()) > 30) {
-                        mobArmor.getLivingEntity().teleport(mobArmor.getSpawner().getLocation());
-                        mobArmor.getLivingEntity().setHealth(mobArmor.getLivingEntity().getMaxHealth());
-                    }
-                });
-            }
-        }, 20L, 20L);
-    }
+//    public static void task() {
+//        AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
+//            @Override
+//            public void run() {
+//                mobArmors.values().forEach(mobArmor -> {
+//                    if (mobArmor.getSpawner().getLocation().distance(mobArmor.getLivingEntity().getLocation()) > 30) {
+//                        mobArmor.getLivingEntity().teleport(mobArmor.getSpawner().getLocation());
+//                        mobArmor.getLivingEntity().setHealth(mobArmor.getLivingEntity().getMaxHealth());
+//                    }
+//                });
+//            }
+//        }, 20L, 20L);
+//    }
 
     public static String getName(Tier tier, MobType mobType, boolean isElite) {
         String name = mobType.getName();
@@ -124,6 +120,9 @@ public class MobBuilder {
                     case T5:
                         name = "Infernal " + name;
                         break;
+                    case T6:
+                        name = "Mythical " + name;
+                        break;
                 }
                 break;
             case ZOMBIE:
@@ -142,6 +141,9 @@ public class MobBuilder {
                         break;
                     case T5:
                         name = "Infernal " + name;
+                        break;
+                    case T6:
+                        name = "Mythical " + name;
                         break;
                 }
                 break;
@@ -162,6 +164,9 @@ public class MobBuilder {
                     case T5:
                         name = "Infernal " + name;
                         break;
+                    case T6:
+                        name = "Mythical " + name;
+                        break;
                 }
                 break;
             case PIGMAN:
@@ -181,6 +186,9 @@ public class MobBuilder {
                     case T5:
                         name = "Infernal " + name;
                         break;
+                    case T6:
+                        name = "Mythical " + name;
+                        break;
                 }
                 break;
             case NAGA:
@@ -198,7 +206,10 @@ public class MobBuilder {
                         name = "Gigantic " + name;
                         break;
                     case T5:
-                        name = "Infernal " + name;
+                        name = "Mythical Infernal " + name;
+                        break;
+                    case T6:
+                        name = "Gigantic Mythical " + name;
                         break;
                 }
                 break;

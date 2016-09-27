@@ -12,6 +12,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.energy.EnergyHandle
 import net.atherialrunes.practiceserver.api.handler.handlers.health.HealthHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.ItemHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.nocheat.NoCheatHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.party.ScoreboardHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.PlayerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRoll;
@@ -51,14 +52,14 @@ public class PracticeServer extends JavaPlugin {
         registerCommands();
         registerVendors();
         Utils.load();
-        Bukkit.getServer().setWhitelist(true);
+        //Bukkit.getServer().setWhitelist(true);
     }
 
     private void registerHandlers() {
         HandlerManager.registerHandler(new PlayerHandler());
         HandlerManager.registerHandler(new SpawnerHandler());
         HandlerManager.registerHandler(new HealthHandler());
-        //  HandlerManager.registerHandler(new PartyHandler());
+        //HandlerManager.registerHandler(new PartyHandler());
         HandlerManager.registerHandler(new ScoreboardHandler());
         HandlerManager.registerHandler(new DamageHandler());
         HandlerManager.registerHandler(new VendorHandler());
@@ -75,6 +76,7 @@ public class PracticeServer extends JavaPlugin {
         HandlerManager.registerHandler(new WorldHandler());
         HandlerManager.registerHandler(new DonorHandler());
         HandlerManager.registerHandler(new EnergyHandler());
+        HandlerManager.registerHandler(new NoCheatHandler());
         HandlerManager.loadHandlers();
     }
 
@@ -95,6 +97,10 @@ public class PracticeServer extends JavaPlugin {
     }
 
     public void onDisable() {
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.performCommand("sync");
+            player.kickPlayer(Utils.colorCodes("&aServer Rebooting"));
+        });
         HandlerManager.unloadHandlers();
     }
 }

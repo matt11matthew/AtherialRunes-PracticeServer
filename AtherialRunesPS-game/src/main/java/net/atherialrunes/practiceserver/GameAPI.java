@@ -1,6 +1,7 @@
 package net.atherialrunes.practiceserver;
 
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
+import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -28,8 +29,13 @@ public class GameAPI {
     }
 
     public static void handleLogout(Player player) {
-        if (getGamePlayer(player).isSave()) {
-            getGamePlayer(player).upload();
+        GamePlayer gp = getGamePlayer(player);
+        if (gp.isInCombat()) {
+            gp.kill();
+            Bukkit.getServer().broadcastMessage(Utils.colorCodes("&7" + player.getName()) + " has logged out while in combat!");
+        }
+        if (gp.isSave()) {
+            gp.upload();
         }
         GAMEPLAYERS.remove(player.getUniqueId().toString());
     }

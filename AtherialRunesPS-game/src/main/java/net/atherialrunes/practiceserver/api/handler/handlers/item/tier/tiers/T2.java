@@ -56,5 +56,14 @@ public class T2 extends TierItem {
 
         setTier(Tier.T2);
         setTierNumber(2);
+
+        setArmorPenStatRange("1-10");
+        setDpsMaxStatRange("2-3");
+        setDpsMaxStatRange("4-6");
+        setArmorMinStatRange("2-4");
+        setArmorMaxStatRange("6-9");
+        setIntStatRange("25-95");
+        setVsStatRange("1-10");
+        setAccuracyStatRange("1-30");
     }
 }

@@ -56,5 +56,14 @@ public class T3 extends TierItem {
 
         setTier(Tier.T3);
         setTierNumber(3);
+
+        setArmorPenStatRange("1-10");
+        setDpsMaxStatRange("3-6");
+        setDpsMaxStatRange("7-8");
+        setArmorMinStatRange("3-6");
+        setArmorMaxStatRange("7-8");
+        setIntStatRange("60-165");
+        setVsStatRange("2-12");
+        setAccuracyStatRange("15-30");
     }
 }

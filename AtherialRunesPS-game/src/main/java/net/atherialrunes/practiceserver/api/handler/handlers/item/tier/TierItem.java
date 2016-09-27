@@ -54,14 +54,39 @@ public abstract class TierItem {
     private String vitStatRange;
     private String strStatRange;
 
+    private String armorPenStatRange;
+    private String accuracyStatRange;
+    private String dpsMinStatRange;
+    private String dpsMaxStatRange;
+    private String armorMinStatRange;
+    private String armorMaxStatRange;
+    private String intStatRange;
+    private String vsStatRange;
+
 
     public TierItem() {
 
     }
 
     public ItemStack rerollStats(ItemStack item) {
-        return build(item, StatUtils.getMinDamage(item), StatUtils.getMaxDamage(item));
-}
+        GearType gearType = GearType.getGearType(item);
+        ItemStack newItem = null;
+        switch (gearType) {
+            case HELMET:
+            case CHESTPLATE:
+            case LEGGINGS:
+            case BOOTS:
+                newItem = buildArmor(item);
+                break;
+            case SWORD:
+            case AXE:
+                newItem = build(item, StatUtils.getMinDamage(item), StatUtils.getMaxDamage(item));
+                break;
+            default:
+                break;
+        }
+        return newItem;
+    }
 
     public ItemStack build(GearType gearType) {
         Material type = null;
@@ -124,6 +149,222 @@ public abstract class TierItem {
             if (RandomUtils.random(1, 10) == 2) {
                 item.addLore("&cCRITICAL HIT: " + decideValue(getCriticalHitRange()) + "%");
                 name = "Critical " + name;
+            }
+            if (gearType == GearType.SWORD) {
+                if (RandomUtils.random(1, 10) == 2) {
+                    item.addLore("&cACCURACY: " + decideValue(getAccuracyStatRange()) + "%");
+                    name = "Accurate " + name;
+                }
+            }
+            if (gearType == GearType.AXE) {
+                if (RandomUtils.random(1, 10) == 2) {
+                    item.addLore("&cARMOR PENETRATION: " + decideValue(getArmorPenStatRange()) + "%");
+                    name = name + " of Penetration";
+                }
+            }
+            if (RandomUtils.random(1, 8) == 2) {
+                int elementType = RandomUtils.random(1, 6);
+                boolean ice = false;
+                boolean fire = false;
+                boolean poison = false;
+                boolean pure = false;
+                switch (elementType) {
+                    case 1:
+                        ice = true;
+                        break;
+                    case 2:
+                        fire = true;
+                        break;
+                    case 3:
+                        poison = true;
+                        break;
+                    case 4:
+                        poison = true;
+                        pure = true;
+                        break;
+                    case 5:
+                        ice = true;
+                        pure = true;
+                        break;
+                    case 6:
+                        fire = true;
+                        pure = true;
+                        break;
+                    default:
+                        break;
+
+                }
+                if (ice) {
+                    item.addLore("&cICE DMG: +" + decideValue(getElementDamageRange()));
+                    name = name + " of Ice";
+                }
+                if (fire) {
+                    item.addLore("&cFIRE DMG: +" + decideValue(getElementDamageRange()));
+                    name = name + " of Fire";
+                }
+                if (poison) {
+                    item.addLore("&cPOISON DMG: +" + decideValue(getElementDamageRange()));
+                    name = name + " of Poison";
+                }
+                if (pure) {
+                    item.addLore("&cPURE DMG: +" + decideValue(getElementDamageRange()));
+                    name = "Pure " + name;
+                }
+            }
+        } else {
+            int firstStat = RandomUtils.random(1, 2);
+            boolean dps = false;
+            switch (firstStat) {
+                case 1:
+                    dps = false;
+                    break;
+                case 2:
+                    dps = true;
+                    break;
+                default:
+                    dps = false;
+                    break;
+            }
+            if (dps) {
+                item.addLore("&cDPS: 10 - 10%");
+            } else {
+                item.addLore("&cARMOR: 10 - 10%");
+            }
+            item.addLore("&cHP: +" + hp);
+            boolean energy = false;
+            if (RandomUtils.random(1, 2) == 2) {
+                energy = true;
+            }
+            if (energy) {
+                item.addLore("&cENERGY REGEN: +" + decideValue(getEnergyRange()) + "%");
+                name = "Energetic " + name;
+            } else {
+                item.addLore("&cHP REGEN: +" + decideValue(getHpsRange()) + " HP/s");
+                name = "Mending " + name;
+            }
+            if (RandomUtils.random(1, 3) == 2) {
+                int statType = RandomUtils.random(1, 3);
+                switch (statType) {
+                    case 1:
+                        item.addLore("&cVIT: +" + decideValue(getVitStatRange()));
+                        name = name + " of Fortune";
+                        break;
+                    case 2:
+                        item.addLore("&cSTR: +" + decideValue(getStrStatRange()));
+                        name = name + " of Strength";
+                        break;
+                    case 3:
+                        item.addLore("&cINT: +" + decideValue(getIntStatRange()));
+                        name = name + " of Intellect";
+                        break;
+                }
+            }
+
+            if (RandomUtils.random(1, 3) == 2) {
+                int i = RandomUtils.random(1, 3);
+                boolean block = false;
+                boolean reflect = false;
+                boolean dodge = false;
+                switch (i) {
+                    case 1:
+                        block = true;
+                        break;
+                    case 2:
+                        reflect = true;
+                        break;
+                    case 3:
+                        dodge = true;
+                        break;
+                    default:
+                        break;
+                }
+                if (block) {
+                    item.addLore("&cBLOCK: " + decideValue(getBlockRange()) + "%");
+                    name = "Blocking " + name;
+                } else if (reflect) {
+                    item.addLore("&cREFLECT: " + decideValue(getReflectRange()) + "%");
+                    name = "Reflecting " + name;
+                } else if (dodge) {
+                    item.addLore("&cDODGE: " + decideValue(getDodgeRange()) + "%");
+                    name = "Dodging " + name;
+                }
+            }
+        }
+        name = getTier().getColor() + name;
+        item.setName(name);
+        item.setDurability(durability);
+        item.addItemFlag(ItemFlag.HIDE_ATTRIBUTES);
+        return item.build();
+    }
+
+    public ItemStack build(ItemStack itemstack, int damageMin, int damageMax) {
+        Material type = null;
+        short durability = 0;
+        boolean weapon = false;
+        int hp = 0;
+        String name = "";
+        GearType gearType = GearType.getGearType(itemstack);
+        switch (gearType) {
+            case HELMET:
+                type = helmetType;
+                durability = helmetDurability;
+                hp = decideValue(helmetHpRange);
+                name = getHelmetName();
+                break;
+            case CHESTPLATE:
+                type = chestplateType;
+                durability = chestplateDurability;
+                hp = decideValue(chestplateHpRange);
+                name = getChestplateName();
+                break;
+            case LEGGINGS:
+                type = leggingType;
+                durability = leggingDurability;
+                hp = decideValue(leggingsHpRange);
+                name = getLeggingName();
+                break;
+            case BOOTS:
+                type = bootType;
+                durability = bootDurability;
+                hp = decideValue(bootsHpRange);
+                name = getBootName();
+                break;
+            case SWORD:
+                type = swordType;
+                durability = swordDurability;
+                weapon = true;
+                name = getSwordName();
+                break;
+            case AXE:
+                type = axeType;
+                durability = axeDurability;
+                weapon = true;
+                name = getAxeName();
+                break;
+            default:
+                break;
+        }
+        AtherialItem item = new AtherialItem(type);
+        if (weapon) {
+            if (damageMin > damageMax) {
+                damageMin = (damageMax - 5);
+            }
+            item.addLore("&cDMG: " + damageMin + " - " + damageMax);
+            if (RandomUtils.random(1, 10) == 2) {
+                item.addLore("&cCRITICAL HIT: " + decideValue(getCriticalHitRange()) + "%");
+                name = "Critical " + name;
+            }
+            if (gearType == GearType.SWORD) {
+                if (RandomUtils.random(1, 10) == 2) {
+                    item.addLore("&cACCURACY: " + decideValue(getAccuracyStatRange()) + "%");
+                    name = "Accurate " + name;
+                }
+            }
+            if (gearType == GearType.AXE) {
+                if (RandomUtils.random(1, 10) == 2) {
+                    item.addLore("&cARMOR PENETRATION: " + decideValue(getArmorPenStatRange()) + "%");
+                    name = name + " of Penetration";
+                }
             }
             if (RandomUtils.random(1, 8) == 2) {
                 int elementType = RandomUtils.random(1, 6);
@@ -237,36 +478,31 @@ public abstract class TierItem {
         return item.build();
     }
 
-    public ItemStack build(ItemStack itemstack, int damageMin, int damageMax) {
+    public ItemStack buildArmor(ItemStack itemstack) {
         Material type = null;
         short durability = 0;
         boolean weapon = false;
-        int hp = 0;
         String name = "";
         GearType gearType = GearType.getGearType(itemstack);
         switch (gearType) {
             case HELMET:
                 type = helmetType;
                 durability = helmetDurability;
-                hp = decideValue(helmetHpRange);
                 name = getHelmetName();
                 break;
             case CHESTPLATE:
                 type = chestplateType;
                 durability = chestplateDurability;
-                hp = decideValue(chestplateHpRange);
                 name = getChestplateName();
                 break;
             case LEGGINGS:
                 type = leggingType;
                 durability = leggingDurability;
-                hp = decideValue(leggingsHpRange);
                 name = getLeggingName();
                 break;
             case BOOTS:
                 type = bootType;
                 durability = bootDurability;
-                hp = decideValue(bootsHpRange);
                 name = getBootName();
                 break;
             case SWORD:
@@ -285,120 +521,56 @@ public abstract class TierItem {
                 break;
         }
         AtherialItem item = new AtherialItem(type);
-        if (weapon) {
-            if (damageMin > damageMax) {
-                damageMin = (damageMax - 5);
-            }
-            item.addLore("&cDMG: " + damageMin + " - " + damageMax);
-            if (RandomUtils.random(1, 10) == 2) {
-                item.addLore("&cCRITICAL HIT: " + decideValue(getCriticalHitRange()) + "%");
-                name = "Critical " + name;
-            }
-            if (RandomUtils.random(1, 8) == 2) {
-                int elementType = RandomUtils.random(1, 6);
-                boolean ice = false;
-                boolean fire = false;
-                boolean poison = false;
-                boolean pure = false;
-                switch (elementType) {
-                    case 1:
-                        ice = true;
-                        break;
-                    case 2:
-                        fire = true;
-                        break;
-                    case 3:
-                        poison = true;
-                        break;
-                    case 4:
-                        poison = true;
-                        pure = true;
-                        break;
-                    case 5:
-                        ice = true;
-                        pure = true;
-                        break;
-                    case 6:
-                        fire = true;
-                        pure = true;
-                        break;
-                    default:
-                        break;
-
-                }
-                if (ice) {
-                    item.addLore("&cICE DMG: +" + decideValue(getElementDamageRange()));
-                    name = name + " of Ice";
-                }
-                if (fire) {
-                    item.addLore("&cFIRE DMG: +" + decideValue(getElementDamageRange()));
-                    name = name + " of Fire";
-                }
-                if (poison) {
-                    item.addLore("&cPOISON DMG: +" + decideValue(getElementDamageRange()));
-                    name = name + " of Poison";
-                }
-                if (pure) {
-                    item.addLore("&cPURE DMG: +" + decideValue(getElementDamageRange()));
-                    name = "Pure " + name;
-                }
-            }
-        } else {
-            item.addLore("&cHP: +" + hp);
-            boolean energy = false;
-            if (RandomUtils.random(1, 2) == 2) {
-                energy = true;
-            }
-            if (energy) {
-                item.addLore("&cENERGY REGEN: +" + decideValue(getEnergyRange()) + "%");
-                name = "Energetic " + name;
-            } else {
-                item.addLore("&cHP REGEN: +" + decideValue(getHpsRange()) + " HP/s");
-                name = "Mending " + name;
-            }
-            if (RandomUtils.random(1, 3) == 2) {
-                boolean vit = false;
-                if (RandomUtils.random(1, 2) == 2) {
-                    vit = true;
-                }
-                if (vit) {
+        item.addLore(itemstack.getItemMeta().getLore().get(0));
+        item.addLore(itemstack.getItemMeta().getLore().get(1));
+        item.addLore(itemstack.getItemMeta().getLore().get(2));
+        if (RandomUtils.random(1, 3) == 2) {
+            int statType = RandomUtils.random(1, 3);
+            switch (statType) {
+                case 1:
                     item.addLore("&cVIT: +" + decideValue(getVitStatRange()));
                     name = name + " of Fortune";
-                } else {
+                    break;
+                case 2:
                     item.addLore("&cSTR: +" + decideValue(getStrStatRange()));
                     name = name + " of Strength";
-                }
-            }
-            if (RandomUtils.random(1, 3) == 2) {
-                int i = RandomUtils.random(1, 3);
-                boolean block = false;
-                boolean reflect = false;
-                boolean dodge = false;
-                switch (i) {
-                    case 1:
-                        block = true;
-                        break;
-                    case 2:
-                        reflect = true;
-                        break;
-                    case 3:
-                        dodge = true;
-                        break;
-                    default:
-                        break;
-                }
-                if (block) {
-                    item.addLore("&cBLOCK: " + decideValue(getBlockRange()) + "%");
-                    name = "Blocking " + name;
-                } else if (reflect) {
-                    item.addLore("&cREFLECT: " + decideValue(getReflectRange()) + "%");
-                    name = "Reflecting " + name;
-                } else if (dodge) {
-                    item.addLore("&cDODGE: " + decideValue(getDodgeRange()) + "%");
-                    name = "Dodging " + name;
-                }
+                    break;
+                case 3:
+                    item.addLore("&cINT: +" + decideValue(getIntStatRange()));
+                    name = name + " of Intellect";
+                    break;
             }
         }
+        if (RandomUtils.random(1, 3) == 2) {
+            int i = RandomUtils.random(1, 3);
+            boolean block = false;
+            boolean reflect = false;
+            boolean dodge = false;
+            switch (i) {
+                case 1:
+                    block = true;
+                    break;
+                case 2:
+                    reflect = true;
+                    break;
+                case 3:
+                    dodge = true;
+                    break;
+                default:
+                    break;
+            }
+            if (block) {
+                item.addLore("&cBLOCK: " + decideValue(getBlockRange()) + "%");
+                name = "Blocking " + name;
+            } else if (reflect) {
+                item.addLore("&cREFLECT: " + decideValue(getReflectRange()) + "%");
+                name = "Reflecting " + name;
+            } else if (dodge) {
+                item.addLore("&cDODGE: " + decideValue(getDodgeRange()) + "%");
+                name = "Dodging " + name;
+            }
+        }
+
         name = getTier().getColor() + name;
         item.setName(name);
         item.setDurability(durability);

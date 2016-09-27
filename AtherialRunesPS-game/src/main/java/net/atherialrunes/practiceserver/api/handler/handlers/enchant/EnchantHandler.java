@@ -5,8 +5,8 @@ import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.ItemGenerator;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.GearType;
 import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
+import net.atherialrunes.practiceserver.utils.StatUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,11 +42,13 @@ public class EnchantHandler extends ListenerHandler {
         ItemStack t3scrollwep = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T3, "Weapon").build();
         ItemStack t4scrollwep = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T4, "Weapon").build();
         ItemStack t5scrollwep = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T5, "Weapon").build();
+        ItemStack t6scrollwep = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T6, "Weapon").build();
         ItemStack t1scrollarmor = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T1, "Armor").build();
         ItemStack t2scrollarmor = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T2, "Armor").build();
         ItemStack t3scrollarmor = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T3, "Armor").build();
         ItemStack t4scrollarmor = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T4, "Armor").build();
-        ItemStack t5scrollarmor =ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T5, "Armor").build();
+        ItemStack t5scrollarmor = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T5, "Armor").build();
+        ItemStack t6scrollarmor = ItemGenerator.generateEnchant(scroll.getAmount(), Tier.T6, "Armor").build();
 
         if (scroll.equals(t1scrollarmor)) {
             if (Utils.isArmor(item)) {
@@ -75,6 +77,12 @@ public class EnchantHandler extends ListenerHandler {
         if (scroll.equals(t5scrollarmor)) {
             if (Utils.isArmor(item)) {
                 return (Utils.getTier(item) == 5) ? true : false;
+
+            }
+        }
+        if (scroll.equals(t6scrollarmor)) {
+            if (Utils.isArmor(item)) {
+                return (Utils.getTier(item) == 6) ? true : false;
 
             }
         }
@@ -108,6 +116,12 @@ public class EnchantHandler extends ListenerHandler {
 
             }
         }
+        if (scroll.equals(t6scrollwep)) {
+            if ((Utils.isAxe(item)) || (Utils.isSword(item))) {
+                return (Utils.getTier(item) == 6) ? true : false;
+
+            }
+        }
         return false;
     }
 
@@ -121,7 +135,7 @@ public class EnchantHandler extends ListenerHandler {
                 ItemStack cursor = e.getCursor();
                 if (canEnchant(cursor, cur)) {
                     e.setCancelled(true);
-                    int plus = getPlus(cur.getItemMeta().getDisplayName());
+                    int plus = StatUtils.getPlus(cur);
                     double failRate = 0;
                     switch (plus) {
                         case 0:
@@ -167,13 +181,11 @@ public class EnchantHandler extends ListenerHandler {
                             AtherialItem item = AtherialItem.fromItemStack(cur);
                             item.enchant("Armor");
                             e.setCurrentItem(item.build());
-                            return;
                         }
                         if (Utils.isWeapon(cur)) {
                             AtherialItem item = AtherialItem.fromItemStack(cur);
                             item.enchant("Weapon");
                             e.setCurrentItem(item.build());
-                            return;
 
                         }
                         if (cursor.getAmount() > 1) {
@@ -181,26 +193,25 @@ public class EnchantHandler extends ListenerHandler {
                         } else {
                             e.setCursor(new ItemStack(Material.AIR));
                         }
-                    }
-                    if (r.nextInt(100) <= failRate) {
+                        return;
+                    } else if (r.nextInt(100) <= failRate) {
                         e.setCurrentItem(new ItemStack(Material.AIR));
                         if (cursor.getAmount() > 1) {
                             cursor.setAmount((cursor.getAmount() - 1));
                         } else {
                             e.setCursor(new ItemStack(Material.AIR));
                         }
+                        return;
                     } else {
                         if (Utils.isArmor(cur)) {
                             AtherialItem item = AtherialItem.fromItemStack(cur);
                             item.enchant("Armor");
                             e.setCurrentItem(item.build());
-                            return;
                         }
                         if (Utils.isWeapon(cur)) {
                             AtherialItem item = AtherialItem.fromItemStack(cur);
                             item.enchant("Weapon");
                             e.setCurrentItem(item.build());
-                            return;
 
                         }
                         if (cursor.getAmount() > 1) {
@@ -208,24 +219,10 @@ public class EnchantHandler extends ListenerHandler {
                         } else {
                             e.setCursor(new ItemStack(Material.AIR));
                         }
+                        return;
                     }
                 }
             }
         }
-    }
-
-    public static int getPlus(String name) {
-        int plus = 0;
-        if (name != null) {
-            try {
-                name = ChatColor.stripColor(name);
-                if (name.startsWith("[")) {
-                    plus = Integer.parseInt(name.substring(name.indexOf("+") + 1, name.lastIndexOf("]")));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return plus;
     }
 }

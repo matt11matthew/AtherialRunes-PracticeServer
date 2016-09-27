@@ -7,6 +7,8 @@ import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.database.DatabaseAPI;
 import net.atherialrunes.practiceserver.api.handler.handlers.item.AtherialItem;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.GearType;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.Tier;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.CommandRules;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandToggle;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandToggleChaos;
@@ -20,6 +22,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -67,6 +70,14 @@ public class PlayerHandler extends ListenerHandler {
                 e.printStackTrace();
             }
         }
+        AtherialRunnable.getInstance().runAsyncRepeatingTask(this::saveTask, (20L * 300L), (20L * 300L));
+    }
+
+    public void saveTask() {
+        Bukkit.getServer().broadcastMessage(Utils.colorCodes("&bBacking up playerdata..."));
+        GameAPI.GAMEPLAYERS.values().forEach(gp -> {
+            gp.upload();
+        });
     }
 
     public static long getTimeUntilOut() {
@@ -114,9 +125,15 @@ public class PlayerHandler extends ListenerHandler {
             Bukkit.getServer().broadcastMessage(Utils.colorCodes("&aWelcome " + gp.getName() + " &3To Atherial Runes Practice Server"));
             gp.getPlayer().setMaxHealth(200.0D);
             gp.getPlayer().setHealth(200.0D);
+            gp.setNewPlayer(false);
         }
         gp.getPlayer().setHealthScale(20);
         gp.getPlayer().setHealthScaled(true);
+        gp.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(30000);
+    }
+
+    public void giveSorry(GamePlayer gp) {
+       gp.getPlayer().getInventory().addItem(AtherialItem.generate(GearType.SWORD, Tier.T2).setName("&aDowntime Sword").addLore("&7Sorry for downtime").build());
     }
 
     public void giveStarterKit(GamePlayer gp) {

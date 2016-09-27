@@ -239,4 +239,8 @@ public class GamePlayer {
     public float getEnergyRegen() {
         return StatUtils.getEnergy(getPlayer());
     }
+
+    public void kill() {
+        getPlayer().setHealth(0);
+    }
 }

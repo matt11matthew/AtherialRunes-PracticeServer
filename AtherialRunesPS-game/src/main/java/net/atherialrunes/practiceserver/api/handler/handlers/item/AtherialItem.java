@@ -148,7 +148,12 @@ public class AtherialItem {
     }
 
     public void enchant(String type) {
-        setName("&c[+" + (StatUtils.getPlus(itemStack) + 1) + "] " + itemStack.getItemMeta().getDisplayName());
+        int plus = StatUtils.getPlus(itemStack);
+        if (plus == 0) {
+            setName("&c[+1] " + itemStack.getItemMeta().getDisplayName());
+        } else {
+            setName("&c[+" + (plus + 1) + "] " + itemStack.getItemMeta().getDisplayName().split("] ")[1]);
+        }
         switch (type) {
             case "Armor":
                 int hp = getHP();
@@ -157,7 +162,7 @@ public class AtherialItem {
                 if (StatUtils.hasStat(itemStack, "ENERGY REGEN")) {
                     int energy = (int) StatUtils.getStatFromLore(itemStack, "ENERGY REGEN: ", "%");
                     energy += 1;
-                    setLoreLine(2, "&cENERGY REGEN: " + energy + "%");
+                    setLoreLine(2, "&cENERGY REGEN: +" + energy + "%");
                     break;
                 } else if (StatUtils.hasStat(itemStack, "HP REGEN")) {
                     int hps = (int) StatUtils.getStatFromLore(itemStack, "HP REGEN: ", "HP/s");
@@ -176,5 +181,22 @@ public class AtherialItem {
             default:
                 break;
         }
+    }
+
+    public String getShowText() {
+        List<String> loreList = (itemStack.getItemMeta().hasLore()) ? itemStack.getItemMeta().getLore() : new ArrayList<>();
+        String name = itemStack.getItemMeta().getDisplayName();
+        String lore = null;
+        if (!loreList.isEmpty()) {
+            for (String itemLore : loreList) {
+                if (lore == null) {
+                    lore = itemLore + "\n";
+                } else {
+                    lore += itemLore + "\n";
+                }
+            }
+        }
+        String text = name + "\n" + lore;
+        return text;
     }
 }

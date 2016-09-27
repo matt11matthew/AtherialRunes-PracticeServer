@@ -130,4 +130,20 @@ public class StatUtils {
         }
         return (float) vit;
     }
+
+    public static int getMaxDPS(ItemStack item) {
+        return (StatUtils.hasStat(item, "DPS")) ? Integer.parseInt(item.getItemMeta().getLore().get(0).replaceAll(" ", "").split("DPS:")[1].split("-")[1].split("%")[0]) : 0;
+    }
+
+    public static int getMinDPS(ItemStack item) {
+        return (StatUtils.hasStat(item, "DPS")) ? Integer.parseInt(item.getItemMeta().getLore().get(0).replaceAll(" ", "").split("DPS:")[1].split("-")[0]) : 0;
+    }
+
+    public static int getMaxArmor(ItemStack item) {
+        return (StatUtils.hasStat(item, "ARMOR")) ? Integer.parseInt(item.getItemMeta().getLore().get(0).replaceAll(" ", "").split("ARMOR:")[1].split("-")[1].split("%")[0]) : 0;
+    }
+
+    public static int getMinArmor(ItemStack item) {
+        return (StatUtils.hasStat(item, "ARMOR")) ? Integer.parseInt(item.getItemMeta().getLore().get(0).replaceAll(" ", "").split("ARMOR:")[1].split("-")[0]) : 0;
+    }
 }

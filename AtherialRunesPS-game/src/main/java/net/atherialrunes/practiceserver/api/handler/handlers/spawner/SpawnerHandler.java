@@ -4,6 +4,9 @@ import net.atherialrunes.practiceserver.GameAPI;
 import net.atherialrunes.practiceserver.GameConstants;
 import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobBuilder;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.MobType;
+import net.atherialrunes.practiceserver.api.handler.handlers.mob.armor.MobArmor;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.GamePlayer;
 import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
@@ -13,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -88,6 +92,7 @@ public class SpawnerHandler extends ListenerHandler {
                 try {
                     spawners.put(placing.get(gp), Spawner.getFromSpawnData(placing.get(gp), e.getMessage().trim()));
                     gp.msg("&aYou've placed at spawner!");
+                    spawners.get(placing.get(gp)).spawn();
                     placing.remove(gp);
                     return;
                 } catch (Exception ee) {
@@ -112,6 +117,7 @@ public class SpawnerHandler extends ListenerHandler {
                         Spawner spawner = spawners.get(e.getClickedBlock().getLocation());
                         gp.msg("&a--------------------------------");
                         gp.msg("&cMob: " + spawner.getMobType().getName());
+                        gp.msg("&cTier: " + spawner.getMobTier().toString());
                         gp.msg("&cCooldown: " + spawner.getCooldown());
                         gp.msg("&cRange: " + spawner.getRange());
                         gp.msg("&cAmount: " + spawner.getAmount());
@@ -163,9 +169,9 @@ public class SpawnerHandler extends ListenerHandler {
         }
     }
 
-    private Set<Entity> getEntitiesInChunks(Location l, int chunkRadius) {
+    private Set<Entity> getEntitiesInChunk(Location l, int chunkRadius) {
         Block b = l.getBlock();
-        Set<Entity> entities = new HashSet<Entity>();
+        Set<Entity> entities = new HashSet<>();
         for (int x = -16 * chunkRadius; x <= 16 * chunkRadius; x += 16) {
             for (int z = -16 * chunkRadius; z <= 16 * chunkRadius; z += 16) {
                 for (Entity e : b.getRelative(x, 0, z).getChunk().getEntities()) {
@@ -179,35 +185,48 @@ public class SpawnerHandler extends ListenerHandler {
         return entities;
     }
 
-    public void spawnMobTask() {
-        spawners.values().forEach(spawner -> {
-            int task = 0;
-            if (!spawner.isActive()) {
-                task = AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        spawners.values().forEach(spawner -> {
-                            int task = 0;
-                            if (!spawner.isActive()) {
-                                if (spawner.getCurrentCooldown() > 0) {
-                                    spawner.setCurrentCooldown((spawner.getCurrentCooldown() - 1));
-                                    if (spawner.getCurrentCooldown() == 0) {
-                                        spawner.setActive(true);
-                                    }
-                                }
-                            } else if (spawner.isActive()) {
-                                spawner.setCurrentCooldown(spawner.getCooldown());
-                                if (canSpawn(spawner)) {
-                                    spawner.spawn();
-                                    spawner.setActive(false);
-                                    return;
-                                }
-                            }
-                        });
+    private Set<LivingEntity> getEntitiesInChunks(Location l, int chunkRadius) {
+        Block b = l.getBlock();
+        Set<Entity> oldEntities = getEntitiesInChunk(l, chunkRadius);
+        Set<LivingEntity> entities = new HashSet<>();
+        for (Entity entity : oldEntities) {
+            for (MobType mobType : MobType.values()) {
+                if (entity.getType().equals(mobType.getEntityType())) {
+                    for (MobArmor mobArmor : MobBuilder.mobArmors.values()) {
+                        LivingEntity mob = (LivingEntity) entity;
+                        if (mobArmor.getSpawner().equals(MobBuilder.mobArmors.get(mob))) {
+                            entities.add(mob);
+                        }
                     }
-                }, 20L, 20L);
+                }
             }
-        });
+        }
+        return entities;
+    }
+
+    public void spawnMobTask() {
+        AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
+            @Override
+            public void run() {
+                spawners.values().forEach(spawner -> {
+                    if (!spawner.isActive()) {
+                        if (spawner.getCurrentCooldown() > 0) {
+                            spawner.setCurrentCooldown((spawner.getCurrentCooldown() - 1));
+                            if (spawner.getCurrentCooldown() == 0) {
+                                spawner.setActive(true);
+                            }
+                        }
+                    } else if (spawner.isActive()) {
+                        spawner.setCurrentCooldown(spawner.getCooldown());
+                        spawner.setActive(false);
+                        if (canSpawn(spawner)) {
+                            spawner.spawn();
+                            return;
+                        }
+                    }
+                });
+            }
+        }, 20L, 20L);
     }
 
     private boolean canSpawn(Spawner spawner) {

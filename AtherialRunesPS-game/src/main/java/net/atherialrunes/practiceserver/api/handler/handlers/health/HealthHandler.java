@@ -4,6 +4,7 @@ import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.damage.DamageHandler;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
+import net.atherialrunes.practiceserver.utils.RandomUtils;
 import net.atherialrunes.practiceserver.utils.StatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -22,7 +24,7 @@ public class HealthHandler extends ListenerHandler {
     public void onLoad() {
         super.onLoad();
         levelBarTask();
-        hpTask();
+        AtherialRunnable.getInstance().runRepeatingTask(this::hpTask, 12L, 12L);
     }
 
     @Override
@@ -43,15 +45,7 @@ public class HealthHandler extends ListenerHandler {
     }
 
     public void hpTask() {
-        AtherialRunnable.getInstance().runRepeatingTask(new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    hpRegen(player);
-
-                });
-            }
-        }, 5L, 5L);
+        Bukkit.getOnlinePlayers().forEach(player -> hpRegen(player));
     }
 
     @EventHandler
@@ -114,6 +108,30 @@ public class HealthHandler extends ListenerHandler {
         p.setHealthScaled(true);
     }
 
+    public static double getSTR(Player p) {
+        double str = 0.0D;
+        if ((p.getEquipment().getHelmet() != null) && (p.getEquipment().getHelmet().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getHelmet(), "STR")) {
+                str += (StatUtils.getStatFromLore(p.getEquipment().getHelmet(), "STR: +", ""));
+            }
+        }
+        if ((p.getEquipment().getChestplate() != null) && (p.getEquipment().getChestplate().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getChestplate(), "STR")) {
+                str += (StatUtils.getStatFromLore(p.getEquipment().getChestplate(), "STR: +", ""));
+            }
+        }
+        if ((p.getEquipment().getLeggings() != null) && (p.getEquipment().getLeggings().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getLeggings(), "STR")) {
+                str += (StatUtils.getStatFromLore(p.getEquipment().getLeggings(), "STR: +", ""));
+            }
+        }
+        if ((p.getEquipment().getBoots() != null) && (p.getEquipment().getBoots().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getBoots(), "STR")) {
+                str += (StatUtils.getStatFromLore(p.getEquipment().getBoots(), "STR: +", ""));
+            }
+        }
+        return str;
+    }
 
     public static double getVIT(Player p) {
         double vit = 0.0D;
@@ -163,6 +181,72 @@ public class HealthHandler extends ListenerHandler {
             }
         }
         return vit;
+    }
+
+    public static double getDPS(Player p) {
+        double dps = 0.0D;
+        if ((p.getEquipment().getHelmet() != null) && (p.getEquipment().getHelmet().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getHelmet(), "DPS")) {
+                dps += RandomUtils.random(getMinDPS(p.getEquipment().getHelmet()), getMaxDPS(p.getEquipment().getHelmet()));
+            }
+        }
+        if ((p.getEquipment().getChestplate() != null) && (p.getEquipment().getChestplate().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getLeggings(), "DPS")) {
+                dps += RandomUtils.random(getMinDPS(p.getEquipment().getChestplate()), getMaxDPS(p.getEquipment().getChestplate()));
+            }
+        }
+        if ((p.getEquipment().getLeggings() != null) && (p.getEquipment().getLeggings().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getLeggings(), "DPS")) {
+                dps += RandomUtils.random(getMinDPS(p.getEquipment().getLeggings()), getMaxDPS(p.getEquipment().getLeggings()));
+            }
+        }
+        if ((p.getEquipment().getBoots() != null) && (p.getEquipment().getBoots().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getBoots(), "DPS")) {
+                dps += RandomUtils.random(getMinDPS(p.getEquipment().getBoots()), getMaxDPS(p.getEquipment().getBoots()));
+            }
+        }
+        return dps;
+    }
+
+    public static double getArmor(Player p) {
+        double armor = 0.0D;
+        if ((p.getEquipment().getHelmet() != null) && (p.getEquipment().getHelmet().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getHelmet(), "ARMOR")) {
+                armor += RandomUtils.random(getMinArmor(p.getEquipment().getHelmet()), getMaxArmor(p.getEquipment().getHelmet()));
+            }
+        }
+        if ((p.getEquipment().getChestplate() != null) && (p.getEquipment().getChestplate().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getLeggings(), "ARMOR")) {
+                armor += RandomUtils.random(getMinArmor(p.getEquipment().getChestplate()), getMaxArmor(p.getEquipment().getChestplate()));
+            }
+        }
+        if ((p.getEquipment().getLeggings() != null) && (p.getEquipment().getLeggings().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getLeggings(), "ARMOR")) {
+                armor += RandomUtils.random(getMinArmor(p.getEquipment().getLeggings()), getMaxArmor(p.getEquipment().getLeggings()));
+            }
+        }
+        if ((p.getEquipment().getBoots() != null) && (p.getEquipment().getBoots().getItemMeta().hasLore())) {
+            if (StatUtils.hasStat(p.getEquipment().getBoots(), "ARMOR")) {
+                armor += RandomUtils.random(getMinArmor(p.getEquipment().getBoots()), getMaxArmor(p.getEquipment().getBoots()));
+            }
+        }
+        return armor;
+    }
+
+    public static int getMinDPS(ItemStack item) {
+        return StatUtils.getMinDPS(item);
+    }
+
+    public static int getMaxDPS(ItemStack item) {
+        return StatUtils.getMaxDPS(item);
+    }
+
+    public static int getMinArmor(ItemStack item) {
+        return StatUtils.getMinArmor(item);
+    }
+
+    public static int getMaxArmor(ItemStack item) {
+        return StatUtils.getMaxArmor(item);
     }
 
     public static double getHP(Player p) {

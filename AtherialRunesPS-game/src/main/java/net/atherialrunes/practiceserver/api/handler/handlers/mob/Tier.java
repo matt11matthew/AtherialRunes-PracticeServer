@@ -13,7 +13,10 @@ public enum Tier {
     T2(2, "&a", "armor:chainmail,weapon:stone", ArmorDye.NONE, "Chainmail", "Stone"),
     T3(3, "&b", "armor:iron,weapon:iron", ArmorDye.NONE, "Iron", "Iron"),
     T4(4, "&d", "armor:diamond,weapon:diamond", ArmorDye.NONE, "Diamond", "Diamond"),
-    T5(5, "&e", "armor:gold,weapon:gold", ArmorDye.NONE, "Golden", "Golden");
+    T5(5, "&e", "armor:gold,weapon:gold", ArmorDye.NONE, "Golden", "Golden"),
+    T6(6, "&3", "armor:iron,weapon:iron", ArmorDye.NONE, "Titanium", "Titanium"),
+
+    ;
 
     private int tier;
     private String color;
@@ -90,6 +93,7 @@ public enum Tier {
         if (name.startsWith(ChatColor.AQUA.toString())) return 3;
         if (name.startsWith(ChatColor.LIGHT_PURPLE.toString())) return 4;
         if (name.startsWith(ChatColor.YELLOW.toString())) return 5;
+        if (name.startsWith(ChatColor.DARK_AQUA.toString())) return 6;
         return 0;
     }
 }

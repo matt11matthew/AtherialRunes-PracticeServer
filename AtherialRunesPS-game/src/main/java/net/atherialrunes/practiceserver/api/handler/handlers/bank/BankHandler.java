@@ -194,7 +194,7 @@ public class BankHandler extends ListenerHandler {
         if (e.getSlotType() == InventoryType.SlotType.OUTSIDE) {
             return;
         }
-        if (e.getClickedInventory().getTitle().contains("Bank Chest")) {
+        if ((e.getClickedInventory().getType() == InventoryType.ENDER_CHEST) && (e.getClickedInventory().equals(e.getWhoClicked().getEnderChest()))) {
             if (e.getSlot() == GEM_SLOT) {
                 e.setCancelled(true);
                 if (e.isRightClick()) {

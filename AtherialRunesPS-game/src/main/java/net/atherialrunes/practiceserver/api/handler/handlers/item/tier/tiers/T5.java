@@ -11,23 +11,23 @@ public class T5 extends TierItem {
 
     public T5() {
         setAxeDurability((short) 0);
-        setAxeMinDamageRange("698-802");
-        setAxeMaxDamageRange("1024-2975");
+        setAxeMinDamageRange("900-1000");
+        setAxeMaxDamageRange("1124-2975");
         setAxeType(Material.GOLD_AXE);
 
         setCriticalHitRange("12-19");
         setElementDamageRange("56-125");
         setReflectRange("5-11");
-        setBlockRange("9-18");
-        setDodgeRange("9-18");
+        setBlockRange("9-14");
+        setDodgeRange("9-14");
         setVitStatRange("180-300");
         setStrStatRange("180-300");
         setEnergyRange("3-6");
         setHpsRange("1125-3250");
 
         setSwordDurability((short) 0);
-        setSwordMaxDamageRange("988-2750");
-        setSwordMinDamageRange("624-756");
+        setSwordMaxDamageRange("1100-2750");
+        setSwordMinDamageRange("800-950");
         setSwordType(Material.GOLD_SWORD);
 
         setBootDurability((short) 0);
@@ -55,5 +55,14 @@ public class T5 extends TierItem {
 
         setTier(Tier.T5);
         setTierNumber(5);
+
+        setArmorPenStatRange("5-15");
+        setDpsMinStatRange("10-16");
+        setDpsMaxStatRange("17-32");;
+        setArmorMinStatRange("10-16");
+        setArmorMaxStatRange("17-32");
+        setIntStatRange("160-300");
+        setVsStatRange("5-20");
+        setAccuracyStatRange("15-30");
     }
 }
