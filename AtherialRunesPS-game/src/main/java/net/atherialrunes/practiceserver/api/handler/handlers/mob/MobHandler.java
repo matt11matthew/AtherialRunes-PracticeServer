@@ -90,7 +90,7 @@ public class MobHandler extends ListenerHandler {
             if (dropChance > 100) {
                 dropChance = 100;
             }
-            if (RandomUtils.random(1, 20) == 10) {
+            if (RandomUtils.random(1, 5) == 4) {
                 int gem_amount = 0;
                 switch (mobArmor.getTier()) {
                     case T1:
