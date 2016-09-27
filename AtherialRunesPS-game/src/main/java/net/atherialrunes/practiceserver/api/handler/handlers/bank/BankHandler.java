@@ -1,6 +1,7 @@
 package net.atherialrunes.practiceserver.api.handler.handlers.bank;
 
 import net.atherialrunes.practiceserver.GameAPI;
+import net.atherialrunes.practiceserver.PracticeServer;
 import net.atherialrunes.practiceserver.api.command.AtherialCommandManager;
 import net.atherialrunes.practiceserver.api.handler.ListenerHandler;
 import net.atherialrunes.practiceserver.api.handler.handlers.bank.commands.CommandBank;
@@ -24,6 +25,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -209,40 +211,45 @@ public class BankHandler extends ListenerHandler {
     public void onBankClick(InventoryClickEvent e) {
         if (e.getSlotType() == InventoryType.SlotType.OUTSIDE) return;
         if ((e.getClickedInventory().getType() == InventoryType.ENDER_CHEST) && (e.getClickedInventory().equals(e.getWhoClicked().getEnderChest()))) {
-            if (e.getInventory().contains(Material.PAPER)) {
-                for (int i = 0; i < e.getInventory().getSize(); i++) {
-                    if (e.getInventory().getItem(i) != null) {
-                        if ((e.getInventory().getItem(i) != null) && (i != GEM_SLOT) && (e.getInventory().getItem(i).getType() == Material.PAPER)) {
-                            int amt = getBankNoteValue(e.getInventory().getItem(i));
-                            Player p = (Player) e.getWhoClicked();
-                            GamePlayer gp = GameAPI.getGamePlayer(p);
-                            e.getInventory().removeItem(e.getInventory().getItem(i));
-                            gp.setGems((gp.getGems()) + amt);
-                            p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
-                            e.getInventory().setItem(GEM_SLOT, getGem(gp));
-                            p.sendMessage(Utils.colorCodes("&a&l+&a" + amt + "&lG&a, &lNew Balance: &a" + gp.getGems() + " Gem(s)"));
-                            p.updateInventory();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (e.getInventory().contains(Material.PAPER)) {
+                        for (int i = 0; i < e.getInventory().getSize(); i++) {
+                            if (e.getInventory().getItem(i) != null) {
+                                if ((e.getInventory().getItem(i) != null) && (i != GEM_SLOT) && (e.getInventory().getItem(i).getType() == Material.PAPER)) {
+                                    int amt = getBankNoteValue(e.getInventory().getItem(i));
+                                    Player p = (Player) e.getWhoClicked();
+                                    GamePlayer gp = GameAPI.getGamePlayer(p);
+                                    e.getInventory().removeItem(e.getInventory().getItem(i));
+                                    gp.setGems((gp.getGems()) + amt);
+                                    p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
+                                    e.getInventory().setItem(GEM_SLOT, getGem(gp));
+                                    p.sendMessage(Utils.colorCodes("&a&l+&a" + amt + "&lG&a, &lNew Balance: &a" + gp.getGems() + " Gem(s)"));
+                                    p.updateInventory();
+                                }
+                            }
+                        }
+                    }
+                    if (e.getInventory().contains(Material.EMERALD)) {
+                        for (int i = 0; i < e.getInventory().getSize(); i++) {
+                            if (e.getInventory().getItem(i) != null) {
+                                if ((e.getInventory().getItem(i) != null) && (i != GEM_SLOT) && (e.getInventory().getItem(i).getType() == Material.EMERALD)) {
+                                    int amt = e.getInventory().getItem(i).getAmount();
+                                    Player p = (Player) e.getWhoClicked();
+                                    GamePlayer gp = GameAPI.getGamePlayer(p);
+                                    e.getInventory().removeItem(e.getInventory().getItem(i));
+                                    gp.setGems((gp.getGems()) + amt);
+                                    p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
+                                    e.getInventory().setItem(GEM_SLOT, getGem(gp));
+                                    p.sendMessage(Utils.colorCodes("&a&l+&a" + amt + "&lG&a, &lNew Balance: &a" + gp.getGems() + " Gem(s)"));
+                                    p.updateInventory();
+                                }
+                            }
                         }
                     }
                 }
-            }
-            if (e.getInventory().contains(Material.EMERALD)) {
-                for (int i = 0; i < e.getInventory().getSize(); i++) {
-                    if (e.getInventory().getItem(i) != null) {
-                        if ((e.getInventory().getItem(i) != null) && (i != GEM_SLOT) && (e.getInventory().getItem(i).getType() == Material.EMERALD)) {
-                            int amt = e.getInventory().getItem(i).getAmount();
-                            Player p = (Player) e.getWhoClicked();
-                            GamePlayer gp = GameAPI.getGamePlayer(p);
-                            e.getInventory().removeItem(e.getInventory().getItem(i));
-                            gp.setGems((gp.getGems()) + amt);
-                            p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
-                            e.getInventory().setItem(GEM_SLOT, getGem(gp));
-                            p.sendMessage(Utils.colorCodes("&a&l+&a" + amt + "&lG&a, &lNew Balance: &a" + gp.getGems() + " Gem(s)"));
-                            p.updateInventory();
-                        }
-                    }
-                }
-            }
+            }.runTaskLater(PracticeServer.getInstance(), 3L);
 
         }
     }

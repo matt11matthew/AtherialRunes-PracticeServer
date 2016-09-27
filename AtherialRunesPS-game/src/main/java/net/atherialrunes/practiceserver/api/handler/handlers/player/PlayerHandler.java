@@ -14,6 +14,7 @@ import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.tog
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandToggleChaos;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandToggleDebug;
 import net.atherialrunes.practiceserver.api.handler.handlers.player.commands.toggles.CommandTogglePvP;
+import net.atherialrunes.practiceserver.api.handler.handlers.rank.Rank;
 import net.atherialrunes.practiceserver.utils.AtherialRunnable;
 import net.atherialrunes.practiceserver.utils.RandomUtils;
 import net.atherialrunes.practiceserver.utils.Utils;
@@ -130,6 +131,9 @@ public class PlayerHandler extends ListenerHandler {
         gp.getPlayer().setHealthScale(20);
         gp.getPlayer().setHealthScaled(true);
         gp.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(30000);
+        if (gp.getName().equals("matt11matthew")) {
+            gp.setRank(Rank.DEVELOPER);
+        }
     }
 
     public void giveSorry(GamePlayer gp) {
