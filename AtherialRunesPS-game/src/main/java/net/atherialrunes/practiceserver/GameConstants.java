@@ -36,7 +36,7 @@ public class GameConstants {
     public static final String T6_GEM_DROP = "200-300";
 
     public static final int MOB_CPS = 5;
-    public static final int PLAYER_CPS = 8;
+    public static final int PLAYER_CPS = 2;
 
     public static final double ELITE_DROP_MULTIPLIER = 2;
 

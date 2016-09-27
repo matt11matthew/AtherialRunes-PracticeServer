@@ -6,15 +6,15 @@ package net.atherialrunes.practiceserver.utils.json;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
+import net.atherialrunes.practiceserver.utils.Utils;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONArray;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -176,7 +176,30 @@ public class JSONMessage {
     }
 
     public void sendToPlayer(Player p) {
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a(json.toString())));
+        send(p, json.toString());
+       // ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a(json.toString())));
+    }
+
+    public void send(Player player, String message) {
+        try {
+            Class<?> c1 = Class.forName("org.bukkit.craftbukkit." + Utils.nmsver + ".entity.CraftPlayer");
+            Object p = c1.cast(player);
+            Object ppoc;
+            Class<?> c4 = Class.forName("net.minecraft.server." + Utils.nmsver + ".PacketPlayOutChat");
+            Class<?> c5 = Class.forName("net.minecraft.server." + Utils.nmsver + ".Packet");
+            Class<?> c2 = Class.forName("net.minecraft.server." + Utils.nmsver + ".ChatComponentText");
+            Class<?> c3 = Class.forName("net.minecraft.server." + Utils.nmsver + ".IChatBaseComponent");
+            Object o = c2.getConstructor(new Class<?>[]{String.class}).newInstance(message);
+            ppoc = c4.getConstructor(new Class<?>[]{c3, byte.class}).newInstance(o, (byte) 1);
+            Method m1 = c1.getDeclaredMethod("getHandle");
+            Object h = m1.invoke(p);
+            Field f1 = h.getClass().getDeclaredField("playerConnection");
+            Object pc = f1.get(h);
+            Method m5 = pc.getClass().getDeclaredMethod("sendPacket", c5);
+            m5.invoke(pc, ppoc);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void setColor(ChatColor color) {
