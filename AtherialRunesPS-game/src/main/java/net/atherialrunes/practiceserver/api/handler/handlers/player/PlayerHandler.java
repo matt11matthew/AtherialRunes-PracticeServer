@@ -109,6 +109,8 @@ public class PlayerHandler extends ListenerHandler {
         String DMOTD = (ChatColor.GRAY + "" + ChatColor.ITALIC + "         Donate at http://atherialrunes.buycraft.net/ for perks! ");
         GameAPI.handleLogin(e.getPlayer());
         GamePlayer gp = GameAPI.getGamePlayer(e.getPlayer());
+        gp.msg(MOTD);
+        gp.msg(DMOTD);
         if (gp.isNewPlayer()) {
             giveStarterKit(gp);
             gp.fw();
@@ -119,8 +121,6 @@ public class PlayerHandler extends ListenerHandler {
             gp.msg("&b&l--------------------------------");
             gp.msg("&3Welcome " + gp.getName());
             gp.getPlayer().spigot().sendMessage(comp1);
-            gp.msg(MOTD);
-            gp.msg(DMOTD);
             gp.msg("&b&l--------------------------------");
             Bukkit.getServer().broadcastMessage(Utils.colorCodes("&aWelcome " + gp.getName() + " &3To Atherial Runes Practice Server"));
             gp.getPlayer().setMaxHealth(200.0D);
