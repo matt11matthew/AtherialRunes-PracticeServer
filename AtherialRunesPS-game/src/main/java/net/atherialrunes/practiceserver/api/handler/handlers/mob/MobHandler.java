@@ -90,50 +90,48 @@ public class MobHandler extends ListenerHandler {
             if (dropChance > 100) {
                 dropChance = 100;
             }
-            if (RandomUtils.random(1, 5) == 4) {
-                int gem_amount = 0;
-                switch (mobArmor.getTier()) {
-                    case T1:
-                        gem_amount = decideValue(GameConstants.T1_GEM_DROP);
-                        break;
-                    case T2:
-                        gem_amount = decideValue(GameConstants.T2_GEM_DROP);
-                        break;
-                    case T3:
-                        gem_amount = decideValue(GameConstants.T3_GEM_DROP);
-                        break;
-                    case T4:
-                        gem_amount = decideValue(GameConstants.T4_GEM_DROP);
-                        break;
-                    case T5:
-                        gem_amount = decideValue(GameConstants.T5_GEM_DROP);
-                        break;
-                    case T6:
-                        gem_amount = decideValue(GameConstants.T6_GEM_DROP);
-                        break;
-                }
-                int stacks = 0;
-                if (gem_amount > 64) {
-                    stacks += 1;
-                    gem_amount -= 64;
-                }
-                if (stacks > 1) {
-                    for (int i = 0; i < stacks; i++) {
-                        AtherialItem gem = new AtherialItem(Material.EMERALD);
-                        gem.setName("&aGem");
-                        gem.setAmount(64);
-                        drop(gem.build(), location);
-                    }
+            int gem_amount = 0;
+            switch (mobArmor.getTier()) {
+                case T1:
+                    gem_amount = decideValue(GameConstants.T1_GEM_DROP);
+                    break;
+                case T2:
+                    gem_amount = decideValue(GameConstants.T2_GEM_DROP);
+                    break;
+                case T3:
+                    gem_amount = decideValue(GameConstants.T3_GEM_DROP);
+                    break;
+                case T4:
+                    gem_amount = decideValue(GameConstants.T4_GEM_DROP);
+                    break;
+                case T5:
+                    gem_amount = decideValue(GameConstants.T5_GEM_DROP);
+                    break;
+                case T6:
+                    gem_amount = decideValue(GameConstants.T6_GEM_DROP);
+                    break;
+            }
+            int stacks = 0;
+            if (gem_amount > 64) {
+                stacks += 1;
+                gem_amount -= 64;
+            }
+            if (stacks > 1) {
+                for (int i = 0; i < stacks; i++) {
                     AtherialItem gem = new AtherialItem(Material.EMERALD);
                     gem.setName("&aGem");
-                    gem.setAmount(gem_amount);
-                    drop(gem.build(), location);
-                } else {
-                    AtherialItem gem = new AtherialItem(Material.EMERALD);
-                    gem.setName("&aGem");
-                    gem.setAmount(gem_amount);
+                    gem.setAmount(64);
                     drop(gem.build(), location);
                 }
+                AtherialItem gem = new AtherialItem(Material.EMERALD);
+                gem.setName("&aGem");
+                gem.setAmount(gem_amount);
+                drop(gem.build(), location);
+            } else {
+                AtherialItem gem = new AtherialItem(Material.EMERALD);
+                gem.setName("&aGem");
+                gem.setAmount(gem_amount);
+                drop(gem.build(), location);
             }
             int chance = (int) (Math.random() * 100);
             if (chance < dropChance) {
